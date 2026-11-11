@@ -18,6 +18,8 @@ None of the three adds learned parameters. All code is a patch on the authors' c
 | `scripts/make_val_split.py` | Image-level validation split from RET-2 (+ SHA-256 manifest) |
 | `scripts/run_a3.py` | Runs one A3 configuration (`eval` or `train`) |
 | `scripts/aggregate_results.py` | mean ± std tables → `results/a3/`, `report/tables/` |
+| `scripts/eval_epoch0_standalone.py` | Epoch-0 evaluation (B1 / RIP-fixed) with only torch + open_clip; matches the authors' recall code |
+| `scripts/bootstrap_epoch0.py` | Paired bootstrap CI of the RIP-fixed gain |
 | `scripts/run_a3_local.ps1` | Same A3 protocol on a local Windows GPU (PowerShell) |
 | `scripts/extract_notebook_logs.py` | Pulls metrics from saved notebook outputs → `results/legacy/` |
 | `tests/test_a3_modules.py` | CPU unit tests (D4 invariance, norm, gradients, masks) |
@@ -86,11 +88,30 @@ Shared setup: 1 epoch, batch 16, lr 2e-7, warm-up 100, weight decay 0.5, max gra
 
 Unit tests (CPU): `python -m pytest -q tests`
 
+## Results obtained so far
+
+Epoch 0 (RET-2 checkpoint, no training; deterministic, two identical runs; `results/a3/epoch0_*`):
+
+| Test set | B1 mR | RIP-fixed mR | Gain (95% paired bootstrap CI) | PR-CLIP (paper) |
+|---|---|---|---|---|
+| RSICD | 38.86 | **39.70** | +0.84 [+0.29, +1.42] | 39.23 |
+| RSITMD | 51.81 | 51.88 | +0.07 [−0.77, +0.87] | 52.41 |
+
+B1 on RSITMD reproduces the GeoRSCLIP row of the PR-CLIP paper exactly (all six recalls). Image encoding on 2 CPU threads: RSICD 50 s vs 402 s (8 passes).
+
+```bash
+python scripts/eval_epoch0_standalone.py --ckpt RET-2.pt --csv dataset/test/rsicd_test.csv --images images \
+       --out results/a3/epoch0_rsicd_test.json --save-emb emb_rsicd.pt
+python scripts/bootstrap_epoch0.py --emb emb_rsicd.pt --out results/a3/bootstrap_epoch0_rsicd_test.json
+```
+
+The three-seed trained runs (B1/R2/R3) still need a GPU: run `notebooks/A3_MultiSeed_Colab.ipynb`.
+
 ## Notebooks and results
 
 | Notebook | What it runs | Result in saved outputs | Report |
 |---|---|---|---|
-| `A3_MultiSeed_Colab.ipynb` | A3 protocol: epoch 0 (B1, RIP), B1/R2/R3 × 3 seeds, val selection | to be run | Tables III, IV |
+| `A3_MultiSeed_Colab.ipynb` | A3 protocol: epoch 0 (B1, RIP), B1/R2/R3 × 3 seeds, val selection | epoch 0 done (above); trained runs to be run | Tables IV, V |
 | `PR_CLIP_(2).ipynb` | Modified extraction (type embeddings, pre-LN, GELU, padding mask) | mR **38.74** | Table VI |
 | `PR_CLIP_v4_BRCR.ipynb` | BRCR, flags `mask,bidir,rel,detach` | mR **38.68** | Table VI |
 | `PR_CLIP_STPR_Improved_Ready.ipynb` | STPR: 15% masking of reconstruction queries + local cosine loss (β=0.05) | mR 38.69 | not in report |
@@ -101,7 +122,7 @@ Unit tests (CPU): `python -m pytest -q tests`
 
 All values: RSICD test, 1 epoch, batch 16, lr 2e-7, RET-2 init, seed 1. Full numbers in `results/legacy/legacy_runs.csv`.
 
-**Logs still missing from the repo** (marked † in the report): the earlier sensitivity runs (report Table V), the dual adapter result (38.69), BRCR with all switches (37.97), and the preliminary A3 runs (38.72 / 39.09 / 39.10 / 39.11, epoch 0: 38.89 / 39.66). Upload their `out.log` files to `results/raw_logs/<run_name>/`, or replace them with the A3 notebook outputs.
+**Logs still missing from the repo** (marked † in the report): the earlier sensitivity runs (report Table V), the dual adapter result (38.69), BRCR with all switches (37.97), and the preliminary trained A3 runs (38.72 / 39.09 / 39.10 / 39.11). The epoch-0 numbers are now re-measured with logs. Upload their `out.log` files to `results/raw_logs/<run_name>/`, or replace them with the A3 notebook outputs.
 
 ## Related code: paper-objective re-implementation
 

@@ -1,0 +1,35 @@
+/usr/local/lib/python3.13/site-packages/timm/models/layers/__init__.py:49: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+/home/claude/upstream/PR-CLIP/dataset/test/rsitmd_test.csv: 452 images, 2260 captions, device=cpu
+  images 32/452
+  images 64/452
+  images 96/452
+  images 128/452
+  images 160/452
+  images 192/452
+  images 224/452
+  images 256/452
+  images 288/452
+  images 320/452
+  images 352/452
+  images 384/452
+  images 416/452
+  images 448/452
+  images 452/452
+B1 {'image2text-R@1': 32.3, 'image2text-R@5': 53.32, 'image2text-R@10': 67.92, 'text2image-R@1': 25.04, 'text2image-R@5': 57.88, 'text2image-R@10': 74.38, 'mean-recall': 51.81, 'image_forward_passes': 452, 'image_encode_s': 20.44, 'rank_s': 0.06, 'inference_time_s': 104.77}
+  images 32/452
+  images 64/452
+  images 96/452
+  images 128/452
+  images 160/452
+  images 192/452
+  images 224/452
+  images 256/452
+  images 288/452
+  images 320/452
+  images 352/452
+  images 384/452
+  images 416/452
+  images 448/452
+  images 452/452
+RIP-fixed {'image2text-R@1': 32.52, 'image2text-R@5': 53.1, 'image2text-R@10': 66.81, 'text2image-R@1': 25.4, 'text2image-R@5': 58.14, 'text2image-R@10': 75.31, 'mean-recall': 51.88, 'image_forward_passes': 3616, 'image_encode_s': 167.25, 'rank_s': 0.07, 'inference_time_s': 251.59}

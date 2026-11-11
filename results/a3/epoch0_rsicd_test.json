@@ -1,0 +1,39 @@
+{
+  "csv": "rsicd_test.csv",
+  "images": 1093,
+  "captions": 5465,
+  "checkpoint": "RET-2.pt",
+  "load_state_dict": "<All keys matched successfully>",
+  "device": "cpu",
+  "cpu": "x86_64",
+  "torch_threads": 2,
+  "text_encode_s": 217.57,
+  "runs": {
+    "B1": {
+      "image2text-R@1": 20.86,
+      "image2text-R@5": 41.9,
+      "image2text-R@10": 55.63,
+      "text2image-R@1": 15.59,
+      "text2image-R@5": 41.24,
+      "text2image-R@10": 57.95,
+      "mean-recall": 38.86,
+      "image_forward_passes": 1093,
+      "image_encode_s": 49.6,
+      "rank_s": 0.45,
+      "inference_time_s": 267.61
+    },
+    "RIP-fixed": {
+      "image2text-R@1": 20.59,
+      "image2text-R@5": 43.28,
+      "image2text-R@10": 57.37,
+      "text2image-R@1": 15.72,
+      "text2image-R@5": 42.32,
+      "text2image-R@10": 58.9,
+      "mean-recall": 39.7,
+      "image_forward_passes": 8744,
+      "image_encode_s": 402.13,
+      "rank_s": 0.46,
+      "inference_time_s": 620.15
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "emb": "epoch0_rsitmd_emb.pt (not committed, 2-5 MB, regenerate with --save-emb)",
+  "n_boot": 2000,
+  "mR_B1": 51.81,
+  "mR_RIP": 51.88,
+  "diff": 0.07,
+  "ci95": [
+    -0.77,
+    0.87
+  ],
+  "boot_std": 0.42,
+  "p_diff_le_0": 0.431
+}

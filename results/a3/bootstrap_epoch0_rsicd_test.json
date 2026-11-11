@@ -1,0 +1,13 @@
+{
+  "emb": "epoch0_rsicd_emb.pt (not committed, 2-5 MB, regenerate with --save-emb)",
+  "n_boot": 2000,
+  "mR_B1": 38.86,
+  "mR_RIP": 39.7,
+  "diff": 0.83,
+  "ci95": [
+    0.29,
+    1.42
+  ],
+  "boot_std": 0.29,
+  "p_diff_le_0": 0.0015
+}
