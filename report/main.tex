@@ -1,0 +1,437 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{positioning,fit,calc,arrows.meta,decorations.pathreplacing}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+
+% ---------------------------------------------------------------------------
+% Values not yet produced by the multi-seed / validation protocol are printed
+% as a red "TBD". Replace them after running notebooks/A3_MultiSeed_Colab.ipynb
+% (scripts/aggregate_results.py writes tables/a3_multiseed_rows.tex).
+\newcommand{\TBD}{\textcolor{red}{TBD}}
+\newcommand{\fillme}[1]{\textcolor{red}{[#1]}}
+\newcommand{\pend}{$^{\dagger}$}
+% ---------------------------------------------------------------------------
+
+\begin{document}
+
+\title{Rotation-Invariant Pooling and Extraction Variants for PR-CLIP in Remote Sensing Image--Text Retrieval}
+
+\author{
+\IEEEauthorblockN{Pham Hong Nhat Tan}
+\IEEEauthorblockA{\textit{AI Department, FPT University}\\
+Da Nang, Vietnam\\
+Student ID: DE201155\\
+\fillme{email}}
+\and
+\IEEEauthorblockN{\fillme{Full name}}
+\IEEEauthorblockA{\textit{AI Department, FPT University}\\
+Da Nang, Vietnam\\
+Student ID: \fillme{ID}\\
+\fillme{email}}
+\and
+\IEEEauthorblockN{\fillme{Full name}}
+\IEEEauthorblockA{\textit{AI Department, FPT University}\\
+Da Nang, Vietnam\\
+Student ID: \fillme{ID}\\
+\fillme{email}}
+}
+
+\maketitle
+
+\begin{abstract}
+Remote sensing image--text retrieval (RSITR) ranks satellite or aerial images for a text query and captions for an image query. PR-CLIP improves CLIP-based RSITR with a training-only task that extracts, filters, and reconstructs cross-modal positional information, and reports 39.23\% mean Recall (mR) on RSICD. We study this model with the authors' released code and the GeoRSCLIP RET-2 checkpoint, which itself reaches 38.88\% mR on RSICD without further training. We test three changes that add no learned parameters: rotation-invariant pooling of image embeddings over the dihedral group D4 (RIP-fixed), a padding-aware extraction module with CLIP-initialised projections (E1), and cross-modal-only attention in the extraction encoder (EXT~v2). The most notable observation is that RIP-fixed applied at test time to the RET-2 checkpoint, with no training, gave 39.66\% mR in a preliminary run, above the published PR-CLIP result, while one further epoch of fine-tuning lowered it to 39.09\%. RIP-fixed costs eight image-encoder forward passes per image. In a one-epoch controlled study, RIP-fixed explains almost all of the gain over the matched baseline (38.72\% to 39.09\%), and E1 and EXT~v2 add only 0.01--0.02 points. Because these runs used one seed and selected the reported epoch on the test split, we define a protocol with an image-level validation split and three seeds, and we report mean $\pm$ standard deviation where available. Longer fine-tuning, larger learning rates, residual adapters, and a reliability-aware reconstruction variant did not improve on the starting checkpoint.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Remote sensing, image--text retrieval, CLIP, PR-CLIP, test-time augmentation, rotation invariance
+\end{IEEEkeywords}
+
+% ===========================================================================
+\section{Introduction}
+Remote sensing image--text retrieval connects aerial or satellite images with natural language descriptions. Given a caption, the system ranks candidate images (text-to-image, T2I); given an image, it ranks candidate captions (image-to-text, I2T). Applications include disaster monitoring, land-use analysis, and search in large image archives \cite{yuan2022amfmn,yuan2022galr}.
+
+CLIP \cite{radford2021clip} learns aligned image and text embeddings with a contrastive loss, and CLIP-based models now give the strongest RSITR results, mainly through larger remote sensing training sets \cite{liu2024remoteclip,zhang2024georsclip,wang2024skyclip}. Global embeddings, however, may miss where objects are and how they relate. PR-CLIP \cite{guan2025prclip} addresses this with an auxiliary training task: it extracts cross-modal positional information, filters it out of each modality, and reconstructs it from the other modality. At retrieval time only the CLIP encoders run, so inference stays as cheap as a dual-encoder model.
+
+This report has two goals. First, we check how close a short fine-tuning budget can get to the published PR-CLIP result when starting from the public RET-2 checkpoint. Second, we test modifications that do not add learned parameters. Remote sensing images are taken from above and have no canonical ``up'' direction, so we pool image embeddings over the eight rotations and reflections of the square (the group D4). We also test two changes to the extraction module.
+
+Our contributions are:
+\begin{itemize}
+\item An empirical comparison, under one code base and one training setup, of RIP-fixed, E1, and EXT~v2 on top of PR-CLIP, with all module changes released as a patch to the authors' code.
+\item The observation that RIP-fixed applied to the RET-2 checkpoint without any training reached 39.66\% mR on RSICD in a preliminary run, together with its inference cost.
+\item A documented set of negative results on training duration, learning rate, initialization, residual adapters, and a reconstruction variant.
+\item An evaluation protocol that fixes two problems in our first runs: in the public split, the RSICD ``validation'' file is identical to the test file, and our first runs chose the reported epoch on the test set.
+\end{itemize}
+
+% ===========================================================================
+\section{Related Work}
+
+\subsection{Dual-Stream and Single-Stream RSITR}
+Dual-stream models encode images and texts separately and compare their embeddings. VSE++ \cite{faghri2018vsepp} introduced hard-negative mining for visual--semantic embeddings. AMFMN \cite{yuan2022amfmn} added multi-scale visual attention and released the RSITMD dataset, and GaLR \cite{yuan2022galr} combined global and local features. Later work added scene-aware aggregation (SWAN) \cite{pan2023swan}, prior-instructed representations (PIR) \cite{pan2023pir}, knowledge-aided momentum contrast (KAMCL) \cite{ji2023kamcl}, and direction-oriented embeddings \cite{ma2024direction}. Single-stream models fuse both modalities inside one encoder. Examples include MTGFE \cite{zhang2023mtgfe}, a multi-task fusion encoder, and multi-scale alignment approaches \cite{yang2024transcending}. They model interactions more closely, but they must run the fusion encoder for every query--candidate pair. PR-CLIP \cite{guan2025prclip} keeps cross-modal interaction in training only and retrieves with a dual encoder.
+
+\subsection{CLIP-Based Remote Sensing Models}
+Parameter-efficient transfer of CLIP to RSITR was studied in PE-RSITR \cite{yuan2023pe}. RemoteCLIP \cite{liu2024remoteclip} built a remote sensing CLIP from about 12 times more data than earlier RSITR sets by converting detection and segmentation labels into captions. GeoRSCLIP \cite{zhang2024georsclip} introduced the RS5M dataset with 5 million image--text pairs. Its checkpoint fine-tuned on RET-2 (RSICD and RSITMD combined) is the starting point of our experiments. SkyCLIP \cite{wang2024skyclip} trains on the 2.6-million-pair SkyScript dataset, and EBAKER \cite{ji2024ebaker} filters weakly related text before alignment. These works show that the training data and the starting checkpoint matter a great deal, which our results confirm.
+
+\subsection{Fine-Grained Cross-Modal Alignment}
+SCAN \cite{lee2018scan} matches image regions to words with stacked cross attention. In remote sensing, GaLR \cite{yuan2022galr} and VGSGN \cite{he2024vgsgn} combine global and salient local features. PR-CLIP \cite{guan2025prclip} instead uses token-level positional reconstruction as a training signal. Our EXT~v2 variant is related to cross attention: it restricts the extraction encoder so that image tokens attend only to text tokens and the reverse.
+
+\subsection{Rotation Invariance and Test-Time Augmentation}
+Objects in overhead images can appear in any orientation. RICNN \cite{cheng2016ricnn} adds a rotation-invariance term to CNN training for object detection in very-high-resolution images. Group-equivariant CNNs \cite{cohen2016gcnn} build rotation and reflection symmetry into the layers, and ReDet \cite{han2021redet} applies rotation-equivariant features to aerial object detection. Test-time augmentation (TTA) averages predictions over transformed copies of the input. Shanmugam et al. \cite{shanmugam2021tta} show that simple averaging over augmentations can also hurt some predictions and propose learned aggregation. RIP-fixed is a TTA-style pooling over D4 that also keeps the pooling inside training. Unlike equivariant networks, it needs no change to the pretrained CLIP weights.
+
+% ===========================================================================
+\section{Background: PR-CLIP}
+Fig.~\ref{fig:arch} shows the PR-CLIP training pipeline \cite{guan2025prclip}. A CLIP ViT-B/32 \cite{dosovitskiy2021vit} image encoder $f_v$ and text encoder $f_t$ give global features $v^o, t^o$ and token features $V^o$ (50 tokens) and $T^o$ (77 tokens). The cross-modal contrastive loss $\mathcal{L}_{CMC}$ is a bidirectional InfoNCE loss on $(v^o, t^o)$.
+
+\textbf{Extraction.} Token features are projected to 512 dimensions, $\tilde V^o = V^o W_v^{proj}$ and $\tilde T^o = T^o W_t^{proj}$, concatenated, and passed through a 2-layer Transformer encoder. The output is split back into image part $V^p$ and text part $T^p$.
+
+\textbf{Filtering.} Positional information is removed by $V^f = \mathrm{Linear}(\tilde V^o - V^p)$ and $T^f = \mathrm{Linear}(\tilde T^o - T^p)$.
+
+\textbf{Reconstruction.} An 8-layer Transformer decoder reconstructs $\tilde V^o$ from $V^f$ with $\tilde T^o$ as cross-attention context, and the reverse for text. The paper uses a token-level MSE loss $\mathcal{L}_{PRC}$ and the objective $\mathcal{L} = 0.01\,\mathcal{L}_{CMC} + \mathcal{L}_{PRC}$.
+
+\textbf{Released code.} We use the authors' public code \cite{prclipcode} at commit \texttt{242fba6}, built on the ITRA framework \cite{itra}. In this code the reconstruction loss is an MSE between mean-pooled, normalised reconstructed tokens and the global features, and the training loop combines it with InfoNCE as $(1.5\,\mathcal{L}_{InfoNCE} + \mathcal{L}_{rec})/4$ with 4-step accumulation. This is not identical to the paper's objective. We did not retrain PR-CLIP with the paper's objective and configuration (20 epochs, batch size 160, two RTX 4090 GPUs), so none of our numbers is a full reproduction of the published 39.23\%.
+
+\begin{figure*}[t]
+\centering
+\resizebox{0.92\textwidth}{!}{\input{figures/architecture.tex}}
+\caption{PR-CLIP training pipeline (released code). Orange boxes mark where our A3 modifications act. Extraction, filtering, and reconstruction run only during training. RIP-fixed changes the image embedding used both in training and at retrieval time.}
+\label{fig:arch}
+\end{figure*}
+
+% ===========================================================================
+\section{Investigated Modifications}
+
+\subsection{Notation}
+Table~\ref{tab:notation} defines the labels used in the rest of the report.
+
+\begin{table}[t]
+\centering
+\caption{Labels and abbreviations}
+\label{tab:notation}
+\footnotesize
+\begin{tabular}{@{}p{0.23\columnwidth}p{0.70\columnwidth}@{}}
+\toprule
+Label & Meaning \\
+\midrule
+RET-2 & Training set of PR-CLIP: RSICD + RSITMD after RemoteCLIP de-duplication; 13{,}092 images, 65{,}460 pairs. \\
+RET-2 ckpt & GeoRSCLIP RS5M ViT-B/32 checkpoint fine-tuned on RET-2 (\texttt{RS5M\_ViT-B-32\_RET-2.pt}) \cite{zhang2024georsclip}. \\
+A3 & Our controlled module study: same code, data, seed list and hyper-parameters; only module flags change. \\
+B1 & A3 baseline: released PR-CLIP code, no added module. \\
+RIP-fixed & D4 rotation-invariant pooling of image embeddings, used in training and retrieval (Sec.~\ref{sec:rip}). \\
+E1 & Text padding mask in extraction + CLIP-initialised projections $W^{proj}$ (Sec.~\ref{sec:e1}). \\
+EXT v2 & Extraction encoder restricted to cross-modal attention (Sec.~\ref{sec:ext2}). \\
+R2 / R4 / R3 & RIP-fixed / RIP-fixed+E1 / RIP-fixed+E1+EXT v2. \\
+Epoch 0 & Evaluation of the RET-2 ckpt before any training. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{RIP-fixed: D4 Rotation-Invariant Pooling}
+\label{sec:rip}
+Let $G_{D4}$ be the eight transforms of a square image: rotations by $0^\circ, 90^\circ, 180^\circ, 270^\circ$ and the same rotations after a horizontal flip. For image $I$,
+\begin{equation}
+\bar v = \frac{1}{8}\sum_{g\in G_{D4}} \frac{f_v(g(I))}{\lVert f_v(g(I))\rVert_2},\qquad
+v_{D4} = \frac{\bar v}{\lVert \bar v\rVert_2}\,\lVert f_v(I)\rVert_2 .
+\label{eq:rip}
+\end{equation}
+The direction of $v_{D4}$ is the same for all eight transformed versions of $I$, and its norm equals that of the original embedding, so the logit scale keeps its meaning. During training only the identity branch keeps gradients; the other seven run without gradient tracking. The same pooling is used when computing retrieval embeddings. ``Fixed'' refers to this fixed, parameter-free averaging.
+
+\emph{Cost.} Each image needs eight forward passes of $f_v$. For T2I retrieval the image gallery is encoded once offline, so the query cost does not change. For I2T retrieval the query image is encoded eight times. Text encoding is unchanged. RIP-fixed can be harmful when the caption depends on absolute direction (``north of the river''); RSICD captions rarely do this.
+
+\subsection{E1: Padding-Aware, CLIP-Initialised Extraction}
+\label{sec:e1}
+In the released code all 77 text positions, including padding after the end-of-text token, enter the extraction encoder. E1 adds a key-padding mask so that padding tokens are ignored. It also initialises $W_v^{proj}$ ($768\to512$) with CLIP's visual projection and $W_t^{proj}$ ($512\to512$) with CLIP's text projection, with zero bias, instead of random weights. E1 adds no parameters.
+
+\subsection{EXT v2: Cross-Modal-Only Extraction}
+\label{sec:ext2}
+EXT~v2 keeps the original 2-layer encoder and its weights but applies an attention mask that blocks image--image and text--text attention. The self-attention layers then act as bidirectional cross attention, so every extracted feature is built only from the other modality. This matches the role the extraction output plays in filtering, where it is subtracted as ``information shared with the other modality''. EXT~v2 adds no parameters.
+
+\subsection{Other Explored Variants}
+Before A3 we explored three variants, each in its own setup. (i) \emph{Dual residual adapter}: an identity-initialised bottleneck MLP $x' = x + f_\theta(x)$ on the image and text retrieval embeddings, trained with a 100$\times$ learning rate. (ii) \emph{BRCR} (bidirectional reliability-aware cross-modal reconstruction): token-weighted pooling $z=\sum_i \alpha_i h_i$ in the reconstruction loss, a text padding mask, bidirectional decoder attention, detached targets, and optionally a sum instead of mean loss reduction. (iii) \emph{Modified extraction}: modality-type embeddings, pre-layer normalisation, GELU, and a text padding mask. These variants are reported in Sec.~\ref{sec:explore} but were not run under the A3 protocol.
+
+% ===========================================================================
+\section{Experimental Setup}
+
+\subsection{Datasets and Splits}
+We train on RET-2 and test on RSICD (1{,}093 images, 5{,}465 captions) \cite{lu2018rsicd} and RSITMD (452 images, 2{,}260 captions) \cite{yuan2022amfmn}, using the CSV files released with PR-CLIP. No test image appears in the RET-2 training file.
+
+The released split has a problem for model selection. \texttt{rsicd\_val.csv} is byte-identical to \texttt{rsicd\_test.csv} (same SHA-256), and 733 of the 856 images in \texttt{rsitmd\_val.csv} also appear in RET-2 training. We therefore hold out 10\% of RET-2 \emph{images} (1{,}311 images, 6{,}555 pairs; stratified by scene name, seed 0) as a validation split, and train on the remaining 11{,}781 images. All five captions of an image stay on the same side. The script and SHA-256 manifest are in the repository.
+
+\subsection{Initialization}
+All A3 runs start from the RET-2 ckpt. Some earlier runs start from the original OpenAI CLIP ViT-B/32 weights; these are labelled ``CLIP'' and are not comparable with RET-2 runs.
+
+\subsection{Training Configuration}
+The A3 setup is: 1 epoch, batch size 16, learning rate $2\times10^{-7}$, 100 warm-up steps, weight decay 0.5, maximum gradient norm 50, AMP, ViT-B/32 at $224\times224$. Seeds 1, 2 and 3 are used for every trained configuration. Hyper-parameters are not tuned per module.
+
+\subsection{Evaluation Protocol}
+\begin{itemize}
+\item \textbf{Epoch 0} is the RET-2 ckpt evaluated directly. It is deterministic, so it needs one run per configuration.
+\item \textbf{Epoch 1} is evaluated on validation and test after one epoch, for each seed.
+\item \textbf{Validation-selected}: for each seed, the epoch (0 or 1) with the higher validation mR is chosen, and only that model's test result is reported. The test set is never used to choose an epoch or checkpoint.
+\item We report mean $\pm$ sample standard deviation over seeds.
+\item Inference time IT(s) is the wall-clock time to encode all test images and captions and compute the ranking, measured on the same GPU for every configuration.
+\end{itemize}
+
+\subsection{Metrics}
+For $K\in\{1,5,10\}$, R@$K$ is the share of queries whose ground-truth match is in the top $K$. With five captions per image, an I2T query counts as correct if any of its captions is in the top $K$. Mean Recall is
+\begin{equation}
+\mathrm{mR} = \frac{1}{6}\sum_{K\in\{1,5,10\}}\big(R_{I2T}@K + R_{T2I}@K\big).
+\end{equation}
+All values are percentages.
+
+\subsection{Implementation and Reproducibility}
+All A3 changes are in \texttt{prclip\_patches/} of our repository: \texttt{apply\_patches.py} applies them to the authors' code at commit \texttt{242fba6}, and modules are switched only by the environment variables \texttt{PRCLIP\_RIP}, \texttt{PRCLIP\_E1} and \texttt{PRCLIP\_EXT2}. Unit tests in \texttt{tests/} check D4 invariance, norm preservation, gradient flow, and masking. The notebook \texttt{A3\_MultiSeed\_Colab.ipynb} runs the full protocol and writes every evaluation to \texttt{metrics.jsonl}; \texttt{aggregate\_results.py} produces Table~\ref{tab:a3}. Logs of earlier runs are stored in \texttt{results/legacy/}.
+
+% ===========================================================================
+\section{Results}
+
+\subsection{Reference Results}
+Table~\ref{tab:published} lists published RSICD results and our evaluation of the RET-2 ckpt. Our evaluation of the RET-2 ckpt (38.88\%) agrees with the GeoRSCLIP result reported in the PR-CLIP paper (38.87\%); the small differences in two Recall values come from evaluation details. This is the same checkpoint, not a reproduction of PR-CLIP. It is 0.35 points below PR-CLIP.
+
+\begin{table*}[t]
+\centering
+\caption{Published RSICD results \cite{guan2025prclip} and our evaluation of the starting checkpoint. Values in \%.}
+\label{tab:published}
+\footnotesize
+\begin{tabular}{@{}llccccccc@{}}
+\toprule
+Method & Training data & I2T R@1 & I2T R@5 & I2T R@10 & T2I R@1 & T2I R@5 & T2I R@10 & mR \\
+\midrule
+AMFMN \cite{yuan2022amfmn} & RSICD & 5.39 & 15.08 & 23.40 & 4.90 & 18.28 & 31.44 & 16.42 \\
+GaLR \cite{yuan2022galr} & RSICD & 6.59 & 19.85 & 31.04 & 4.69 & 19.48 & 32.13 & 18.96 \\
+MTGFE \cite{zhang2023mtgfe} & RSICD & 15.28 & 37.05 & 51.60 & 8.67 & 27.56 & 43.92 & 30.68 \\
+PE-RSITR \cite{yuan2023pe} & RSICD & 14.13 & 31.51 & 44.78 & 11.63 & 33.92 & 50.73 & 31.12 \\
+RemoteCLIP \cite{liu2024remoteclip} & RET-3+DET-10+SEG-4 & 17.02 & 37.97 & 51.51 & 13.71 & 37.11 & 54.25 & 35.26 \\
+GeoRSCLIP \cite{zhang2024georsclip} & RS5M+RET-2 & 21.13 & 41.72 & 55.63 & 15.59 & 41.19 & 57.99 & 38.87 \\
+PR-CLIP \cite{guan2025prclip} & RET-2 & 22.32 & 40.81 & 55.90 & 16.47 & 41.74 & 58.12 & 39.23 \\
+\midrule
+RET-2 ckpt, our evaluation & RS5M+RET-2 & 21.13 & 41.72 & 55.63 & 15.59 & 41.24 & 57.95 & 38.88 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{RIP-fixed Without Training}
+Table~\ref{tab:ep0} reports the RET-2 ckpt at epoch 0 with and without RIP-fixed. In the preliminary A3 run, which evaluated before training, B1 gave 38.89\% and RIP-fixed gave 39.66\% on RSICD. The 39.66\% is 0.43 points above the published PR-CLIP result, although it uses no positional reconstruction and no training. After one epoch of fine-tuning, both configurations dropped (to 38.72\% and 39.09\%).
+
+Two cautions apply. First, 39.66\% was observed on the test set, and the decision to stop at epoch 0 was made after seeing test numbers; the validation-selected rows of Table~\ref{tab:a3} are the fair comparison. Second, the RSITMD result is needed to tell whether the gain holds on a second test set. The remaining cells in Table~\ref{tab:ep0} are filled by the Phase~1 cells of the A3 notebook.
+
+\begin{table*}[t]
+\centering
+\caption{RET-2 ckpt evaluated without training (epoch 0). Deterministic, one run per row. IT(s): total inference time on the test set. \TBD{} = produced by Phase~1 of the A3 notebook.}
+\label{tab:ep0}
+\footnotesize
+\begin{tabular}{@{}llcccccccc@{}}
+\toprule
+Test set & Configuration & I2T R@1 & I2T R@5 & I2T R@10 & T2I R@1 & T2I R@5 & T2I R@10 & mR & IT(s) \\
+\midrule
+\multirow{2}{*}{RSICD} & B1 (single pass) & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & 38.89\pend & \TBD \\
+ & RIP-fixed (8 passes) & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & 39.66\pend & \TBD \\
+\midrule
+\multirow{2}{*}{RSITMD} & B1 (single pass) & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+ & RIP-fixed (8 passes) & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+\midrule
+RSICD & PR-CLIP (published) & 22.32 & 40.81 & 55.90 & 16.47 & 41.74 & 58.12 & 39.23 & 3.95 \\
+\bottomrule
+\multicolumn{10}{@{}p{0.95\textwidth}@{}}{\pend{} Preliminary A3 run; per-metric values and log to be re-generated with the released notebook. The published IT(s) used an RTX 4090 and is not directly comparable.}
+\end{tabular}
+\end{table*}
+
+\subsection{Controlled A3 Module Study}
+Table~\ref{tab:a3} first lists the preliminary single-seed A3 runs. RIP-fixed (R2) raised mR from 38.72\% to 39.09\% (+0.37). Adding E1 (R4) gave 39.10\% and adding EXT~v2 (R3) gave 39.11\%. Nearly all of the gain therefore comes from RIP-fixed, which directly changes the embeddings used for retrieval. Extraction runs only during training and can affect retrieval only through gradients to the backbone, and with one epoch at learning rate $2\times10^{-7}$ that effect is small. Compared with PR-CLIP, the best run (R3) has lower I2T R@1 (20.04 vs.\ 22.32) but higher T2I R@5 and R@10.
+
+The seed-to-seed spread we saw elsewhere is about 0.4 points (38.15\% vs.\ 37.75\% for the same setting with seeds 1 and 2 in Table~\ref{tab:sens}). The 0.37-point gain of RIP-fixed is therefore within the range of seed noise, and the 0.01--0.02-point differences among R2, R4 and R3 carry no information. The lower block of Table~\ref{tab:a3} reports the three-seed, validation-selected results needed to settle this.
+
+\begin{table*}[t]
+\centering
+\caption{Controlled A3 study on RSICD test. Upper block: preliminary runs (seed 1, epoch chosen without validation). Lower block: three seeds, mean $\pm$ std; ``val-selected'' picks epoch 0 or 1 per seed on the RET-2 validation split.}
+\label{tab:a3}
+\footnotesize
+\begin{tabular}{@{}lllccccccc@{}}
+\toprule
+Run & Setting & $n$ & I2T R@1 & I2T R@5 & I2T R@10 & T2I R@1 & T2I R@5 & T2I R@10 & mR \\
+\midrule
+PR-CLIP (published) & -- & -- & 22.32 & 40.81 & 55.90 & 16.47 & 41.74 & 58.12 & 39.23 \\
+\midrule
+B1 baseline & epoch 1, seed 1 & 1 & 20.31 & 40.99 & 53.80 & 16.40 & 42.01 & 58.79 & 38.72 \\
+R2 RIP-fixed & epoch 1, seed 1 & 1 & 19.95 & 41.08 & 55.44 & 16.32 & 42.16 & 59.58 & 39.09 \\
+R4 RIP+E1 & epoch 1, seed 1 & 1 & 19.95 & 41.26 & 55.35 & 16.43 & 42.07 & 59.52 & 39.10 \\
+R3 RIP+E1+EXT v2 & epoch 1, seed 1 & 1 & 20.04 & 40.99 & 55.72 & 16.40 & 42.16 & 59.36 & 39.11 \\
+\midrule
+\IfFileExists{tables/a3_multiseed_rows.tex}{\input{tables/a3_multiseed_rows.tex}}{%
+B1 baseline & val-selected & 3 & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+R2 RIP-fixed & val-selected & 3 & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+R3 RIP+E1+EXT v2 & val-selected & 3 & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\}
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Sensitivity to Optimization and Initialization}
+Table~\ref{tab:sens} gives earlier runs that vary the learning rate, number of epochs, seed, batch size and initialization. Every fine-tuning run from the RET-2 ckpt ended below the checkpoint itself (38.88\%). With learning rate $5\times10^{-6}$ and seed 1, mR fell from 38.15\% after one epoch to 37.51\% after two and 36.96\% after three. A 20-epoch RET-2 run peaked at 36.77\% (epoch 15) and ended at 36.48\%. Runs from OpenAI CLIP weights stayed between 34.27\% and 36.86\%. These runs selected the best epoch on the test set, so the ``best epoch'' numbers are optimistic; the trend, however, is consistent. Without training-loss and validation curves we cannot tell whether the drop is overfitting or drift away from the RS5M representation.
+
+\begin{table}[t]
+\centering
+\caption{Earlier runs on RSICD test (mR, \%). lr: learning rate; ep: epochs; best ep.\ was chosen on test. Log: \checkmark{} = notebook output in repository; \pend{} = log to be uploaded.}
+\label{tab:sens}
+\footnotesize
+\begin{tabular}{@{}lllcc@{}}
+\toprule
+Init & Setting & Seed & mR & Log \\
+\midrule
+RET-2 & no training & -- & 38.88 & \pend \\
+RET-2 & 1 ep, lr $2\mathrm{e}{-7}$ & 1 & 38.72 & \pend \\
+RET-2 & 1 ep, lr $2\mathrm{e}{-7}$ & -- & 38.70 & \pend \\
+RET-2 & 1 ep, lr $5\mathrm{e}{-6}$ & 1 & 38.15 & \pend \\
+RET-2 & 1 ep, lr $1\mathrm{e}{-6}$ & -- & 38.11 & \pend \\
+RET-2 & 1 ep, lr $5\mathrm{e}{-6}$ & 2 & 37.75 & \pend \\
+RET-2 & 2 ep, lr $5\mathrm{e}{-6}$ & 1 & 37.51 & \pend \\
+RET-2 & 3 ep, lr $5\mathrm{e}{-6}$ & 1 & 36.96 & \pend \\
+RET-2 & 20 ep, best ep.\ 15 & -- & 36.77 & \pend \\
+RET-2 & 20 ep, final & -- & 36.48 & \pend \\
+CLIP & 20 ep, best ep.\ 17 & 0 & 36.86 & \pend \\
+CLIP & 20 ep, best ep.\ 9 & 1 & 36.33 & \pend \\
+CLIP & 20 ep, best ep.\ 11 & 3 & 35.31 & \pend \\
+CLIP & batch 64, 20 ep, best ep.\ 5 & -- & 34.27 & \pend \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Exploratory Variants}
+\label{sec:explore}
+Table~\ref{tab:explore} lists the variants tested before A3. None exceeded the RET-2 ckpt. Turning on every BRCR switch, including sum-reduced loss, gave the lowest result (37.97\%); because several switches changed at once, the drop cannot be attributed to one of them. The modified extraction module reached 38.74\% alone, in line with the very small extraction effect in A3. These variants used setups that differ from A3 (for example the adapter's 100$\times$ learning rate), so they should not be ranked against Table~\ref{tab:a3}.
+
+\begin{table}[t]
+\centering
+\caption{Exploratory variants on RSICD test (1 epoch, batch 16, lr $2\mathrm{e}{-7}$, RET-2 init, seed 1).}
+\label{tab:explore}
+\footnotesize
+\begin{tabular}{@{}lcl@{}}
+\toprule
+Variant & mR & Log \\
+\midrule
+RET-2 ckpt (no training) & 38.88 & \pend \\
+Modified extraction & 38.74 & \checkmark{} \texttt{PR\_CLIP\_(2)} \\
+Dual residual adapter & 38.69 & \pend \\
+BRCR (mask, bidir, rel, detach) & 38.68 & \checkmark{} \texttt{PR\_CLIP\_v4\_BRCR} \\
+BRCR, all switches (+ sum loss) & 37.97 & \pend \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ===========================================================================
+\section{Discussion}
+\textbf{The starting checkpoint dominates.} The RET-2 ckpt already gives 38.88\%, within 0.35 points of PR-CLIP. Every fine-tuning setting we tried moved away from it. Under a small budget, keeping the pretrained representation was more effective than adapting it.
+
+\textbf{RIP-fixed acts at retrieval time.} RIP-fixed was the only change with a gain larger than a few hundredths of a point, and the gain was largest with no training at all. This suggests that the benefit comes from averaging out orientation-dependent noise in the image embedding at retrieval time, not from better training. Averaging over D4 also makes the gallery embeddings of rotated copies of a scene identical, which fits nadir imagery where orientation is arbitrary. The cost is eight image-encoder passes per image; for T2I search this is an offline indexing cost only.
+
+\textbf{Extraction changes have little effect in this setup.} Extraction only shapes gradients, and one epoch at a very small learning rate gives it little room to change the backbone. A fair test of E1 and EXT~v2 would need longer training with the paper's objective and batch size.
+
+\textbf{Single seeds are not enough.} A seed changes the result by up to 0.4 points, which is as large as the RIP-fixed gain. Conclusions about R2, R3 and R4 should rest on the multi-seed, validation-selected results.
+
+% ===========================================================================
+\section{Limitations}
+\begin{itemize}
+\item We did not retrain PR-CLIP with the paper's objective, batch size 160 and 20 epochs; the released code's objective also differs from the paper's equation. No number here is a full reproduction of 39.23\%.
+\item The preliminary results (39.09/39.10/39.11\% and 39.66\% at epoch 0) come from one seed, and the epoch was chosen after seeing test results. They are replaced by validation-selected, three-seed results as these become available (Tables~\ref{tab:ep0} and \ref{tab:a3}).
+\item The validation split is carved from RET-2, so A3 runs in the new protocol train on 10\% fewer images than the preliminary runs.
+\item RIP-fixed is evaluated only on RSICD and RSITMD; it may hurt captions with absolute directions, which we have not measured separately.
+\item The exploratory variants were not run under the A3 protocol and lack a complete factorial ablation.
+\end{itemize}
+
+% ===========================================================================
+\section{Conclusion}
+We studied PR-CLIP starting from the public RET-2 checkpoint under a small training budget. The checkpoint alone reaches 38.88\% mR on RSICD, and every fine-tuning run we tried ended below it. Among parameter-free changes, D4 rotation-invariant pooling was the only one with a noticeable effect: 39.09\% after one epoch and 39.66\% with no training in a preliminary run, at the cost of eight image-encoder passes per image. The extraction variants E1 and EXT~v2 changed mR by at most 0.02 points. We release the module patch, a validation split that fixes the val/test overlap in the public CSV files, and a notebook that produces validation-selected, three-seed results. Future work should run PR-CLIP with the paper's objective and configuration, test RIP-fixed on direction-dependent captions, and replace uniform D4 averaging with learned aggregation \cite{shanmugam2021tta}.
+
+\section*{Code Availability}
+Code, patches, notebooks and logs: \url{https://github.com/hoangk64-ai/PR-CLIP-Improved}. Authors' PR-CLIP code: \url{https://github.com/ADMIS-TONGJI/PR-CLIP} (commit \texttt{242fba6}).
+
+% ===========================================================================
+\begin{thebibliography}{99}
+\footnotesize
+
+\bibitem{guan2025prclip}
+J.~Guan, Y.~Shu, W.~Li, Z.~Song, and Y.~Zhang, ``PR-CLIP: Cross-modal positional reconstruction for remote sensing image--text retrieval,'' \emph{Remote Sens.}, vol.~17, no.~13, Art.~no.~2117, 2025, doi: 10.3390/rs17132117.
+
+\bibitem{prclipcode}
+ADMIS-TONGJI, ``PR-CLIP,'' GitHub repository, 2025. [Online]. Available: \url{https://github.com/ADMIS-TONGJI/PR-CLIP}
+
+\bibitem{itra}
+D.~Chen, ``ITRA,'' GitHub repository. [Online]. Available: \url{https://github.com/ChenDelong1999/ITRA}
+
+\bibitem{radford2021clip}
+A.~Radford \emph{et~al.}, ``Learning transferable visual models from natural language supervision,'' in \emph{Proc. 38th Int. Conf. Mach. Learn. (ICML)}, 2021, pp.~8748--8763.
+
+\bibitem{dosovitskiy2021vit}
+A.~Dosovitskiy \emph{et~al.}, ``An image is worth 16x16 words: Transformers for image recognition at scale,'' in \emph{Proc. Int. Conf. Learn. Represent. (ICLR)}, 2021.
+
+\bibitem{lu2018rsicd}
+X.~Lu, B.~Wang, X.~Zheng, and X.~Li, ``Exploring models and data for remote sensing image caption generation,'' \emph{IEEE Trans. Geosci. Remote Sens.}, vol.~56, no.~4, pp.~2183--2195, 2018.
+
+\bibitem{yuan2022amfmn}
+Z.~Yuan \emph{et~al.}, ``Exploring a fine-grained multiscale method for cross-modal remote sensing image retrieval,'' \emph{IEEE Trans. Geosci. Remote Sens.}, vol.~60, pp.~1--19, 2022.
+
+\bibitem{yuan2022galr}
+Z.~Yuan \emph{et~al.}, ``Remote sensing cross-modal text-image retrieval based on global and local information,'' \emph{IEEE Trans. Geosci. Remote Sens.}, vol.~60, pp.~1--16, 2022.
+
+\bibitem{faghri2018vsepp}
+F.~Faghri, D.~J. Fleet, J.~R. Kiros, and S.~Fidler, ``VSE++: Improving visual-semantic embeddings with hard negatives,'' in \emph{Proc. Brit. Mach. Vis. Conf. (BMVC)}, 2018.
+
+\bibitem{lee2018scan}
+K.-H. Lee, X.~Chen, G.~Hua, H.~Hu, and X.~He, ``Stacked cross attention for image-text matching,'' in \emph{Proc. Eur. Conf. Comput. Vis. (ECCV)}, 2018, pp.~201--216.
+
+\bibitem{pan2023swan}
+J.~Pan, Q.~Ma, and C.~Bai, ``Reducing semantic confusion: Scene-aware aggregation network for remote sensing cross-modal retrieval,'' in \emph{Proc. ACM Int. Conf. Multimedia Retrieval (ICMR)}, 2023, pp.~398--406.
+
+\bibitem{pan2023pir}
+J.~Pan, Q.~Ma, and C.~Bai, ``A prior instruction representation framework for remote sensing image-text retrieval,'' in \emph{Proc. 31st ACM Int. Conf. Multimedia}, 2023, pp.~611--620.
+
+\bibitem{ji2023kamcl}
+Z.~Ji, C.~Meng, Y.~Zhang, Y.~Pang, and X.~Li, ``Knowledge-aided momentum contrastive learning for remote-sensing image text retrieval,'' \emph{IEEE Trans. Geosci. Remote Sens.}, vol.~61, pp.~1--13, 2023.
+
+\bibitem{zhang2023mtgfe}
+X.~Zhang \emph{et~al.}, ``A fusion encoder with multi-task guidance for cross-modal text--image retrieval in remote sensing,'' \emph{Remote Sens.}, vol.~15, Art.~no.~4637, 2023.
+
+\bibitem{yuan2023pe}
+Y.~Yuan, Y.~Zhan, and Z.~Xiong, ``Parameter-efficient transfer learning for remote sensing image--text retrieval,'' \emph{IEEE Trans. Geosci. Remote Sens.}, vol.~61, pp.~1--14, 2023.
+
+\bibitem{ma2024direction}
+Q.~Ma, J.~Pan, and C.~Bai, ``Direction-oriented visual-semantic embedding model for remote sensing image-text retrieval,'' \emph{IEEE Trans. Geosci. Remote Sens.}, vol.~62, Art.~no.~4704014, 2024.
+
+\bibitem{yang2024transcending}
+R.~Yang \emph{et~al.}, ``Transcending fusion: A multi-scale alignment method for remote sensing image-text retrieval,'' \emph{IEEE Trans. Geosci. Remote Sens.}, vol.~62, Art.~no.~4709217, 2024.
+
+\bibitem{he2024vgsgn}
+Y.~He, X.~Xu, H.~Chen, J.~Li, and F.~Pu, ``Visual global-salient guided network for remote sensing image-text retrieval,'' \emph{IEEE Trans. Geosci. Remote Sens.}, vol.~62, Art.~no.~5641814, 2024.
+
+\bibitem{liu2024remoteclip}
+F.~Liu \emph{et~al.}, ``RemoteCLIP: A vision language foundation model for remote sensing,'' \emph{IEEE Trans. Geosci. Remote Sens.}, vol.~62, Art.~no.~5622216, 2024.
+
+\bibitem{zhang2024georsclip}
+Z.~Zhang, T.~Zhao, Y.~Guo, and J.~Yin, ``RS5M and GeoRSCLIP: A large scale vision-language dataset and a large vision-language model for remote sensing,'' \emph{IEEE Trans. Geosci. Remote Sens.}, vol.~62, Art.~no.~5642123, 2024.
+
+\bibitem{wang2024skyclip}
+Z.~Wang, R.~Prabha, T.~Huang, J.~Wu, and R.~Rajagopal, ``SkyScript: A large and semantically diverse vision-language dataset for remote sensing,'' in \emph{Proc. AAAI Conf. Artif. Intell.}, vol.~38, 2024, pp.~5805--5813.
+
+\bibitem{ji2024ebaker}
+Z.~Ji \emph{et~al.}, ``Eliminate before align: A remote sensing image-text retrieval framework with keyword explicit reasoning,'' in \emph{Proc. 32nd ACM Int. Conf. Multimedia}, 2024, pp.~1662--1671.
+
+\bibitem{cheng2016ricnn}
+G.~Cheng, P.~Zhou, and J.~Han, ``Learning rotation-invariant convolutional neural networks for object detection in VHR optical remote sensing images,'' \emph{IEEE Trans. Geosci. Remote Sens.}, vol.~54, no.~12, pp.~7405--7415, 2016.
+
+\bibitem{cohen2016gcnn}
+T.~Cohen and M.~Welling, ``Group equivariant convolutional networks,'' in \emph{Proc. 33rd Int. Conf. Mach. Learn. (ICML)}, 2016, pp.~2990--2999.
+
+\bibitem{han2021redet}
+J.~Han, J.~Ding, N.~Xue, and G.-S. Xia, ``ReDet: A rotation-equivariant detector for aerial object detection,'' in \emph{Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR)}, 2021.
+
+\bibitem{shanmugam2021tta}
+D.~Shanmugam, D.~Blalock, G.~Balakrishnan, and J.~Guttag, ``Better aggregation in test-time augmentation,'' in \emph{Proc. IEEE/CVF Int. Conf. Comput. Vis. (ICCV)}, 2021.
+
+\end{thebibliography}
+
+\end{document}

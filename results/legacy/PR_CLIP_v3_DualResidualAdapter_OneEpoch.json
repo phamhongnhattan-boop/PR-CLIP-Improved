@@ -1,0 +1,8 @@
+{
+  "notebook": "PR_CLIP_v3_DualResidualAdapter_OneEpoch.ipynb",
+  "has_outputs": true,
+  "runs": [],
+  "errors": [
+    "AssertionError: GPU runtime required"
+  ]
+}

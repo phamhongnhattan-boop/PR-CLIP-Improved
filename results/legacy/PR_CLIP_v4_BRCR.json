@@ -1,0 +1,25 @@
+{
+  "notebook": "PR_CLIP_v4_BRCR.ipynb",
+  "has_outputs": true,
+  "runs": [
+    {
+      "config": {
+        "name": "rsicd_v4_decoder_lrate_5e-6"
+      },
+      "evaluations": [
+        {
+          "run": "rsicd_v4_decoder_lrate_5e-6",
+          "epoch": 1,
+          "image2text-R@1": 20.22,
+          "image2text-R@5": 40.99,
+          "image2text-R@10": 53.8,
+          "text2image-R@1": 16.4,
+          "text2image-R@5": 41.92,
+          "text2image-R@10": 58.77,
+          "mean-recall": 38.68
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,51 @@
+% PR-CLIP training pipeline with the three A3 modification points (orange).
+\begin{tikzpicture}[
+  font=\footnotesize, >=Stealth, node distance=5mm,
+  box/.style={draw, rounded corners=1.5pt, align=center, minimum height=9mm, inner sep=3pt, fill=white},
+  enc/.style={box, fill=blue!7, minimum width=22mm},
+  mod/.style={box, fill=gray!10, minimum width=24mm},
+  modmark/.style={draw=orange!85!black, very thick, rounded corners=2pt},
+  tag/.style={fill=orange!85!black, text=white, font=\scriptsize\bfseries, rounded corners=1pt, inner sep=2pt, align=center},
+  lossb/.style={box, fill=red!6, draw=red!60!black, minimum width=16mm},
+  lab/.style={font=\scriptsize, fill=white, inner sep=1pt}
+]
+% inputs and encoders
+\node[box, minimum width=14mm] (img) {Image $I$};
+\node[box, minimum width=14mm, below=14mm of img] (txt) {Text $t$};
+\node[enc, right=16mm of img] (venc) {CLIP image\\encoder $f_v$};
+\node[enc, right=16mm of txt] (tenc) {CLIP text\\encoder $f_t$};
+\draw[->] (img) -- (venc);
+\draw[->] (txt) -- (tenc);
+% global path (used for retrieval)
+\node[box, right=10mm of venc, minimum width=12mm] (vg) {$v^{o}$};
+\node[box, right=10mm of tenc, minimum width=12mm] (tg) {$t^{o}$};
+\draw[->] (venc) -- node[lab, above] {global} (vg);
+\draw[->] (tenc) -- node[lab, above] {global} (tg);
+\node[lossb] (cmc) at ($(vg)!0.5!(tg) + (22mm,0)$) {CMC loss};
+\draw[->] (vg) -| (cmc);
+\draw[->] (tg) -| (cmc);
+\node[font=\scriptsize, text=blue!50!black, align=left, right=3mm of cmc] {retrieval uses\\only $v^{o}, t^{o}$};
+% token path (training only)
+\node[mod, below=16mm of tenc] (proj) {Projections\\$W_v^{proj}$, $W_t^{proj}$};
+\node[mod, right=14mm of proj] (ext) {Extraction\\2-layer encoder};
+\node[mod, right=14mm of ext] (fil) {Filtering\\$\mathrm{Lin}(\tilde X^{o}-X^{p})$};
+\node[mod, right=14mm of fil] (rec) {Reconstruction\\8-layer decoder};
+\node[lossb, right=14mm of rec] (prc) {PRC loss};
+\draw[->] ($(venc.south)+(-5mm,0)$) -- ++(0,-3mm) -| ($(proj.west)+(-7mm,0)$) node[lab, pos=0.82, right] {tokens $V^{o}$} -- (proj.west);
+\draw[->] (tenc) -- node[lab, right] {tokens $T^{o}$} (proj);
+\draw[->] (proj) -- (ext);
+\draw[->] (ext) -- node[lab, above] {$V^{p}, T^{p}$} (fil);
+\draw[->] (fil) -- node[lab, above] {$V^{f}, T^{f}$} (rec);
+\draw[->] (rec) -- node[lab, above] {$V^{r}, T^{r}$} (prc);
+% modification marks
+\node[modmark, fit=(venc), inner sep=2pt] (m1) {};
+\node[tag, above=1mm of m1] {RIP-fixed: D4 pooling (training + retrieval)};
+\node[modmark, fit=(proj), inner sep=2pt] (m2) {};
+\node[tag, below=1mm of m2] {E1: CLIP init\\+ text padding mask};
+\node[modmark, fit=(ext), inner sep=2pt] (m3) {};
+\node[tag, below=1mm of m3] {EXT v2: cross-modal\\-only attention};
+% train-only bracket
+\draw[decorate, decoration={brace, amplitude=4pt, mirror}, gray]
+  ([yshift=-14mm]proj.south west) -- ([yshift=-14mm]prc.south east)
+  node[midway, below=4pt, gray, font=\scriptsize] {positional reconstruction task: training only, removed at retrieval time};
+\end{tikzpicture}

@@ -1,0 +1,33 @@
+{
+  "notebook": "PR_CLIP_AGR_v2_OneEpoch.ipynb",
+  "has_outputs": true,
+  "runs": [
+    {
+      "config": {
+        "name": "rsicd_AGR_gatepool_dlr10_bs16_ep1_v2",
+        "lr": "2e-07",
+        "epochs": "1",
+        "batch_size": "16",
+        "seed": "1",
+        "load_clip_weights": "True",
+        "train_data": "./dataset/train/ret2.csv",
+        "retrieval_data": "./dataset/test/rsicd_test.csv",
+        "precision": "amp"
+      },
+      "evaluations": [
+        {
+          "run": "rsicd_AGR_gatepool_dlr10_bs16_ep1_v2",
+          "epoch": 1,
+          "image2text-R@1": 19.85,
+          "image2text-R@5": 40.99,
+          "image2text-R@10": 54.16,
+          "text2image-R@1": 16.21,
+          "text2image-R@5": 41.74,
+          "text2image-R@10": 58.57,
+          "mean-recall": 38.59
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

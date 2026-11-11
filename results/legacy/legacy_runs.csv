@@ -1,0 +1,8 @@
+notebook,name,lr,epochs,batch_size,seed,load_clip_weights,train_data,retrieval_data,precision,run,epoch,image2text-R@1,image2text-R@5,image2text-R@10,text2image-R@1,text2image-R@5,text2image-R@10,mean-recall
+PR_CLIP_(2).ipynb,rsicd_bs16_ret2_lr2e-7,2e-07,1,16,1,True,./dataset/train/ret2.csv,./dataset/test/rsicd_test.csv,amp,rsicd_bs16_ret2_lr2e-7-11_04-07_47_05,1,19.85,41.54,54.53,16.18,41.83,58.52,38.74
+PR_CLIP_AGR_v2_OneEpoch.ipynb,rsicd_AGR_gatepool_dlr10_bs16_ep1_v2,2e-07,1,16,1,True,./dataset/train/ret2.csv,./dataset/test/rsicd_test.csv,amp,rsicd_AGR_gatepool_dlr10_bs16_ep1_v2,1,19.85,40.99,54.16,16.21,41.74,58.57,38.59
+PR_CLIP_STPR_Improved_Ready.ipynb,rsicd_STPR_mask15_beta005_bs16_lr2e-7,2e-07,1,16,1,True,./dataset/train/ret2.csv,./dataset/test/rsicd_test.csv,amp,rsicd_STPR_mask15_beta005_bs16_lr2e-7,1,20.31,40.9,53.71,16.43,42.01,58.81,38.69
+PR_CLIP_v3_DualResidualAdapter_OneEpoch.ipynb,(no retrieval result in saved outputs),,,,,,,,,AssertionError: GPU runtime required,,,,,,,,
+PR_CLIP_v3_FIXED_EndToEnd_Train.ipynb,(no retrieval result in saved outputs),,,,,,,,,,,,,,,,,
+PR_CLIP_v4_BRCR.ipynb,rsicd_v4_decoder_lrate_5e-6,,,,,,,,,rsicd_v4_decoder_lrate_5e-6,1,20.22,40.99,53.8,16.4,41.92,58.77,38.68
+PR_CLIP_v4_OneEpoch.ipynb,(no retrieval result in saved outputs),,,,,,,,,,,,,,,,,

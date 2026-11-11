@@ -1,0 +1,366 @@
+diff --git a/data/train_data.py b/data/train_data.py
+index ff228cc..f8b6c66 100644
+--- a/data/train_data.py
++++ b/data/train_data.py
+@@ -157,11 +157,11 @@ class CsvDataset(Dataset):
+             ])
+ 
+         # Faster data loading. see https://github.com/pytorch/pytorch/issues/13246#issuecomment-905703662
+-        self.images = np.array(df[img_key].tolist()).astype(np.string_)
++        self.images = np.array(df[img_key].tolist()).astype(np.bytes_)
+         self.captions = np.array(df[caption_key].tolist())
+         for i in range(len(self.captions)):
+             self.captions[i] = self.captions[i].encode('ascii',errors='ignore')
+-        self.captions = self.captions.astype(np.string_)
++        self.captions = self.captions.astype(np.bytes_)
+ 
+         # use a subset of given dataset
+         if dataset_size is not None:
+diff --git a/evaluation/evaluation.py b/evaluation/evaluation.py
+index bfd0672..1557332 100644
+--- a/evaluation/evaluation.py
++++ b/evaluation/evaluation.py
+@@ -1,3 +1,4 @@
++import torch
+ import logging
+ import os
+ import json
+@@ -113,7 +114,23 @@ def evaluate(model, epoch, preprocess, args, tb_writer=None):
+         
+     # Image-text retrieval
+     metrics = {}
++    import time as _t, json as _j, os as _o  # [A3-METRICS]
++    from model.a3_modules import active_flags as _flags
++    if torch.cuda.is_available():
++        torch.cuda.synchronize()
++    _t0 = _t.time()
+     retrieval_metrics = retrieval_evaluation(model, epoch, preprocess, args)
++    if torch.cuda.is_available():
++        torch.cuda.synchronize()
++    _it = _t.time() - _t0
++    if getattr(args, 'logs', None) and str(args.logs).lower() != 'none':
++        _p = _o.path.join(args.logs, args.name, 'metrics.jsonl')
++        _o.makedirs(_o.path.dirname(_p), exist_ok=True)
++        with open(_p, 'a') as _f:
++            _f.write(_j.dumps({'name': args.name, 'epoch': epoch, 'seed': args.seed,
++                               'retrieval_data': args.retrieval_data, 'modules': _flags(),
++                               'resume': args.resume, 'inference_time_s': round(_it, 2),
++                               **{k: round(float(v), 4) for k, v in retrieval_metrics.items()}}) + '\n')
+     metrics.update(retrieval_metrics)
+     all_metrics.update(retrieval_metrics)
+     for name, val in metrics.items():
+diff --git a/evaluation/linear_eval.py b/evaluation/linear_eval.py
+index 8e98c68..013bcf9 100644
+--- a/evaluation/linear_eval.py
++++ b/evaluation/linear_eval.py
+@@ -223,7 +223,7 @@ def get_linear_eval_acc(train_features, train_labels, test_features, test_labels
+         classifier = sklearnLogisticRegression(random_state=0, C=args.C, max_iter=1000, verbose=1, n_jobs=-1)
+         classifier.fit(train_features, train_labels)
+         predictions = classifier.predict(test_features)
+-        accuracy = 100 * np.mean((test_labels == predictions).astype(np.float)) 
++        accuracy = 100 * np.mean((test_labels == predictions).astype(float)) 
+ 
+     elif args.linear_prob_mode=='sklearn-search':
+         logging.info('Runing sklearn-based logistic regression with hyper-parameter search...')
+@@ -234,7 +234,7 @@ def get_linear_eval_acc(train_features, train_labels, test_features, test_labels
+             classifier = sklearnLogisticRegression(random_state=0, C=C, max_iter=50, verbose=0, n_jobs=-1)
+             classifier.fit(train_features, train_labels)
+             predictions = classifier.predict(test_features)
+-            accuracy = 100 * np.mean((test_labels == predictions).astype(np.float)) 
++            accuracy = 100 * np.mean((test_labels == predictions).astype(float)) 
+             accuracies.append(accuracy)
+             logging.info(f'accuracy={accuracy}')
+         accuracy = max(accuracies)
+@@ -244,7 +244,7 @@ def get_linear_eval_acc(train_features, train_labels, test_features, test_labels
+         classifier = sklearnLogisticRegression(random_state=0, C=Cs[index], max_iter=1000, verbose=1, n_jobs=-1)
+         classifier.fit(train_features, train_labels)
+         predictions = classifier.predict(test_features)
+-        accuracy = 100 * np.mean((test_labels == predictions).astype(np.float)) 
++        accuracy = 100 * np.mean((test_labels == predictions).astype(float)) 
+     
+     elif args.linear_prob_mode=='pytorch' or 'ImageNet':
+         logging.info('Runing pytorch-based logistic regression')
+diff --git a/model/a3_modules.py b/model/a3_modules.py
+new file mode 100644
+index 0000000..68da533
+--- /dev/null
++++ b/model/a3_modules.py
+@@ -0,0 +1,131 @@
++"""A3 modules for PR-CLIP (authors' code, commit 242fba6).
++
++All modules are switched on/off with environment variables, so the same
++patched code base is used for every run (B1, R2, R3, R4):
++
++    PRCLIP_RIP=1   RIP-fixed: D4 rotation-invariant pooling of image embeddings
++    PRCLIP_E1=1    E1: text padding mask + CLIP-initialised extraction projections
++    PRCLIP_EXT2=1  EXT v2: cross-modal-only attention inside the extraction encoder
++
++None of the modules adds learned parameters or new hyper-parameters.
++"""
++import os
++
++import torch
++import torch.nn.functional as F
++
++
++def flag(name: str) -> bool:
++    return os.environ.get(name, "0").strip().lower() in {"1", "true", "yes", "on"}
++
++
++def active_flags() -> str:
++    names = [n for n in ("PRCLIP_RIP", "PRCLIP_E1", "PRCLIP_EXT2") if flag(n)]
++    return ",".join(names) if names else "none (B1 baseline)"
++
++
++# ---------------------------------------------------------------------------
++# RIP-fixed: D4 rotation-invariant pooling
++# ---------------------------------------------------------------------------
++def d4_transforms(images: torch.Tensor):
++    """Yield the 8 elements of the dihedral group D4 applied to a [B,C,H,W] batch.
++
++    The identity comes first. Images must be square (224x224 after CLIP preprocessing).
++    """
++    assert images.shape[-1] == images.shape[-2], "D4 pooling needs square images"
++    for flip in (False, True):
++        x = torch.flip(images, dims=[-1]) if flip else images
++        for k in range(4):
++            yield torch.rot90(x, k=k, dims=[-2, -1]) if k else x
++
++
++def rip_pool(encode_fn, images: torch.Tensor) -> torch.Tensor:
++    """RIP-fixed pooling (report Eq. 6-7).
++
++    v_bar = mean_g normalize(f(g(I)));  v_D4 = normalize(v_bar) * ||f(I)||.
++    Only the identity branch keeps gradients; the other 7 run under no_grad.
++    """
++    feats = None
++    base = None
++    for idx, x in enumerate(d4_transforms(images)):
++        if idx == 0:
++            f = encode_fn(x)
++            base = f
++        else:
++            with torch.no_grad():
++                f = encode_fn(x)
++        f = F.normalize(f.float(), dim=-1)
++        feats = f if feats is None else feats + f
++    v_bar = feats / 8.0
++    return F.normalize(v_bar, dim=-1) * base.float().norm(dim=-1, keepdim=True)
++
++
++# ---------------------------------------------------------------------------
++# E1: CLIP-initialised projections + text padding mask
++# ---------------------------------------------------------------------------
++@torch.no_grad()
++def clip_init_projections(proj_image: torch.nn.Linear, proj_text: torch.nn.Linear,
++                          image_backbone, text_backbone) -> None:
++    """Initialise proj_image (768->512) with CLIP visual.proj and proj_text
++    (512->512) with CLIP text_projection, biases set to zero. No new parameters."""
++    vproj = getattr(image_backbone, "proj", None)
++    if vproj is not None and tuple(vproj.shape) == (proj_image.in_features, proj_image.out_features):
++        proj_image.weight.copy_(vproj.t().to(proj_image.weight.dtype))
++        proj_image.bias.zero_()
++    tproj = getattr(text_backbone, "text_projection", None)
++    if tproj is not None and tuple(tproj.shape) == (proj_text.in_features, proj_text.out_features):
++        proj_text.weight.copy_(tproj.t().to(proj_text.weight.dtype))
++        proj_text.bias.zero_()
++
++
++def text_valid_mask(tokens: torch.Tensor) -> torch.Tensor:
++    """True for real tokens (SOT ... EOT), False for padding after EOT."""
++    pos = torch.arange(tokens.size(1), device=tokens.device)[None, :]
++    return pos <= tokens.argmax(dim=-1)[:, None]
++
++
++def key_padding_mask(n_image: int, text_mask: torch.Tensor) -> torch.Tensor:
++    """Key padding mask for the [image ; text] sequence. True = ignore."""
++    b = text_mask.size(0)
++    img = torch.zeros(b, n_image, dtype=torch.bool, device=text_mask.device)
++    return torch.cat([img, ~text_mask.bool()], dim=1)
++
++
++# ---------------------------------------------------------------------------
++# EXT v2: cross-modal-only attention, re-using the original 2-layer encoder
++# ---------------------------------------------------------------------------
++def cross_only_attn_mask(n_image: int, n_text: int, device) -> torch.Tensor:
++    """[L, L] boolean mask, True = blocked. Image tokens attend only to text
++    tokens and text tokens attend only to image tokens, so the original
++    self-attention layers act as bidirectional cross-attention."""
++    L = n_image + n_text
++    mask = torch.zeros(L, L, dtype=torch.bool, device=device)
++    mask[:n_image, :n_image] = True
++    mask[n_image:, n_image:] = True
++    return mask
++
++
++def run_extraction(it_encoder, image_embed: torch.Tensor, text_embed: torch.Tensor,
++                   text_mask=None, use_e1: bool = False, use_ext2: bool = False) -> torch.Tensor:
++    """Drop-in replacement for `self.it_encoder(it_seq)` in ItraModel.forward."""
++    n_img, n_txt = image_embed.size(1), text_embed.size(1)
++    it_seq = torch.cat([image_embed, text_embed], dim=1)
++    kpm = key_padding_mask(n_img, text_mask) if (use_e1 and text_mask is not None) else None
++    attn = cross_only_attn_mask(n_img, n_txt, it_seq.device) if use_ext2 else None
++    if kpm is None and attn is None:
++        return it_encoder(it_seq)
++    if kpm is not None and attn is not None:
++        # merge into one float mask per sample so every row keeps >=1 key
++        neg = torch.finfo(it_seq.dtype).min
++        full = attn[None].expand(it_seq.size(0), -1, -1) | kpm[:, None, :]
++        nheads = it_encoder.layers[0].self_attn.num_heads
++        fmask = torch.zeros(full.shape, dtype=it_seq.dtype, device=it_seq.device).masked_fill(full, neg)
++        fmask = fmask.repeat_interleave(nheads, dim=0)
++        x = it_seq
++        for layer in it_encoder.layers:
++            x = layer(x, src_mask=fmask)
++        return x
++    x = it_seq
++    for layer in it_encoder.layers:
++        x = layer(x, src_mask=attn, src_key_padding_mask=kpm)
++    return x
+diff --git a/model/model.py b/model/model.py
+index e1fd92e..5528a7a 100644
+--- a/model/model.py
++++ b/model/model.py
+@@ -27,6 +27,7 @@ from transformers import AutoConfig, AutoTokenizer, AutoModel, BertForSequenceCl
+ from transformers import BertConfig
+ import torch.nn.functional as F
+ from model.xbert import BertModel
++from model import a3_modules as A3  # [A3-PATCH]
+ 
+ def get_model(args):
+     logging.info(f'Builing model for rank {args.rank}')
+@@ -401,6 +402,12 @@ class ItraModel(nn.Module):
+         self.loss = 0 
+         self.to(self.device)
+         self.text_hidden = torch.tensor(1)
++        self.text_valid_mask = None
++        self.a3_rip = A3.flag('PRCLIP_RIP')
++        self.a3_e1 = A3.flag('PRCLIP_E1')
++        self.a3_ext2 = A3.flag('PRCLIP_EXT2')
++        if self.a3_e1:
++            A3.clip_init_projections(self.proj_image, self.proj_text, self.image_backbone, self.text_backbone)
+ 
+     def reinit_logit_scale(self, logit_scale):
+         self.logit_scale = torch.nn.parameter.Parameter(torch.ones(1) * np.log(1 / logit_scale))#.to(self.device)
+@@ -411,7 +418,10 @@ class ItraModel(nn.Module):
+         with self.image_context():
+             if self.image_model_builder=='chineseclip': 
+                 images = images.type(self.image_backbone.conv1.weight.dtype)
+-            image_features = self.image_backbone(images)
++            if getattr(self, 'a3_rip', False) and self.image_model_builder == 'openclip':
++                image_features = A3.rip_pool(self.image_backbone, images)
++            else:
++                image_features = self.image_backbone(images)
+             if 'vicregl' in self.image_model_tag:
+                 image_features = image_features[1]
+         if projection:
+@@ -453,6 +463,7 @@ class ItraModel(nn.Module):
+                 # TODO: support CoOp-style prompting (CoOp for retrieval finetuning?)
+                 context_length = (77 - self.n_prompt) if self.prompt is not None else 77
+                 texts = self.tokenizer(texts, context_length=context_length).to(self.device)
++                self.text_valid_mask = A3.text_valid_mask(texts) if self.prompt is None else None
+                 def open_clip_forward(texts):
+                     x = self.text_backbone.token_embedding(texts)  # [batch_size, n_ctx, d_model] (bs, 77-args.n_prompts, 512)
+                     if self.prompt is not None:
+@@ -573,6 +584,20 @@ class ItraModel(nn.Module):
+ 
+         return text_features
+     
++    def _vit_hidden(self, images):
++        v = self.image_backbone
++        x = v.conv1(images.type(v.conv1.weight.dtype))
++        x = x.reshape(x.shape[0], x.shape[1], -1).permute(0, 2, 1)
++        cls = v.class_embedding.to(x.dtype) + torch.zeros(x.shape[0], 1, x.shape[-1], dtype=x.dtype, device=x.device)
++        x = torch.cat([cls, x], dim=1)
++        x = x + v.positional_embedding.to(x.dtype)
++        x = v.patch_dropout(x)
++        x = v.ln_pre(x)
++        x = x.permute(1, 0, 2)
++        x = v.transformer(x)
++        x = x.permute(1, 0, 2)
++        return v.ln_post(x)
++
+     def forward(self, images, texts, text_only=False):
+         """
+         images: torch.tensor (batchs_size, preprocessed image)
+@@ -586,7 +611,7 @@ class ItraModel(nn.Module):
+             image_features = self.encode_image(images, projection=True)
+         
+         text_embed = self.proj_text(self.text_hidden)
+-        image_embed = self.proj_image(self.image_backbone(images, return_hidden=True))
++        image_embed = self.proj_image(self._vit_hidden(images))
+         # print(a.shape)
+         # print([text_embed.shape, image_embed.shape])
+         # image_o_features = F.normalize(torch.mean(image_embed, dim=1).to(self.device), dim=-1)
+@@ -599,7 +624,8 @@ class ItraModel(nn.Module):
+         image_masks = torch.ones(image_embed.size()[:-1],dtype=torch.long).to(self.device)
+         # it_masks = torch.ones(it_seq.size()[:-1],dtype=torch.long).to(self.device)
+ 
+-        att_embed = self.it_encoder(it_seq)
++        att_embed = A3.run_extraction(self.it_encoder, image_embed, text_embed,
++                                      self.text_valid_mask, self.a3_e1, self.a3_ext2)
+ 
+         image_res_embed = self.fc_image(image_embed - att_embed[:,:i_len,:])
+         text_res_embed = self.fc_text(text_embed - att_embed[:,i_len:,:])
+diff --git a/training/main.py b/training/main.py
+index 963b5ae..0e6adc0 100644
+--- a/training/main.py
++++ b/training/main.py
+@@ -15,6 +15,7 @@ from torch.cuda.amp import GradScaler
+ from timm.utils import ModelEma
+ 
+ from model.model import get_model
++from model.a3_modules import active_flags as _a3_flags
+ from training.distributed import is_master, init_distributed_device, world_info_from_env
+ from training.logger import setup_logging, get_exp_name
+ from training.params import parse_args
+@@ -232,7 +233,7 @@ def main():
+     if args.resume is not None:
+         if os.path.isfile(args.resume):
+             logging.info(f"=> loading checkpoint from '{args.resume}'...")
+-            checkpoint = torch.load(args.resume, map_location=device)
++            checkpoint = torch.load(args.resume, map_location=device, weights_only=False)
+             if 'epoch' in checkpoint:
+                 # resuming a train checkpoint w/ epoch and optimizer state
+                 start_epoch = checkpoint["epoch"]
+@@ -271,6 +272,7 @@ def main():
+         evaluate(model, start_epoch, preprocess_val, args, writer)
+         return
+     
++    logging.info(f"[A3] active modules: {_a3_flags()}")
+     if args.eval_first:
+         evaluate(model_ema.ema if args.model_ema else model, start_epoch, preprocess_val, args, writer)
+     
+diff --git a/training/optimization.py b/training/optimization.py
+index 7a81f35..3629033 100644
+--- a/training/optimization.py
++++ b/training/optimization.py
+@@ -6,8 +6,8 @@ from timm.optim.adafactor import Adafactor
+ from timm.optim.adahessian import Adahessian
+ from timm.optim.adamp import AdamP
+ from timm.optim.lookahead import Lookahead
+-from timm.optim.nadam import Nadam
+-from timm.optim.radam import RAdam
++from timm.optim.nadam import NAdamLegacy as Nadam
++from timm.optim.radam import RAdamLegacy as RAdam
+ from timm.optim.rmsprop_tf import RMSpropTF
+ from timm.optim.sgdp import SGDP
+ 
+diff --git a/utils/tsne_checkpoints.py b/utils/tsne_checkpoints.py
+index f990a53..7fa1238 100644
+--- a/utils/tsne_checkpoints.py
++++ b/utils/tsne_checkpoints.py
+@@ -63,11 +63,11 @@ class CsvDataset(Dataset):
+             ])
+ 
+         # Faster data loading. see https://github.com/pytorch/pytorch/issues/13246#issuecomment-905703662
+-        self.images = np.array(df[img_key].tolist()).astype(np.string_)
++        self.images = np.array(df[img_key].tolist()).astype(np.bytes_)
+         self.captions = np.array(df[caption_key].tolist())
+         for i in range(len(self.captions)):
+             self.captions[i] = self.captions[i].encode('ascii',errors='ignore')
+-        self.captions = self.captions.astype(np.string_)
++        self.captions = self.captions.astype(np.bytes_)
+ 
+         # use a subset of given dataset
+         if dataset_size is not None:

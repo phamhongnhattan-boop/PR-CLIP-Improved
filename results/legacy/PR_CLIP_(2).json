@@ -1,0 +1,35 @@
+{
+  "notebook": "PR_CLIP_(2).ipynb",
+  "has_outputs": true,
+  "runs": [
+    {
+      "config": {
+        "name": "rsicd_bs16_ret2_lr2e-7",
+        "lr": "2e-07",
+        "epochs": "1",
+        "batch_size": "16",
+        "seed": "1",
+        "load_clip_weights": "True",
+        "train_data": "./dataset/train/ret2.csv",
+        "retrieval_data": "./dataset/test/rsicd_test.csv",
+        "precision": "amp"
+      },
+      "evaluations": [
+        {
+          "run": "rsicd_bs16_ret2_lr2e-7-11_04-07_47_05",
+          "epoch": 1,
+          "image2text-R@1": 19.85,
+          "image2text-R@5": 41.54,
+          "image2text-R@10": 54.53,
+          "text2image-R@1": 16.18,
+          "text2image-R@5": 41.83,
+          "text2image-R@10": 58.52,
+          "mean-recall": 38.74
+        }
+      ]
+    }
+  ],
+  "errors": [
+    "FileNotFoundError: [Errno 2] No such file or directory: '/content/drive/MyDrive/prclip_logs/rsicd_bs16_seed3/checkpoint/epoch_latest.pt'"
+  ]
+}
