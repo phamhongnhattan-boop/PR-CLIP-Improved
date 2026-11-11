@@ -95,7 +95,7 @@ Fig.~\ref{fig:arch} shows the PR-CLIP training pipeline \cite{guan2025prclip}. A
 
 \textbf{Reconstruction.} An 8-layer Transformer decoder reconstructs $\tilde V^o$ from $V^f$ with $\tilde T^o$ as cross-attention context, and the reverse for text. The paper uses a token-level MSE loss $\mathcal{L}_{PRC}$ and the objective $\mathcal{L} = 0.01\,\mathcal{L}_{CMC} + \mathcal{L}_{PRC}$.
 
-\textbf{Released code.} We use the authors' public code \cite{prclipcode} at commit \texttt{242fba6}, built on the ITRA framework \cite{itra}. In this code the reconstruction loss is an MSE between mean-pooled, normalised reconstructed tokens and the global features, and the training loop combines it with InfoNCE as $(1.5\,\mathcal{L}_{InfoNCE} + \mathcal{L}_{rec})/4$ with 4-step accumulation. This is not identical to the paper's objective. An audit of the release found further gaps (Table~\ref{tab:audit}). We did not retrain PR-CLIP with the paper's objective and configuration (20 epochs, batch size 160, two RTX 4090 GPUs), so none of our numbers is a full reproduction of the published 39.23\%.
+\textbf{Released code.} We use the authors' public code \cite{prclipcode} at commit \texttt{242fba6}, built on the ITRA framework \cite{itra}. In this code the reconstruction loss is an MSE between mean-pooled, normalised reconstructed tokens and the global features, and the training loop combines it with InfoNCE as $(1.5\,\mathcal{L}_{InfoNCE} + \mathcal{L}_{rec})/4$ with 4-step accumulation. This is not identical to the paper's objective. An audit of the release found further gaps (Table~\ref{tab:audit}). In particular, the mixed-precision (AMP) branch of the training loop never resets the gradients, so they overflow, every step reports a NaN gradient norm and the gradient scaler skips the update; without a fix the model is not trained at all. All our runs use a fix that accumulates gradients over four batches, as the fp32 branch does, and then resets them (\texttt{AMP-FIX} in our patch). We did not retrain PR-CLIP with the paper's objective and configuration (20 epochs, batch size 160, two RTX 4090 GPUs), so none of our numbers is a full reproduction of the published 39.23\%.
 
 \begin{figure*}[t]
 \centering
@@ -122,6 +122,7 @@ Selection & train / val / test & \texttt{best.pt} on test CSV \\
 RSICD val & separate split & = test file (same SHA-256) \\
 Checkpoint & released & link gives image archive \\
 Tokens & -- & no \texttt{return\_hidden} in OpenCLIP 2.20 \\
+AMP branch & -- & no \texttt{zero\_grad()}: grad $=$ NaN, no update \\
 \bottomrule
 \end{tabular}
 \end{table}
