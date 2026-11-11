@@ -1,0 +1,25 @@
+{
+  "source": "C:\\Users\\NHAT TAN\\Documents\\Codex\\2026-10-10\\yu\\a3_run\\PR-CLIP\\dataset\\train\\ret2.csv",
+  "seed": 0,
+  "val_frac": 0.1,
+  "train_images": 11781,
+  "train_pairs": 58905,
+  "val_images": 1311,
+  "val_pairs": 6555,
+  "val_overlap_with_test_csvs": {
+    "rsicd_test.csv": 0,
+    "rsicd_val.csv": 0,
+    "rsitmd_test.csv": 0,
+    "rsitmd_val.csv": 61
+  },
+  "sha256": {
+    "ret2.csv": "67a38af817037e6f268ea8609df2d3d1a74a36444dd9ae841a71caacd05599c3",
+    "ret2_trainsplit.csv": "41e6f378bce90bc41d47cc5a71fcf5081e67985d57e3c47b4e5e94f1878fa6f2",
+    "ret2_val.csv": "6826be449e99ccbcc1d19b0f0054eb54ac804fa61a4ddd7442ea07e7913800ba",
+    "rsicd_test.csv": "babb50017a24a133eaea5fc670e1977c3bbdfc6e7eb9c878a85d1f37cf48be4e",
+    "rsicd_val.csv": "babb50017a24a133eaea5fc670e1977c3bbdfc6e7eb9c878a85d1f37cf48be4e",
+    "rsitmd_test.csv": "b1cb3f07316f56d698de39d6b288aa7303d0a4bc265db814cf7a3358388746db",
+    "rsitmd_val.csv": "8174a97c62374c07f07b0cc8ab6825e228587e0d56896ede914ff471392a6fd2"
+  },
+  "note": "rsicd_val.csv == rsicd_test.csv in the authors' repo; never use it for model selection."
+}

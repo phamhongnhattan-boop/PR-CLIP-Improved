@@ -1,0 +1,1786 @@
+2026-11-12,00:05:43 | INFO | [main.py-127]: Running with a single process. Device cuda:0.
+2026-11-12,00:05:43 | INFO | [model.py-31]: Builing model for rank 0
+2026-11-12,00:05:43 | INFO | [model.py-35]: Loading [ViT-B-32] as text model via [openclip]. Pretrained=True
+2026-11-12,00:05:43 | INFO | [factory.py-144]: Loading pretrained ViT-B-32 from OpenAI.
+2026-11-12,00:05:45 | INFO | [model.py-50]: text: <All keys matched successfully>
+2026-11-12,00:05:45 | INFO | [model.py-136]: Loading [ViT-B-32] as image model via [openclip]. Pretrained=True
+2026-11-12,00:05:45 | INFO | [factory.py-144]: Loading pretrained ViT-B-32 from OpenAI.
+2026-11-12,00:05:47 | INFO | [model.py-151]: image: <All keys matched successfully>
+2026-11-12,00:05:47 | INFO | [model.py-304]: Calculate gradients for image backbone?	True
+2026-11-12,00:05:47 | INFO | [model.py-305]: Calculate gradients for text backbone?	True
+2026-11-12,00:05:47 | INFO | [model.py-338]: Text backbone do not append projection head, so set args.joint_projection_dim = self.text_dim
+2026-11-12,00:05:47 | INFO | [model.py-356]: Image backbone do not append projection head so set args.joint_projection_dim = self.image_dim
+2026-11-12,00:05:47 | INFO | [main.py-175]: Using [InfoNCE] loss: CLIPLoss()
+2026-11-12,00:05:47 | INFO | [episodic_training.py-14]: Model will be trained with epoch-wise training strategy.
+2026-11-12,00:05:48 | INFO | [train_data.py-56]: Training data contains 1 dataset(s): [./dataset/train/ret2_trainsplit.csv]. n-samples: [58905], n-classes: [58905]
+2026-11-12,00:05:48 | INFO | [train_data.py-346]: Dataset initialized:
+2026-11-12,00:05:48 | INFO | [train_data.py-347]: 	dataset n_sample: 	58905
+2026-11-12,00:05:48 | INFO | [train_data.py-348]: 	dataloader n_step: 	3682
+2026-11-12,00:05:48 | INFO | [optimization.py-145]: Param groups = {
+  "no_decay": {
+    "weight_decay": 0.0,
+    "params": [
+      "logit_scale",
+      "text_backbone.transformer.resblocks.0.ln_1.weight",
+      "text_backbone.transformer.resblocks.0.ln_1.bias",
+      "text_backbone.transformer.resblocks.0.attn.in_proj_bias",
+      "text_backbone.transformer.resblocks.0.attn.out_proj.bias",
+      "text_backbone.transformer.resblocks.0.ln_2.weight",
+      "text_backbone.transformer.resblocks.0.ln_2.bias",
+      "text_backbone.transformer.resblocks.0.mlp.c_fc.bias",
+      "text_backbone.transformer.resblocks.0.mlp.c_proj.bias",
+      "text_backbone.transformer.resblocks.1.ln_1.weight",
+      "text_backbone.transformer.resblocks.1.ln_1.bias",
+      "text_backbone.transformer.resblocks.1.attn.in_proj_bias",
+      "text_backbone.transformer.resblocks.1.attn.out_proj.bias",
+      "text_backbone.transformer.resblocks.1.ln_2.weight",
+      "text_backbone.transformer.resblocks.1.ln_2.bias",
+      "text_backbone.transformer.resblocks.1.mlp.c_fc.bias",
+      "text_backbone.transformer.resblocks.1.mlp.c_proj.bias",
+      "text_backbone.transformer.resblocks.2.ln_1.weight",
+      "text_backbone.transformer.resblocks.2.ln_1.bias",
+      "text_backbone.transformer.resblocks.2.attn.in_proj_bias",
+      "text_backbone.transformer.resblocks.2.attn.out_proj.bias",
+      "text_backbone.transformer.resblocks.2.ln_2.weight",
+      "text_backbone.transformer.resblocks.2.ln_2.bias",
+      "text_backbone.transformer.resblocks.2.mlp.c_fc.bias",
+      "text_backbone.transformer.resblocks.2.mlp.c_proj.bias",
+      "text_backbone.transformer.resblocks.3.ln_1.weight",
+      "text_backbone.transformer.resblocks.3.ln_1.bias",
+      "text_backbone.transformer.resblocks.3.attn.in_proj_bias",
+      "text_backbone.transformer.resblocks.3.attn.out_proj.bias",
+      "text_backbone.transformer.resblocks.3.ln_2.weight",
+      "text_backbone.transformer.resblocks.3.ln_2.bias",
+      "text_backbone.transformer.resblocks.3.mlp.c_fc.bias",
+      "text_backbone.transformer.resblocks.3.mlp.c_proj.bias",
+      "text_backbone.transformer.resblocks.4.ln_1.weight",
+      "text_backbone.transformer.resblocks.4.ln_1.bias",
+      "text_backbone.transformer.resblocks.4.attn.in_proj_bias",
+      "text_backbone.transformer.resblocks.4.attn.out_proj.bias",
+      "text_backbone.transformer.resblocks.4.ln_2.weight",
+      "text_backbone.transformer.resblocks.4.ln_2.bias",
+      "text_backbone.transformer.resblocks.4.mlp.c_fc.bias",
+      "text_backbone.transformer.resblocks.4.mlp.c_proj.bias",
+      "text_backbone.transformer.resblocks.5.ln_1.weight",
+      "text_backbone.transformer.resblocks.5.ln_1.bias",
+      "text_backbone.transformer.resblocks.5.attn.in_proj_bias",
+      "text_backbone.transformer.resblocks.5.attn.out_proj.bias",
+      "text_backbone.transformer.resblocks.5.ln_2.weight",
+      "text_backbone.transformer.resblocks.5.ln_2.bias",
+      "text_backbone.transformer.resblocks.5.mlp.c_fc.bias",
+      "text_backbone.transformer.resblocks.5.mlp.c_proj.bias",
+      "text_backbone.transformer.resblocks.6.ln_1.weight",
+      "text_backbone.transformer.resblocks.6.ln_1.bias",
+      "text_backbone.transformer.resblocks.6.attn.in_proj_bias",
+      "text_backbone.transformer.resblocks.6.attn.out_proj.bias",
+      "text_backbone.transformer.resblocks.6.ln_2.weight",
+      "text_backbone.transformer.resblocks.6.ln_2.bias",
+      "text_backbone.transformer.resblocks.6.mlp.c_fc.bias",
+      "text_backbone.transformer.resblocks.6.mlp.c_proj.bias",
+      "text_backbone.transformer.resblocks.7.ln_1.weight",
+      "text_backbone.transformer.resblocks.7.ln_1.bias",
+      "text_backbone.transformer.resblocks.7.attn.in_proj_bias",
+      "text_backbone.transformer.resblocks.7.attn.out_proj.bias",
+      "text_backbone.transformer.resblocks.7.ln_2.weight",
+      "text_backbone.transformer.resblocks.7.ln_2.bias",
+      "text_backbone.transformer.resblocks.7.mlp.c_fc.bias",
+      "text_backbone.transformer.resblocks.7.mlp.c_proj.bias",
+      "text_backbone.transformer.resblocks.8.ln_1.weight",
+      "text_backbone.transformer.resblocks.8.ln_1.bias",
+      "text_backbone.transformer.resblocks.8.attn.in_proj_bias",
+      "text_backbone.transformer.resblocks.8.attn.out_proj.bias",
+      "text_backbone.transformer.resblocks.8.ln_2.weight",
+      "text_backbone.transformer.resblocks.8.ln_2.bias",
+      "text_backbone.transformer.resblocks.8.mlp.c_fc.bias",
+      "text_backbone.transformer.resblocks.8.mlp.c_proj.bias",
+      "text_backbone.transformer.resblocks.9.ln_1.weight",
+      "text_backbone.transformer.resblocks.9.ln_1.bias",
+      "text_backbone.transformer.resblocks.9.attn.in_proj_bias",
+      "text_backbone.transformer.resblocks.9.attn.out_proj.bias",
+      "text_backbone.transformer.resblocks.9.ln_2.weight",
+      "text_backbone.transformer.resblocks.9.ln_2.bias",
+      "text_backbone.transformer.resblocks.9.mlp.c_fc.bias",
+      "text_backbone.transformer.resblocks.9.mlp.c_proj.bias",
+      "text_backbone.transformer.resblocks.10.ln_1.weight",
+      "text_backbone.transformer.resblocks.10.ln_1.bias",
+      "text_backbone.transformer.resblocks.10.attn.in_proj_bias",
+      "text_backbone.transformer.resblocks.10.attn.out_proj.bias",
+      "text_backbone.transformer.resblocks.10.ln_2.weight",
+      "text_backbone.transformer.resblocks.10.ln_2.bias",
+      "text_backbone.transformer.resblocks.10.mlp.c_fc.bias",
+      "text_backbone.transformer.resblocks.10.mlp.c_proj.bias",
+      "text_backbone.transformer.resblocks.11.ln_1.weight",
+      "text_backbone.transformer.resblocks.11.ln_1.bias",
+      "text_backbone.transformer.resblocks.11.attn.in_proj_bias",
+      "text_backbone.transformer.resblocks.11.attn.out_proj.bias",
+      "text_backbone.transformer.resblocks.11.ln_2.weight",
+      "text_backbone.transformer.resblocks.11.ln_2.bias",
+      "text_backbone.transformer.resblocks.11.mlp.c_fc.bias",
+      "text_backbone.transformer.resblocks.11.mlp.c_proj.bias",
+      "text_backbone.ln_final.weight",
+      "text_backbone.ln_final.bias",
+      "image_backbone.class_embedding",
+      "image_backbone.ln_pre.weight",
+      "image_backbone.ln_pre.bias",
+      "image_backbone.transformer.resblocks.0.ln_1.weight",
+      "image_backbone.transformer.resblocks.0.ln_1.bias",
+      "image_backbone.transformer.resblocks.0.attn.in_proj_bias",
+      "image_backbone.transformer.resblocks.0.attn.out_proj.bias",
+      "image_backbone.transformer.resblocks.0.ln_2.weight",
+      "image_backbone.transformer.resblocks.0.ln_2.bias",
+      "image_backbone.transformer.resblocks.0.mlp.c_fc.bias",
+      "image_backbone.transformer.resblocks.0.mlp.c_proj.bias",
+      "image_backbone.transformer.resblocks.1.ln_1.weight",
+      "image_backbone.transformer.resblocks.1.ln_1.bias",
+      "image_backbone.transformer.resblocks.1.attn.in_proj_bias",
+      "image_backbone.transformer.resblocks.1.attn.out_proj.bias",
+      "image_backbone.transformer.resblocks.1.ln_2.weight",
+      "image_backbone.transformer.resblocks.1.ln_2.bias",
+      "image_backbone.transformer.resblocks.1.mlp.c_fc.bias",
+      "image_backbone.transformer.resblocks.1.mlp.c_proj.bias",
+      "image_backbone.transformer.resblocks.2.ln_1.weight",
+      "image_backbone.transformer.resblocks.2.ln_1.bias",
+      "image_backbone.transformer.resblocks.2.attn.in_proj_bias",
+      "image_backbone.transformer.resblocks.2.attn.out_proj.bias",
+      "image_backbone.transformer.resblocks.2.ln_2.weight",
+      "image_backbone.transformer.resblocks.2.ln_2.bias",
+      "image_backbone.transformer.resblocks.2.mlp.c_fc.bias",
+      "image_backbone.transformer.resblocks.2.mlp.c_proj.bias",
+      "image_backbone.transformer.resblocks.3.ln_1.weight",
+      "image_backbone.transformer.resblocks.3.ln_1.bias",
+      "image_backbone.transformer.resblocks.3.attn.in_proj_bias",
+      "image_backbone.transformer.resblocks.3.attn.out_proj.bias",
+      "image_backbone.transformer.resblocks.3.ln_2.weight",
+      "image_backbone.transformer.resblocks.3.ln_2.bias",
+      "image_backbone.transformer.resblocks.3.mlp.c_fc.bias",
+      "image_backbone.transformer.resblocks.3.mlp.c_proj.bias",
+      "image_backbone.transformer.resblocks.4.ln_1.weight",
+      "image_backbone.transformer.resblocks.4.ln_1.bias",
+      "image_backbone.transformer.resblocks.4.attn.in_proj_bias",
+      "image_backbone.transformer.resblocks.4.attn.out_proj.bias",
+      "image_backbone.transformer.resblocks.4.ln_2.weight",
+      "image_backbone.transformer.resblocks.4.ln_2.bias",
+      "image_backbone.transformer.resblocks.4.mlp.c_fc.bias",
+      "image_backbone.transformer.resblocks.4.mlp.c_proj.bias",
+      "image_backbone.transformer.resblocks.5.ln_1.weight",
+      "image_backbone.transformer.resblocks.5.ln_1.bias",
+      "image_backbone.transformer.resblocks.5.attn.in_proj_bias",
+      "image_backbone.transformer.resblocks.5.attn.out_proj.bias",
+      "image_backbone.transformer.resblocks.5.ln_2.weight",
+      "image_backbone.transformer.resblocks.5.ln_2.bias",
+      "image_backbone.transformer.resblocks.5.mlp.c_fc.bias",
+      "image_backbone.transformer.resblocks.5.mlp.c_proj.bias",
+      "image_backbone.transformer.resblocks.6.ln_1.weight",
+      "image_backbone.transformer.resblocks.6.ln_1.bias",
+      "image_backbone.transformer.resblocks.6.attn.in_proj_bias",
+      "image_backbone.transformer.resblocks.6.attn.out_proj.bias",
+      "image_backbone.transformer.resblocks.6.ln_2.weight",
+      "image_backbone.transformer.resblocks.6.ln_2.bias",
+      "image_backbone.transformer.resblocks.6.mlp.c_fc.bias",
+      "image_backbone.transformer.resblocks.6.mlp.c_proj.bias",
+      "image_backbone.transformer.resblocks.7.ln_1.weight",
+      "image_backbone.transformer.resblocks.7.ln_1.bias",
+      "image_backbone.transformer.resblocks.7.attn.in_proj_bias",
+      "image_backbone.transformer.resblocks.7.attn.out_proj.bias",
+      "image_backbone.transformer.resblocks.7.ln_2.weight",
+      "image_backbone.transformer.resblocks.7.ln_2.bias",
+      "image_backbone.transformer.resblocks.7.mlp.c_fc.bias",
+      "image_backbone.transformer.resblocks.7.mlp.c_proj.bias",
+      "image_backbone.transformer.resblocks.8.ln_1.weight",
+      "image_backbone.transformer.resblocks.8.ln_1.bias",
+      "image_backbone.transformer.resblocks.8.attn.in_proj_bias",
+      "image_backbone.transformer.resblocks.8.attn.out_proj.bias",
+      "image_backbone.transformer.resblocks.8.ln_2.weight",
+      "image_backbone.transformer.resblocks.8.ln_2.bias",
+      "image_backbone.transformer.resblocks.8.mlp.c_fc.bias",
+      "image_backbone.transformer.resblocks.8.mlp.c_proj.bias",
+      "image_backbone.transformer.resblocks.9.ln_1.weight",
+      "image_backbone.transformer.resblocks.9.ln_1.bias",
+      "image_backbone.transformer.resblocks.9.attn.in_proj_bias",
+      "image_backbone.transformer.resblocks.9.attn.out_proj.bias",
+      "image_backbone.transformer.resblocks.9.ln_2.weight",
+      "image_backbone.transformer.resblocks.9.ln_2.bias",
+      "image_backbone.transformer.resblocks.9.mlp.c_fc.bias",
+      "image_backbone.transformer.resblocks.9.mlp.c_proj.bias",
+      "image_backbone.transformer.resblocks.10.ln_1.weight",
+      "image_backbone.transformer.resblocks.10.ln_1.bias",
+      "image_backbone.transformer.resblocks.10.attn.in_proj_bias",
+      "image_backbone.transformer.resblocks.10.attn.out_proj.bias",
+      "image_backbone.transformer.resblocks.10.ln_2.weight",
+      "image_backbone.transformer.resblocks.10.ln_2.bias",
+      "image_backbone.transformer.resblocks.10.mlp.c_fc.bias",
+      "image_backbone.transformer.resblocks.10.mlp.c_proj.bias",
+      "image_backbone.transformer.resblocks.11.ln_1.weight",
+      "image_backbone.transformer.resblocks.11.ln_1.bias",
+      "image_backbone.transformer.resblocks.11.attn.in_proj_bias",
+      "image_backbone.transformer.resblocks.11.attn.out_proj.bias",
+      "image_backbone.transformer.resblocks.11.ln_2.weight",
+      "image_backbone.transformer.resblocks.11.ln_2.bias",
+      "image_backbone.transformer.resblocks.11.mlp.c_fc.bias",
+      "image_backbone.transformer.resblocks.11.mlp.c_proj.bias",
+      "image_backbone.ln_post.weight",
+      "image_backbone.ln_post.bias",
+      "proj_image.bias",
+      "proj_text.bias",
+      "fusion_model.fusion_model.embeddings.LayerNorm.weight",
+      "fusion_model.fusion_model.embeddings.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.0.attention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.0.attention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.0.attention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.0.attention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.0.attention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.0.attention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.0.crossattention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.0.crossattention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.0.crossattention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.0.crossattention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.0.crossattention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.0.crossattention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.0.intermediate.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.0.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.0.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.0.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.1.attention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.1.attention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.1.attention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.1.attention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.1.attention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.1.attention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.1.crossattention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.1.crossattention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.1.crossattention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.1.crossattention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.1.crossattention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.1.crossattention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.1.intermediate.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.1.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.1.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.1.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.2.attention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.2.attention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.2.attention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.2.attention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.2.attention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.2.attention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.2.crossattention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.2.crossattention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.2.crossattention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.2.crossattention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.2.crossattention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.2.crossattention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.2.intermediate.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.2.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.2.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.2.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.3.attention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.3.attention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.3.attention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.3.attention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.3.attention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.3.attention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.3.crossattention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.3.crossattention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.3.crossattention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.3.crossattention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.3.crossattention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.3.crossattention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.3.intermediate.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.3.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.3.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.3.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.4.attention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.4.attention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.4.attention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.4.attention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.4.attention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.4.attention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.4.crossattention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.4.crossattention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.4.crossattention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.4.crossattention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.4.crossattention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.4.crossattention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.4.intermediate.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.4.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.4.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.4.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.5.attention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.5.attention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.5.attention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.5.attention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.5.attention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.5.attention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.5.crossattention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.5.crossattention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.5.crossattention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.5.crossattention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.5.crossattention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.5.crossattention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.5.intermediate.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.5.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.5.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.5.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.6.attention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.6.attention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.6.attention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.6.attention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.6.attention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.6.attention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.6.crossattention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.6.crossattention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.6.crossattention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.6.crossattention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.6.crossattention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.6.crossattention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.6.intermediate.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.6.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.6.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.6.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.7.attention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.7.attention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.7.attention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.7.attention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.7.attention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.7.attention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.7.crossattention.self.query.bias",
+      "fusion_model.fusion_model.encoder.layer.7.crossattention.self.key.bias",
+      "fusion_model.fusion_model.encoder.layer.7.crossattention.self.value.bias",
+      "fusion_model.fusion_model.encoder.layer.7.crossattention.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.7.crossattention.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.7.crossattention.output.LayerNorm.bias",
+      "fusion_model.fusion_model.encoder.layer.7.intermediate.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.7.output.dense.bias",
+      "fusion_model.fusion_model.encoder.layer.7.output.LayerNorm.weight",
+      "fusion_model.fusion_model.encoder.layer.7.output.LayerNorm.bias",
+      "fc_image.bias",
+      "fc_text.bias",
+      "it_encoder.layers.0.self_attn.in_proj_bias",
+      "it_encoder.layers.0.self_attn.out_proj.bias",
+      "it_encoder.layers.0.linear1.bias",
+      "it_encoder.layers.0.linear2.bias",
+      "it_encoder.layers.0.norm1.weight",
+      "it_encoder.layers.0.norm1.bias",
+      "it_encoder.layers.0.norm2.weight",
+      "it_encoder.layers.0.norm2.bias",
+      "it_encoder.layers.1.self_attn.in_proj_bias",
+      "it_encoder.layers.1.self_attn.out_proj.bias",
+      "it_encoder.layers.1.linear1.bias",
+      "it_encoder.layers.1.linear2.bias",
+      "it_encoder.layers.1.norm1.weight",
+      "it_encoder.layers.1.norm1.bias",
+      "it_encoder.layers.1.norm2.weight",
+      "it_encoder.layers.1.norm2.bias"
+    ],
+    "lr_scale": 1.0
+  },
+  "decay": {
+    "weight_decay": 0.5,
+    "params": [
+      "text_backbone.positional_embedding",
+      "text_backbone.text_projection",
+      "text_backbone.transformer.resblocks.0.attn.in_proj_weight",
+      "text_backbone.transformer.resblocks.0.attn.out_proj.weight",
+      "text_backbone.transformer.resblocks.0.mlp.c_fc.weight",
+      "text_backbone.transformer.resblocks.0.mlp.c_proj.weight",
+      "text_backbone.transformer.resblocks.1.attn.in_proj_weight",
+      "text_backbone.transformer.resblocks.1.attn.out_proj.weight",
+      "text_backbone.transformer.resblocks.1.mlp.c_fc.weight",
+      "text_backbone.transformer.resblocks.1.mlp.c_proj.weight",
+      "text_backbone.transformer.resblocks.2.attn.in_proj_weight",
+      "text_backbone.transformer.resblocks.2.attn.out_proj.weight",
+      "text_backbone.transformer.resblocks.2.mlp.c_fc.weight",
+      "text_backbone.transformer.resblocks.2.mlp.c_proj.weight",
+      "text_backbone.transformer.resblocks.3.attn.in_proj_weight",
+      "text_backbone.transformer.resblocks.3.attn.out_proj.weight",
+      "text_backbone.transformer.resblocks.3.mlp.c_fc.weight",
+      "text_backbone.transformer.resblocks.3.mlp.c_proj.weight",
+      "text_backbone.transformer.resblocks.4.attn.in_proj_weight",
+      "text_backbone.transformer.resblocks.4.attn.out_proj.weight",
+      "text_backbone.transformer.resblocks.4.mlp.c_fc.weight",
+      "text_backbone.transformer.resblocks.4.mlp.c_proj.weight",
+      "text_backbone.transformer.resblocks.5.attn.in_proj_weight",
+      "text_backbone.transformer.resblocks.5.attn.out_proj.weight",
+      "text_backbone.transformer.resblocks.5.mlp.c_fc.weight",
+      "text_backbone.transformer.resblocks.5.mlp.c_proj.weight",
+      "text_backbone.transformer.resblocks.6.attn.in_proj_weight",
+      "text_backbone.transformer.resblocks.6.attn.out_proj.weight",
+      "text_backbone.transformer.resblocks.6.mlp.c_fc.weight",
+      "text_backbone.transformer.resblocks.6.mlp.c_proj.weight",
+      "text_backbone.transformer.resblocks.7.attn.in_proj_weight",
+      "text_backbone.transformer.resblocks.7.attn.out_proj.weight",
+      "text_backbone.transformer.resblocks.7.mlp.c_fc.weight",
+      "text_backbone.transformer.resblocks.7.mlp.c_proj.weight",
+      "text_backbone.transformer.resblocks.8.attn.in_proj_weight",
+      "text_backbone.transformer.resblocks.8.attn.out_proj.weight",
+      "text_backbone.transformer.resblocks.8.mlp.c_fc.weight",
+      "text_backbone.transformer.resblocks.8.mlp.c_proj.weight",
+      "text_backbone.transformer.resblocks.9.attn.in_proj_weight",
+      "text_backbone.transformer.resblocks.9.attn.out_proj.weight",
+      "text_backbone.transformer.resblocks.9.mlp.c_fc.weight",
+      "text_backbone.transformer.resblocks.9.mlp.c_proj.weight",
+      "text_backbone.transformer.resblocks.10.attn.in_proj_weight",
+      "text_backbone.transformer.resblocks.10.attn.out_proj.weight",
+      "text_backbone.transformer.resblocks.10.mlp.c_fc.weight",
+      "text_backbone.transformer.resblocks.10.mlp.c_proj.weight",
+      "text_backbone.transformer.resblocks.11.attn.in_proj_weight",
+      "text_backbone.transformer.resblocks.11.attn.out_proj.weight",
+      "text_backbone.transformer.resblocks.11.mlp.c_fc.weight",
+      "text_backbone.transformer.resblocks.11.mlp.c_proj.weight",
+      "text_backbone.token_embedding.weight",
+      "image_backbone.positional_embedding",
+      "image_backbone.proj",
+      "image_backbone.conv1.weight",
+      "image_backbone.transformer.resblocks.0.attn.in_proj_weight",
+      "image_backbone.transformer.resblocks.0.attn.out_proj.weight",
+      "image_backbone.transformer.resblocks.0.mlp.c_fc.weight",
+      "image_backbone.transformer.resblocks.0.mlp.c_proj.weight",
+      "image_backbone.transformer.resblocks.1.attn.in_proj_weight",
+      "image_backbone.transformer.resblocks.1.attn.out_proj.weight",
+      "image_backbone.transformer.resblocks.1.mlp.c_fc.weight",
+      "image_backbone.transformer.resblocks.1.mlp.c_proj.weight",
+      "image_backbone.transformer.resblocks.2.attn.in_proj_weight",
+      "image_backbone.transformer.resblocks.2.attn.out_proj.weight",
+      "image_backbone.transformer.resblocks.2.mlp.c_fc.weight",
+      "image_backbone.transformer.resblocks.2.mlp.c_proj.weight",
+      "image_backbone.transformer.resblocks.3.attn.in_proj_weight",
+      "image_backbone.transformer.resblocks.3.attn.out_proj.weight",
+      "image_backbone.transformer.resblocks.3.mlp.c_fc.weight",
+      "image_backbone.transformer.resblocks.3.mlp.c_proj.weight",
+      "image_backbone.transformer.resblocks.4.attn.in_proj_weight",
+      "image_backbone.transformer.resblocks.4.attn.out_proj.weight",
+      "image_backbone.transformer.resblocks.4.mlp.c_fc.weight",
+      "image_backbone.transformer.resblocks.4.mlp.c_proj.weight",
+      "image_backbone.transformer.resblocks.5.attn.in_proj_weight",
+      "image_backbone.transformer.resblocks.5.attn.out_proj.weight",
+      "image_backbone.transformer.resblocks.5.mlp.c_fc.weight",
+      "image_backbone.transformer.resblocks.5.mlp.c_proj.weight",
+      "image_backbone.transformer.resblocks.6.attn.in_proj_weight",
+      "image_backbone.transformer.resblocks.6.attn.out_proj.weight",
+      "image_backbone.transformer.resblocks.6.mlp.c_fc.weight",
+      "image_backbone.transformer.resblocks.6.mlp.c_proj.weight",
+      "image_backbone.transformer.resblocks.7.attn.in_proj_weight",
+      "image_backbone.transformer.resblocks.7.attn.out_proj.weight",
+      "image_backbone.transformer.resblocks.7.mlp.c_fc.weight",
+      "image_backbone.transformer.resblocks.7.mlp.c_proj.weight",
+      "image_backbone.transformer.resblocks.8.attn.in_proj_weight",
+      "image_backbone.transformer.resblocks.8.attn.out_proj.weight",
+      "image_backbone.transformer.resblocks.8.mlp.c_fc.weight",
+      "image_backbone.transformer.resblocks.8.mlp.c_proj.weight",
+      "image_backbone.transformer.resblocks.9.attn.in_proj_weight",
+      "image_backbone.transformer.resblocks.9.attn.out_proj.weight",
+      "image_backbone.transformer.resblocks.9.mlp.c_fc.weight",
+      "image_backbone.transformer.resblocks.9.mlp.c_proj.weight",
+      "image_backbone.transformer.resblocks.10.attn.in_proj_weight",
+      "image_backbone.transformer.resblocks.10.attn.out_proj.weight",
+      "image_backbone.transformer.resblocks.10.mlp.c_fc.weight",
+      "image_backbone.transformer.resblocks.10.mlp.c_proj.weight",
+      "image_backbone.transformer.resblocks.11.attn.in_proj_weight",
+      "image_backbone.transformer.resblocks.11.attn.out_proj.weight",
+      "image_backbone.transformer.resblocks.11.mlp.c_fc.weight",
+      "image_backbone.transformer.resblocks.11.mlp.c_proj.weight",
+      "proj_image.weight",
+      "proj_text.weight",
+      "fusion_model.fusion_model.embeddings.position_embeddings.weight",
+      "fusion_model.fusion_model.embeddings.token_type_embeddings.weight",
+      "fusion_model.fusion_model.encoder.layer.0.attention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.0.attention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.0.attention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.0.attention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.0.crossattention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.0.crossattention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.0.crossattention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.0.crossattention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.0.intermediate.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.0.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.1.attention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.1.attention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.1.attention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.1.attention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.1.crossattention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.1.crossattention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.1.crossattention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.1.crossattention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.1.intermediate.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.1.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.2.attention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.2.attention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.2.attention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.2.attention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.2.crossattention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.2.crossattention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.2.crossattention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.2.crossattention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.2.intermediate.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.2.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.3.attention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.3.attention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.3.attention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.3.attention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.3.crossattention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.3.crossattention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.3.crossattention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.3.crossattention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.3.intermediate.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.3.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.4.attention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.4.attention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.4.attention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.4.attention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.4.crossattention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.4.crossattention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.4.crossattention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.4.crossattention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.4.intermediate.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.4.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.5.attention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.5.attention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.5.attention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.5.attention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.5.crossattention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.5.crossattention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.5.crossattention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.5.crossattention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.5.intermediate.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.5.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.6.attention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.6.attention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.6.attention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.6.attention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.6.crossattention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.6.crossattention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.6.crossattention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.6.crossattention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.6.intermediate.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.6.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.7.attention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.7.attention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.7.attention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.7.attention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.7.crossattention.self.query.weight",
+      "fusion_model.fusion_model.encoder.layer.7.crossattention.self.key.weight",
+      "fusion_model.fusion_model.encoder.layer.7.crossattention.self.value.weight",
+      "fusion_model.fusion_model.encoder.layer.7.crossattention.output.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.7.intermediate.dense.weight",
+      "fusion_model.fusion_model.encoder.layer.7.output.dense.weight",
+      "fc_image.weight",
+      "fc_text.weight",
+      "it_encoder.layers.0.self_attn.in_proj_weight",
+      "it_encoder.layers.0.self_attn.out_proj.weight",
+      "it_encoder.layers.0.linear1.weight",
+      "it_encoder.layers.0.linear2.weight",
+      "it_encoder.layers.1.self_attn.in_proj_weight",
+      "it_encoder.layers.1.self_attn.out_proj.weight",
+      "it_encoder.layers.1.linear1.weight",
+      "it_encoder.layers.1.linear2.weight"
+    ],
+    "lr_scale": 1.0
+  }
+}
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	logit_scale	[]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.positional_embedding	[77, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.text_projection	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.0.ln_1.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.0.ln_1.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.0.attn.in_proj_weight	[1536, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.0.attn.in_proj_bias	[1536]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.0.attn.out_proj.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.0.attn.out_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.0.ln_2.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.0.ln_2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.0.mlp.c_fc.weight	[2048, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.0.mlp.c_fc.bias	[2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.0.mlp.c_proj.weight	[512, 2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.0.mlp.c_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.1.ln_1.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.1.ln_1.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.1.attn.in_proj_weight	[1536, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.1.attn.in_proj_bias	[1536]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.1.attn.out_proj.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.1.attn.out_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.1.ln_2.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.1.ln_2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.1.mlp.c_fc.weight	[2048, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.1.mlp.c_fc.bias	[2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.1.mlp.c_proj.weight	[512, 2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.1.mlp.c_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.2.ln_1.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.2.ln_1.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.2.attn.in_proj_weight	[1536, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.2.attn.in_proj_bias	[1536]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.2.attn.out_proj.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.2.attn.out_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.2.ln_2.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.2.ln_2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.2.mlp.c_fc.weight	[2048, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.2.mlp.c_fc.bias	[2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.2.mlp.c_proj.weight	[512, 2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.2.mlp.c_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.3.ln_1.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.3.ln_1.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.3.attn.in_proj_weight	[1536, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.3.attn.in_proj_bias	[1536]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.3.attn.out_proj.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.3.attn.out_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.3.ln_2.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.3.ln_2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.3.mlp.c_fc.weight	[2048, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.3.mlp.c_fc.bias	[2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.3.mlp.c_proj.weight	[512, 2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.3.mlp.c_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.4.ln_1.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.4.ln_1.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.4.attn.in_proj_weight	[1536, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.4.attn.in_proj_bias	[1536]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.4.attn.out_proj.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.4.attn.out_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.4.ln_2.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.4.ln_2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.4.mlp.c_fc.weight	[2048, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.4.mlp.c_fc.bias	[2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.4.mlp.c_proj.weight	[512, 2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.4.mlp.c_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.5.ln_1.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.5.ln_1.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.5.attn.in_proj_weight	[1536, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.5.attn.in_proj_bias	[1536]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.5.attn.out_proj.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.5.attn.out_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.5.ln_2.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.5.ln_2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.5.mlp.c_fc.weight	[2048, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.5.mlp.c_fc.bias	[2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.5.mlp.c_proj.weight	[512, 2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.5.mlp.c_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.6.ln_1.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.6.ln_1.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.6.attn.in_proj_weight	[1536, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.6.attn.in_proj_bias	[1536]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.6.attn.out_proj.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.6.attn.out_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.6.ln_2.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.6.ln_2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.6.mlp.c_fc.weight	[2048, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.6.mlp.c_fc.bias	[2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.6.mlp.c_proj.weight	[512, 2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.6.mlp.c_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.7.ln_1.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.7.ln_1.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.7.attn.in_proj_weight	[1536, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.7.attn.in_proj_bias	[1536]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.7.attn.out_proj.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.7.attn.out_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.7.ln_2.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.7.ln_2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.7.mlp.c_fc.weight	[2048, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.7.mlp.c_fc.bias	[2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.7.mlp.c_proj.weight	[512, 2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.7.mlp.c_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.8.ln_1.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.8.ln_1.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.8.attn.in_proj_weight	[1536, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.8.attn.in_proj_bias	[1536]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.8.attn.out_proj.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.8.attn.out_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.8.ln_2.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.8.ln_2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.8.mlp.c_fc.weight	[2048, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.8.mlp.c_fc.bias	[2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.8.mlp.c_proj.weight	[512, 2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.8.mlp.c_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.9.ln_1.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.9.ln_1.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.9.attn.in_proj_weight	[1536, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.9.attn.in_proj_bias	[1536]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.9.attn.out_proj.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.9.attn.out_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.9.ln_2.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.9.ln_2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.9.mlp.c_fc.weight	[2048, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.9.mlp.c_fc.bias	[2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.9.mlp.c_proj.weight	[512, 2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.9.mlp.c_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.10.ln_1.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.10.ln_1.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.10.attn.in_proj_weight	[1536, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.10.attn.in_proj_bias	[1536]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.10.attn.out_proj.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.10.attn.out_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.10.ln_2.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.10.ln_2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.10.mlp.c_fc.weight	[2048, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.10.mlp.c_fc.bias	[2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.10.mlp.c_proj.weight	[512, 2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.10.mlp.c_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.11.ln_1.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.11.ln_1.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.11.attn.in_proj_weight	[1536, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.11.attn.in_proj_bias	[1536]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.11.attn.out_proj.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.11.attn.out_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.11.ln_2.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.11.ln_2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.11.mlp.c_fc.weight	[2048, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.11.mlp.c_fc.bias	[2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.11.mlp.c_proj.weight	[512, 2048]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.transformer.resblocks.11.mlp.c_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.token_embedding.weight	[49408, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.ln_final.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	text_backbone.ln_final.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.class_embedding	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.positional_embedding	[50, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.proj	[768, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.conv1.weight	[768, 3, 32, 32]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.ln_pre.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.ln_pre.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.0.ln_1.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.0.ln_1.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.0.attn.in_proj_weight	[2304, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.0.attn.in_proj_bias	[2304]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.0.attn.out_proj.weight	[768, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.0.attn.out_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.0.ln_2.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.0.ln_2.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.0.mlp.c_fc.weight	[3072, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.0.mlp.c_fc.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.0.mlp.c_proj.weight	[768, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.0.mlp.c_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.1.ln_1.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.1.ln_1.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.1.attn.in_proj_weight	[2304, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.1.attn.in_proj_bias	[2304]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.1.attn.out_proj.weight	[768, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.1.attn.out_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.1.ln_2.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.1.ln_2.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.1.mlp.c_fc.weight	[3072, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.1.mlp.c_fc.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.1.mlp.c_proj.weight	[768, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.1.mlp.c_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.2.ln_1.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.2.ln_1.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.2.attn.in_proj_weight	[2304, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.2.attn.in_proj_bias	[2304]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.2.attn.out_proj.weight	[768, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.2.attn.out_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.2.ln_2.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.2.ln_2.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.2.mlp.c_fc.weight	[3072, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.2.mlp.c_fc.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.2.mlp.c_proj.weight	[768, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.2.mlp.c_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.3.ln_1.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.3.ln_1.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.3.attn.in_proj_weight	[2304, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.3.attn.in_proj_bias	[2304]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.3.attn.out_proj.weight	[768, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.3.attn.out_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.3.ln_2.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.3.ln_2.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.3.mlp.c_fc.weight	[3072, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.3.mlp.c_fc.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.3.mlp.c_proj.weight	[768, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.3.mlp.c_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.4.ln_1.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.4.ln_1.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.4.attn.in_proj_weight	[2304, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.4.attn.in_proj_bias	[2304]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.4.attn.out_proj.weight	[768, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.4.attn.out_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.4.ln_2.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.4.ln_2.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.4.mlp.c_fc.weight	[3072, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.4.mlp.c_fc.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.4.mlp.c_proj.weight	[768, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.4.mlp.c_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.5.ln_1.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.5.ln_1.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.5.attn.in_proj_weight	[2304, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.5.attn.in_proj_bias	[2304]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.5.attn.out_proj.weight	[768, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.5.attn.out_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.5.ln_2.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.5.ln_2.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.5.mlp.c_fc.weight	[3072, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.5.mlp.c_fc.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.5.mlp.c_proj.weight	[768, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.5.mlp.c_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.6.ln_1.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.6.ln_1.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.6.attn.in_proj_weight	[2304, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.6.attn.in_proj_bias	[2304]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.6.attn.out_proj.weight	[768, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.6.attn.out_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.6.ln_2.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.6.ln_2.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.6.mlp.c_fc.weight	[3072, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.6.mlp.c_fc.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.6.mlp.c_proj.weight	[768, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.6.mlp.c_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.7.ln_1.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.7.ln_1.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.7.attn.in_proj_weight	[2304, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.7.attn.in_proj_bias	[2304]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.7.attn.out_proj.weight	[768, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.7.attn.out_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.7.ln_2.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.7.ln_2.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.7.mlp.c_fc.weight	[3072, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.7.mlp.c_fc.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.7.mlp.c_proj.weight	[768, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.7.mlp.c_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.8.ln_1.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.8.ln_1.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.8.attn.in_proj_weight	[2304, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.8.attn.in_proj_bias	[2304]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.8.attn.out_proj.weight	[768, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.8.attn.out_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.8.ln_2.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.8.ln_2.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.8.mlp.c_fc.weight	[3072, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.8.mlp.c_fc.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.8.mlp.c_proj.weight	[768, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.8.mlp.c_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.9.ln_1.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.9.ln_1.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.9.attn.in_proj_weight	[2304, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.9.attn.in_proj_bias	[2304]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.9.attn.out_proj.weight	[768, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.9.attn.out_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.9.ln_2.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.9.ln_2.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.9.mlp.c_fc.weight	[3072, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.9.mlp.c_fc.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.9.mlp.c_proj.weight	[768, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.9.mlp.c_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.10.ln_1.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.10.ln_1.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.10.attn.in_proj_weight	[2304, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.10.attn.in_proj_bias	[2304]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.10.attn.out_proj.weight	[768, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.10.attn.out_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.10.ln_2.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.10.ln_2.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.10.mlp.c_fc.weight	[3072, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.10.mlp.c_fc.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.10.mlp.c_proj.weight	[768, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.10.mlp.c_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.11.ln_1.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.11.ln_1.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.11.attn.in_proj_weight	[2304, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.11.attn.in_proj_bias	[2304]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.11.attn.out_proj.weight	[768, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.11.attn.out_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.11.ln_2.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.11.ln_2.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.11.mlp.c_fc.weight	[3072, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.11.mlp.c_fc.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.11.mlp.c_proj.weight	[768, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.transformer.resblocks.11.mlp.c_proj.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.ln_post.weight	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	image_backbone.ln_post.bias	[768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	proj_image.weight	[512, 768]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	proj_image.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	proj_text.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	proj_text.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.embeddings.position_embeddings.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.embeddings.token_type_embeddings.weight	[2, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.embeddings.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.embeddings.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.attention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.attention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.attention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.attention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.attention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.attention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.attention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.attention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.attention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.attention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.crossattention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.crossattention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.crossattention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.crossattention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.crossattention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.crossattention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.crossattention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.crossattention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.crossattention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.crossattention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.intermediate.dense.weight	[3072, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.intermediate.dense.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.output.dense.weight	[512, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.0.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.attention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.attention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.attention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.attention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.attention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.attention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.attention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.attention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.attention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.attention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.crossattention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.crossattention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.crossattention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.crossattention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.crossattention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.crossattention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.crossattention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.crossattention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.crossattention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.crossattention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.intermediate.dense.weight	[3072, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.intermediate.dense.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.output.dense.weight	[512, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.1.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.attention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.attention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.attention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.attention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.attention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.attention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.attention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.attention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.attention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.attention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.crossattention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.crossattention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.crossattention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.crossattention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.crossattention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.crossattention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.crossattention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.crossattention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.crossattention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.crossattention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.intermediate.dense.weight	[3072, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.intermediate.dense.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.output.dense.weight	[512, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.2.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.attention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.attention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.attention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.attention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.attention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.attention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.attention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.attention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.attention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.attention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.crossattention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.crossattention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.crossattention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.crossattention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.crossattention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.crossattention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.crossattention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.crossattention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.crossattention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.crossattention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.intermediate.dense.weight	[3072, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.intermediate.dense.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.output.dense.weight	[512, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.3.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.attention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.attention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.attention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.attention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.attention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.attention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.attention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.attention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.attention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.attention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.crossattention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.crossattention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.crossattention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.crossattention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.crossattention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.crossattention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.crossattention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.crossattention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.crossattention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.crossattention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.intermediate.dense.weight	[3072, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.intermediate.dense.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.output.dense.weight	[512, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.4.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.attention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.attention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.attention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.attention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.attention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.attention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.attention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.attention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.attention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.attention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.crossattention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.crossattention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.crossattention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.crossattention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.crossattention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.crossattention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.crossattention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.crossattention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.crossattention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.crossattention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.intermediate.dense.weight	[3072, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.intermediate.dense.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.output.dense.weight	[512, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.5.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.attention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.attention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.attention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.attention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.attention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.attention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.attention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.attention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.attention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.attention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.crossattention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.crossattention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.crossattention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.crossattention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.crossattention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.crossattention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.crossattention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.crossattention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.crossattention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.crossattention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.intermediate.dense.weight	[3072, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.intermediate.dense.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.output.dense.weight	[512, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.6.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.attention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.attention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.attention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.attention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.attention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.attention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.attention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.attention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.attention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.attention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.crossattention.self.query.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.crossattention.self.query.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.crossattention.self.key.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.crossattention.self.key.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.crossattention.self.value.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.crossattention.self.value.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.crossattention.output.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.crossattention.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.crossattention.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.crossattention.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.intermediate.dense.weight	[3072, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.intermediate.dense.bias	[3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.output.dense.weight	[512, 3072]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.output.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.output.LayerNorm.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fusion_model.fusion_model.encoder.layer.7.output.LayerNorm.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fc_image.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fc_image.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fc_text.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	fc_text.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.0.self_attn.in_proj_weight	[1536, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.0.self_attn.in_proj_bias	[1536]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.0.self_attn.out_proj.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.0.self_attn.out_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.0.linear1.weight	[1024, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.0.linear1.bias	[1024]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.0.linear2.weight	[512, 1024]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.0.linear2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.0.norm1.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.0.norm1.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.0.norm2.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.0.norm2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.1.self_attn.in_proj_weight	[1536, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.1.self_attn.in_proj_bias	[1536]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.1.self_attn.out_proj.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.1.self_attn.out_proj.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.1.linear1.weight	[1024, 512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.1.linear1.bias	[1024]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.1.linear2.weight	[512, 1024]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.1.linear2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.1.norm1.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.1.norm1.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.1.norm2.weight	[512]
+2026-11-12,00:05:48 | INFO | [main.py-210]: 	it_encoder.layers.1.norm2.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-212]: ---
+2026-11-12,00:05:48 | INFO | [main.py-218]: 	fusion_model.fusion_model.embeddings.word_embeddings.weight	[30522, 512]
+2026-11-12,00:05:48 | INFO | [main.py-218]: 	fusion_model.fusion_model.pooler.dense.weight	[512, 512]
+2026-11-12,00:05:48 | INFO | [main.py-218]: 	fusion_model.fusion_model.pooler.dense.bias	[512]
+2026-11-12,00:05:48 | INFO | [main.py-220]: ---
+2026-11-12,00:05:48 | INFO | [main.py-222]: Model structure
+ItraModel(
+  (text_backbone): CLIP(
+    (visual): None
+    (transformer): Transformer(
+      (resblocks): ModuleList(
+        (0-11): 12 x ResidualAttentionBlock(
+          (ln_1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+          (attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+          )
+          (ls_1): Identity()
+          (ln_2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+          (mlp): Sequential(
+            (c_fc): Linear(in_features=512, out_features=2048, bias=True)
+            (gelu): QuickGELU()
+            (c_proj): Linear(in_features=2048, out_features=512, bias=True)
+          )
+          (ls_2): Identity()
+        )
+      )
+    )
+    (token_embedding): Embedding(49408, 512)
+    (ln_final): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+  )
+  (image_backbone): VisionTransformer(
+    (patchnorm_pre_ln): Identity()
+    (conv1): Conv2d(3, 768, kernel_size=(32, 32), stride=(32, 32), bias=False)
+    (patch_dropout): Identity()
+    (ln_pre): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+    (transformer): Transformer(
+      (resblocks): ModuleList(
+        (0-11): 12 x ResidualAttentionBlock(
+          (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+          )
+          (ls_1): Identity()
+          (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (mlp): Sequential(
+            (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+            (gelu): QuickGELU()
+            (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+          )
+          (ls_2): Identity()
+        )
+      )
+    )
+    (ln_post): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  )
+  (text_projection_head): Identity()
+  (image_projection_head): Identity()
+  (proj_image): Linear(in_features=768, out_features=512, bias=True)
+  (proj_text): Linear(in_features=512, out_features=512, bias=True)
+  (fusion_model): FusionModel(
+    (fusion_model): BertModel(
+      (embeddings): BertEmbeddings(
+        (word_embeddings): Embedding(30522, 512, padding_idx=0)
+        (position_embeddings): Embedding(512, 512)
+        (token_type_embeddings): Embedding(2, 512)
+        (LayerNorm): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (encoder): BertEncoder(
+        (layer): ModuleList(
+          (0-7): 8 x BertLayer(
+            (attention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=512, out_features=512, bias=True)
+                (key): Linear(in_features=512, out_features=512, bias=True)
+                (value): Linear(in_features=512, out_features=512, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=512, out_features=512, bias=True)
+                (LayerNorm): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (crossattention): BertAttention(
+              (self): BertSelfAttention(
+                (query): Linear(in_features=512, out_features=512, bias=True)
+                (key): Linear(in_features=512, out_features=512, bias=True)
+                (value): Linear(in_features=512, out_features=512, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+              (output): BertSelfOutput(
+                (dense): Linear(in_features=512, out_features=512, bias=True)
+                (LayerNorm): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+            (intermediate): BertIntermediate(
+              (dense): Linear(in_features=512, out_features=3072, bias=True)
+              (intermediate_act_fn): GELUActivation()
+            )
+            (output): BertOutput(
+              (dense): Linear(in_features=3072, out_features=512, bias=True)
+              (LayerNorm): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+        )
+      )
+      (pooler): BertPooler(
+        (dense): Linear(in_features=512, out_features=512, bias=True)
+        (activation): Tanh()
+      )
+    )
+  )
+  (fc_image): Linear(in_features=512, out_features=512, bias=True)
+  (fc_text): Linear(in_features=512, out_features=512, bias=True)
+  (it_encoder): TransformerEncoder(
+    (layers): ModuleList(
+      (0-1): 2 x TransformerEncoderLayer(
+        (self_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+        )
+        (linear1): Linear(in_features=512, out_features=1024, bias=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (linear2): Linear(in_features=1024, out_features=512, bias=True)
+        (norm1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.1, inplace=False)
+        (dropout2): Dropout(p=0.1, inplace=False)
+      )
+    )
+  )
+  (rec_loss): MSELoss()
+  (info_nce_loss): BiDirectionalInfoNCELoss(
+    (cross_entropy_loss): CrossEntropyLoss()
+  )
+  (triplet_loss): BiDirectionalTripletLoss(
+    (triplet_loss): TripletMarginLoss()
+  )
+)
+2026-11-12,00:05:48 | INFO | [main.py-223]: Total Model Parameters (M):	        214.85
+2026-11-12,00:05:48 | INFO | [main.py-224]: Image Backbone Parameters (M):	     87.85
+2026-11-12,00:05:48 | INFO | [main.py-225]: Text Backbone Parameters (M):	      63.43
+2026-11-12,00:05:48 | INFO | [main.py-226]: Image Projection Parameters (M):	   0.0
+2026-11-12,00:05:48 | INFO | [main.py-227]: Text Projection Parameters (M):	    0.0
+2026-11-12,00:05:48 | INFO | [main.py-228]: Trainable Parameters (M):	198.96
+2026-11-12,00:05:48 | INFO | [main.py-229]: Frozen Parameters (M):	15.89
+2026-11-12,00:05:48 | INFO | [main.py-278]: [A3] active modules: PRCLIP_RIP
+2026-11-12,00:05:48 | INFO | [evaluation.py-20]: Starting evaluation of [A3_R2_train_s2] at epoch 0
+2026-11-12,00:06:29 | INFO | [evaluation.py-176]: Finished evaluation of [A3_R2_train_s2] at epoch 0
+	retrieval-image2text-R@1	37.15
+	retrieval-image2text-R@5	54.46
+	retrieval-image2text-R@10	69.11
+	retrieval-text2image-R@1	33.44
+	retrieval-text2image-R@5	66.48
+	retrieval-text2image-R@10	80.11
+	retrieval-mean-recall	56.79
+2026-11-12,00:06:29 | INFO | [main.py-288]: args:
+2026-11-12,00:06:29 | INFO | [main.py-291]:   C: 3.16
+2026-11-12,00:06:29 | INFO | [main.py-291]:   adapter: None
+2026-11-12,00:06:29 | INFO | [main.py-291]:   augmentation: None
+2026-11-12,00:06:29 | INFO | [main.py-291]:   backbone_decay: 1
+2026-11-12,00:06:29 | INFO | [main.py-291]:   batch_size: 16
+2026-11-12,00:06:29 | INFO | [main.py-291]:   beta1: 0.9
+2026-11-12,00:06:29 | INFO | [main.py-291]:   beta2: 0.98
+2026-11-12,00:06:29 | INFO | [main.py-291]:   cache_dir: C:\Users\NHAT TAN\Documents\Codex\2026-10-10\yu\work\openclip-cache
+2026-11-12,00:06:29 | INFO | [main.py-291]:   cache_path: C:\Users\NHAT TAN\Documents\Codex\2026-10-10\yu\work\a3_logs\A3_R2_train_s2\cache
+2026-11-12,00:06:29 | INFO | [main.py-291]:   cache_teacher: None
+2026-11-12,00:06:29 | INFO | [main.py-291]:   checkpoint_path: C:\Users\NHAT TAN\Documents\Codex\2026-10-10\yu\work\a3_logs\A3_R2_train_s2\checkpoints
+2026-11-12,00:06:29 | INFO | [main.py-291]:   clip_grad: None
+2026-11-12,00:06:29 | INFO | [main.py-291]:   config_yaml: None
+2026-11-12,00:06:29 | INFO | [main.py-291]:   copy_codebase: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   csv_caption_key: title
+2026-11-12,00:06:29 | INFO | [main.py-291]:   csv_img_key: filename
+2026-11-12,00:06:29 | INFO | [main.py-291]:   csv_separator: ,
+2026-11-12,00:06:29 | INFO | [main.py-291]:   dataset_size: 58905
+2026-11-12,00:06:29 | INFO | [main.py-291]:   datasets_dir: None
+2026-11-12,00:06:29 | INFO | [main.py-291]:   ddp_static_graph: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   debug: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   device: cuda:0
+2026-11-12,00:06:29 | INFO | [main.py-291]:   dino_teacher_temp: 0.04
+2026-11-12,00:06:29 | INFO | [main.py-291]:   dist_backend: nccl
+2026-11-12,00:06:29 | INFO | [main.py-291]:   dist_url: env://
+2026-11-12,00:06:29 | INFO | [main.py-291]:   distributed: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   episode_size: 58905
+2026-11-12,00:06:29 | INFO | [main.py-291]:   episodic_training: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   epochs: 1
+2026-11-12,00:06:29 | INFO | [main.py-291]:   eps: 1e-06
+2026-11-12,00:06:29 | INFO | [main.py-291]:   eval_first: True
+2026-11-12,00:06:29 | INFO | [main.py-291]:   eval_with_wise_ft: 1
+2026-11-12,00:06:29 | INFO | [main.py-291]:   evaluation_workers: 8
+2026-11-12,00:06:29 | INFO | [main.py-291]:   find_unused_parameters: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   force_quick_gelu: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   gather_with_grad: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   horovod: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   image_dim: 512
+2026-11-12,00:06:29 | INFO | [main.py-291]:   image_head_n_layers: 0
+2026-11-12,00:06:29 | INFO | [main.py-291]:   image_model: ViT-B-32
+2026-11-12,00:06:29 | INFO | [main.py-291]:   image_model_builder: openclip
+2026-11-12,00:06:29 | INFO | [main.py-291]:   image_model_tag: openai
+2026-11-12,00:06:29 | INFO | [main.py-291]:   image_resolution: 224
+2026-11-12,00:06:29 | INFO | [main.py-291]:   images_dir: C:\Users\NHAT TAN\Documents\Codex\2026-10-10\yu\work\images\image_all
+2026-11-12,00:06:29 | INFO | [main.py-291]:   joint_projection_dim: 512
+2026-11-12,00:06:29 | INFO | [main.py-291]:   layer_decay_image: 1
+2026-11-12,00:06:29 | INFO | [main.py-291]:   layer_decay_text: 1
+2026-11-12,00:06:29 | INFO | [main.py-291]:   linear_frequency: 0
+2026-11-12,00:06:29 | INFO | [main.py-291]:   linear_prob_mode: pytorch
+2026-11-12,00:06:29 | INFO | [main.py-291]:   load_clip_weights: True
+2026-11-12,00:06:29 | INFO | [main.py-291]:   load_clip_weights_from: C:\Users\NHAT TAN\Documents\Codex\2026-10-10\yu\work\RS5M_ViT-B-32_RET-2.pt
+2026-11-12,00:06:29 | INFO | [main.py-291]:   local_loss: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   local_rank: 0
+2026-11-12,00:06:29 | INFO | [main.py-291]:   lock_image_model: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   lock_image_partial: 
+2026-11-12,00:06:29 | INFO | [main.py-291]:   lock_text_model: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   lock_text_partial: 
+2026-11-12,00:06:29 | INFO | [main.py-291]:   log_level: 20
+2026-11-12,00:06:29 | INFO | [main.py-291]:   log_local: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   log_path: C:\Users\NHAT TAN\Documents\Codex\2026-10-10\yu\work\a3_logs\A3_R2_train_s2\out.log
+2026-11-12,00:06:29 | INFO | [main.py-291]:   logit_scale: 0.07
+2026-11-12,00:06:29 | INFO | [main.py-291]:   logs: C:\Users\NHAT TAN\Documents\Codex\2026-10-10\yu\work\a3_logs
+2026-11-12,00:06:29 | INFO | [main.py-291]:   loss: InfoNCE
+2026-11-12,00:06:29 | INFO | [main.py-291]:   lr: 2e-07
+2026-11-12,00:06:29 | INFO | [main.py-291]:   max_grad_norm: 50.0
+2026-11-12,00:06:29 | INFO | [main.py-291]:   max_seq_length: 77
+2026-11-12,00:06:29 | INFO | [main.py-291]:   model_ema: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   model_ema_decay: 0.9999
+2026-11-12,00:06:29 | INFO | [main.py-291]:   model_ema_force_cpu: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   momentum: 0.9
+2026-11-12,00:06:29 | INFO | [main.py-291]:   n_prompt: 4
+2026-11-12,00:06:29 | INFO | [main.py-291]:   name: A3_R2_train_s2
+2026-11-12,00:06:29 | INFO | [main.py-291]:   nlp_eval_frequency: 0
+2026-11-12,00:06:29 | INFO | [main.py-291]:   no_set_device_rank: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   opt: adamw
+2026-11-12,00:06:29 | INFO | [main.py-291]:   opt_betas: None
+2026-11-12,00:06:29 | INFO | [main.py-291]:   opt_eps: 1e-08
+2026-11-12,00:06:29 | INFO | [main.py-291]:   precision: amp
+2026-11-12,00:06:29 | INFO | [main.py-291]:   pretrained_image_model: True
+2026-11-12,00:06:29 | INFO | [main.py-291]:   pretrained_text_model: True
+2026-11-12,00:06:29 | INFO | [main.py-291]:   prompt: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   rank: 0
+2026-11-12,00:06:29 | INFO | [main.py-291]:   report_to: 
+2026-11-12,00:06:29 | INFO | [main.py-291]:   restart: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   resume: None
+2026-11-12,00:06:29 | INFO | [main.py-291]:   retrieval_csv_caption_key: title
+2026-11-12,00:06:29 | INFO | [main.py-291]:   retrieval_csv_img_key: filename
+2026-11-12,00:06:29 | INFO | [main.py-291]:   retrieval_csv_separator: ,
+2026-11-12,00:06:29 | INFO | [main.py-291]:   retrieval_data: ./dataset/val/ret2_val.csv
+2026-11-12,00:06:29 | INFO | [main.py-291]:   retrieval_frequency: 1
+2026-11-12,00:06:29 | INFO | [main.py-291]:   retrieval_images_dir: C:\Users\NHAT TAN\Documents\Codex\2026-10-10\yu\work\images\image_all
+2026-11-12,00:06:29 | INFO | [main.py-291]:   save_frequency: 1
+2026-11-12,00:06:29 | INFO | [main.py-291]:   save_logs: True
+2026-11-12,00:06:29 | INFO | [main.py-291]:   save_most_recent: True
+2026-11-12,00:06:29 | INFO | [main.py-291]:   seed: 2
+2026-11-12,00:06:29 | INFO | [main.py-291]:   teacher: text
+2026-11-12,00:06:29 | INFO | [main.py-291]:   tensorboard: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   tensorboard_path: 
+2026-11-12,00:06:29 | INFO | [main.py-291]:   text_dim: 512
+2026-11-12,00:06:29 | INFO | [main.py-291]:   text_head_n_layers: 0
+2026-11-12,00:06:29 | INFO | [main.py-291]:   text_model: ViT-B-32
+2026-11-12,00:06:29 | INFO | [main.py-291]:   text_model_builder: openclip
+2026-11-12,00:06:29 | INFO | [main.py-291]:   text_model_tag: openai
+2026-11-12,00:06:29 | INFO | [main.py-291]:   text_pooler: cls
+2026-11-12,00:06:29 | INFO | [main.py-291]:   text_width: 512
+2026-11-12,00:06:29 | INFO | [main.py-291]:   torchscript: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   trace: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   train_data: ./dataset/train/ret2_trainsplit.csv
+2026-11-12,00:06:29 | INFO | [main.py-291]:   use_bn_sync: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   visualize_frequency: -1
+2026-11-12,00:06:29 | INFO | [main.py-291]:   w_align: 1.0
+2026-11-12,00:06:29 | INFO | [main.py-291]:   w_rkd_a: 1.0
+2026-11-12,00:06:29 | INFO | [main.py-291]:   w_rkd_d: 0.5
+2026-11-12,00:06:29 | INFO | [main.py-291]:   w_simcse: 0.0
+2026-11-12,00:06:29 | INFO | [main.py-291]:   wandb: False
+2026-11-12,00:06:29 | INFO | [main.py-291]:   wandb_notes: 
+2026-11-12,00:06:29 | INFO | [main.py-291]:   warmup: 100
+2026-11-12,00:06:29 | INFO | [main.py-291]:   weight_decay: 0.5
+2026-11-12,00:06:29 | INFO | [main.py-291]:   weight_decay_end: None
+2026-11-12,00:06:29 | INFO | [main.py-291]:   workers: 2
+2026-11-12,00:06:29 | INFO | [main.py-291]:   world_size: 1
+2026-11-12,00:06:29 | INFO | [main.py-291]:   zeroshot_frequency: 0
+2026-11-12,00:06:29 | INFO | [main.py-303]: Start epoch 0
+2026-11-12,00:06:36 | INFO | [train.py-213]: Train Epoch: 1/1 [   16/58905 (0%)] Loss: 0.03344 Data (t): 6.615 Batch (t): 7.616 LR: 0.000000 grad: 0.000000 
+2026-11-12,00:06:39 | INFO | [train.py-213]: Train Epoch: 1/1 [  176/58905 (0%)] Loss: 0.10513 Data (t): 0.023 Batch (t): 0.295 LR: 0.000000 grad: 21.311302 
+2026-11-12,00:06:42 | INFO | [train.py-213]: Train Epoch: 1/1 [  336/58905 (1%)] Loss: 0.02694 Data (t): 0.031 Batch (t): 0.295 LR: 0.000000 grad: 19.010931 
+2026-11-12,00:06:45 | INFO | [train.py-213]: Train Epoch: 1/1 [  496/58905 (1%)] Loss: 0.08513 Data (t): 0.025 Batch (t): 0.297 LR: 0.000000 grad: 18.121185 
+2026-11-12,00:06:48 | INFO | [train.py-213]: Train Epoch: 1/1 [  656/58905 (1%)] Loss: 0.04345 Data (t): 0.031 Batch (t): 0.305 LR: 0.000000 grad: 17.684397 
+2026-11-12,00:06:51 | INFO | [train.py-213]: Train Epoch: 1/1 [  816/58905 (1%)] Loss: 0.08374 Data (t): 0.026 Batch (t): 0.308 LR: 0.000000 grad: 16.420683 
+2026-11-12,00:06:55 | INFO | [train.py-213]: Train Epoch: 1/1 [  976/58905 (2%)] Loss: 0.12177 Data (t): 0.031 Batch (t): 0.310 LR: 0.000000 grad: 17.179363 
+2026-11-12,00:06:58 | INFO | [train.py-213]: Train Epoch: 1/1 [ 1136/58905 (2%)] Loss: 0.03942 Data (t): 0.027 Batch (t): 0.310 LR: 0.000000 grad: 24.782118 
+2026-11-12,00:07:01 | INFO | [train.py-213]: Train Epoch: 1/1 [ 1296/58905 (2%)] Loss: 0.07976 Data (t): 0.032 Batch (t): 0.312 LR: 0.000000 grad: 18.230013 
+2026-11-12,00:07:04 | INFO | [train.py-213]: Train Epoch: 1/1 [ 1456/58905 (2%)] Loss: 0.01709 Data (t): 0.026 Batch (t): 0.308 LR: 0.000000 grad: 16.989136 
+2026-11-12,00:07:07 | INFO | [train.py-213]: Train Epoch: 1/1 [ 1616/58905 (3%)] Loss: 0.04417 Data (t): 0.032 Batch (t): 0.318 LR: 0.000000 grad: 16.032640 
+2026-11-12,00:07:10 | INFO | [train.py-213]: Train Epoch: 1/1 [ 1776/58905 (3%)] Loss: 0.04760 Data (t): 0.027 Batch (t): 0.308 LR: 0.000000 grad: 13.542441 
+2026-11-12,00:07:13 | INFO | [train.py-213]: Train Epoch: 1/1 [ 1936/58905 (3%)] Loss: 0.01914 Data (t): 0.031 Batch (t): 0.311 LR: 0.000000 grad: 21.725283 
+2026-11-12,00:07:16 | INFO | [train.py-213]: Train Epoch: 1/1 [ 2096/58905 (4%)] Loss: 0.00655 Data (t): 0.027 Batch (t): 0.315 LR: 0.000000 grad: 23.397211 
+2026-11-12,00:07:20 | INFO | [train.py-213]: Train Epoch: 1/1 [ 2256/58905 (4%)] Loss: 0.01641 Data (t): 0.032 Batch (t): 0.314 LR: 0.000000 grad: 22.225649 
+2026-11-12,00:07:23 | INFO | [train.py-213]: Train Epoch: 1/1 [ 2416/58905 (4%)] Loss: 0.04973 Data (t): 0.027 Batch (t): 0.317 LR: 0.000000 grad: 21.146282 
+2026-11-12,00:07:26 | INFO | [train.py-213]: Train Epoch: 1/1 [ 2576/58905 (4%)] Loss: 0.02884 Data (t): 0.033 Batch (t): 0.325 LR: 0.000000 grad: 30.964928 
+2026-11-12,00:07:29 | INFO | [train.py-213]: Train Epoch: 1/1 [ 2736/58905 (5%)] Loss: 0.16370 Data (t): 0.027 Batch (t): 0.316 LR: 0.000000 grad: 22.953407 
+2026-11-12,00:07:32 | INFO | [train.py-213]: Train Epoch: 1/1 [ 2896/58905 (5%)] Loss: 0.25830 Data (t): 0.033 Batch (t): 0.326 LR: 0.000000 grad: 11.686604 
+2026-11-12,00:07:35 | INFO | [train.py-213]: Train Epoch: 1/1 [ 3056/58905 (5%)] Loss: 0.03582 Data (t): 0.028 Batch (t): 0.316 LR: 0.000000 grad: 16.264454 
+2026-11-12,00:07:39 | INFO | [train.py-213]: Train Epoch: 1/1 [ 3216/58905 (5%)] Loss: 0.04058 Data (t): 0.032 Batch (t): 0.328 LR: 0.000000 grad: 18.217400 
+2026-11-12,00:07:42 | INFO | [train.py-213]: Train Epoch: 1/1 [ 3376/58905 (6%)] Loss: 0.03606 Data (t): 0.026 Batch (t): 0.317 LR: 0.000000 grad: 13.348500 
+2026-11-12,00:07:45 | INFO | [train.py-213]: Train Epoch: 1/1 [ 3536/58905 (6%)] Loss: 0.07539 Data (t): 0.033 Batch (t): 0.325 LR: 0.000000 grad: 24.980577 
+2026-11-12,00:07:48 | INFO | [train.py-213]: Train Epoch: 1/1 [ 3696/58905 (6%)] Loss: 0.00554 Data (t): 0.027 Batch (t): 0.319 LR: 0.000000 grad: 25.231785 
+2026-11-12,00:07:52 | INFO | [train.py-213]: Train Epoch: 1/1 [ 3856/58905 (7%)] Loss: 0.07974 Data (t): 0.026 Batch (t): 0.321 LR: 0.000000 grad: inf 
+2026-11-12,00:07:55 | INFO | [train.py-213]: Train Epoch: 1/1 [ 4016/58905 (7%)] Loss: 0.05187 Data (t): 0.027 Batch (t): 0.316 LR: 0.000000 grad: 29.014307 
+2026-11-12,00:07:58 | INFO | [train.py-213]: Train Epoch: 1/1 [ 4176/58905 (7%)] Loss: 0.04166 Data (t): 0.033 Batch (t): 0.328 LR: 0.000000 grad: 27.532522 
+2026-11-12,00:08:01 | INFO | [train.py-213]: Train Epoch: 1/1 [ 4336/58905 (7%)] Loss: 0.08074 Data (t): 0.028 Batch (t): 0.321 LR: 0.000000 grad: 17.707014 
+2026-11-12,00:08:04 | INFO | [train.py-213]: Train Epoch: 1/1 [ 4496/58905 (8%)] Loss: 0.07630 Data (t): 0.032 Batch (t): 0.325 LR: 0.000000 grad: 24.093939 
+2026-11-12,00:08:08 | INFO | [train.py-213]: Train Epoch: 1/1 [ 4656/58905 (8%)] Loss: 0.07709 Data (t): 0.029 Batch (t): 0.325 LR: 0.000000 grad: 17.037745 
+2026-11-12,00:08:11 | INFO | [train.py-213]: Train Epoch: 1/1 [ 4816/58905 (8%)] Loss: 0.07719 Data (t): 0.033 Batch (t): 0.328 LR: 0.000000 grad: 33.823563 
+2026-11-12,00:08:14 | INFO | [train.py-213]: Train Epoch: 1/1 [ 4976/58905 (8%)] Loss: 0.01059 Data (t): 0.026 Batch (t): 0.318 LR: 0.000000 grad: 22.634388 
+2026-11-12,00:08:17 | INFO | [train.py-213]: Train Epoch: 1/1 [ 5136/58905 (9%)] Loss: 0.09609 Data (t): 0.033 Batch (t): 0.327 LR: 0.000000 grad: 13.688745 
+2026-11-12,00:08:21 | INFO | [train.py-213]: Train Epoch: 1/1 [ 5296/58905 (9%)] Loss: 0.07509 Data (t): 0.026 Batch (t): 0.325 LR: 0.000000 grad: 21.782379 
+2026-11-12,00:08:24 | INFO | [train.py-213]: Train Epoch: 1/1 [ 5456/58905 (9%)] Loss: 0.01516 Data (t): 0.032 Batch (t): 0.331 LR: 0.000000 grad: 28.351244 
+2026-11-12,00:08:27 | INFO | [train.py-213]: Train Epoch: 1/1 [ 5616/58905 (10%)] Loss: 0.28461 Data (t): 0.028 Batch (t): 0.322 LR: 0.000000 grad: 19.929499 
+2026-11-12,00:08:31 | INFO | [train.py-213]: Train Epoch: 1/1 [ 5776/58905 (10%)] Loss: 0.00660 Data (t): 0.032 Batch (t): 0.329 LR: 0.000000 grad: 22.347000 
+2026-11-12,00:08:34 | INFO | [train.py-213]: Train Epoch: 1/1 [ 5936/58905 (10%)] Loss: 0.05877 Data (t): 0.026 Batch (t): 0.320 LR: 0.000000 grad: 25.553387 
+2026-11-12,00:08:37 | INFO | [train.py-213]: Train Epoch: 1/1 [ 6096/58905 (10%)] Loss: 0.03143 Data (t): 0.033 Batch (t): 0.328 LR: 0.000000 grad: 24.335318 
+2026-11-12,00:08:40 | INFO | [train.py-213]: Train Epoch: 1/1 [ 6256/58905 (11%)] Loss: 0.08842 Data (t): 0.027 Batch (t): 0.328 LR: 0.000000 grad: 17.882366 
+2026-11-12,00:08:44 | INFO | [train.py-213]: Train Epoch: 1/1 [ 6416/58905 (11%)] Loss: 0.01945 Data (t): 0.033 Batch (t): 0.333 LR: 0.000000 grad: 19.140892 
+2026-11-12,00:08:47 | INFO | [train.py-213]: Train Epoch: 1/1 [ 6576/58905 (11%)] Loss: 0.02015 Data (t): 0.027 Batch (t): 0.322 LR: 0.000000 grad: 21.904564 
+2026-11-12,00:08:50 | INFO | [train.py-213]: Train Epoch: 1/1 [ 6736/58905 (11%)] Loss: 0.05852 Data (t): 0.033 Batch (t): 0.328 LR: 0.000000 grad: 20.810143 
+2026-11-12,00:08:53 | INFO | [train.py-213]: Train Epoch: 1/1 [ 6896/58905 (12%)] Loss: 0.07750 Data (t): 0.027 Batch (t): 0.322 LR: 0.000000 grad: 22.207758 
+2026-11-12,00:08:57 | INFO | [train.py-213]: Train Epoch: 1/1 [ 7056/58905 (12%)] Loss: 0.02506 Data (t): 0.033 Batch (t): 0.331 LR: 0.000000 grad: 26.044182 
+2026-11-12,00:09:00 | INFO | [train.py-213]: Train Epoch: 1/1 [ 7216/58905 (12%)] Loss: 0.18087 Data (t): 0.027 Batch (t): 0.321 LR: 0.000000 grad: 18.948288 
+2026-11-12,00:09:03 | INFO | [train.py-213]: Train Epoch: 1/1 [ 7376/58905 (13%)] Loss: 0.00963 Data (t): 0.033 Batch (t): 0.330 LR: 0.000000 grad: 22.706095 
+2026-11-12,00:09:06 | INFO | [train.py-213]: Train Epoch: 1/1 [ 7536/58905 (13%)] Loss: 0.02131 Data (t): 0.026 Batch (t): 0.325 LR: 0.000000 grad: 29.780333 
+2026-11-12,00:09:10 | INFO | [train.py-213]: Train Epoch: 1/1 [ 7696/58905 (13%)] Loss: 0.04191 Data (t): 0.033 Batch (t): 0.330 LR: 0.000000 grad: 28.080030 
+2026-11-12,00:09:13 | INFO | [train.py-213]: Train Epoch: 1/1 [ 7856/58905 (13%)] Loss: 0.11693 Data (t): 0.027 Batch (t): 0.326 LR: 0.000000 grad: 20.100330 
+2026-11-12,00:09:16 | INFO | [train.py-213]: Train Epoch: 1/1 [ 8016/58905 (14%)] Loss: 0.02952 Data (t): 0.034 Batch (t): 0.333 LR: 0.000000 grad: 21.438719 
+2026-11-12,00:09:20 | INFO | [train.py-213]: Train Epoch: 1/1 [ 8176/58905 (14%)] Loss: 0.05970 Data (t): 0.027 Batch (t): 0.328 LR: 0.000000 grad: 19.918976 
+2026-11-12,00:09:23 | INFO | [train.py-213]: Train Epoch: 1/1 [ 8336/58905 (14%)] Loss: 0.09778 Data (t): 0.033 Batch (t): 0.334 LR: 0.000000 grad: 21.382380 
+2026-11-12,00:09:26 | INFO | [train.py-213]: Train Epoch: 1/1 [ 8496/58905 (14%)] Loss: 0.00576 Data (t): 0.027 Batch (t): 0.322 LR: 0.000000 grad: 27.825647 
+2026-11-12,00:09:29 | INFO | [train.py-213]: Train Epoch: 1/1 [ 8656/58905 (15%)] Loss: 0.04685 Data (t): 0.033 Batch (t): 0.331 LR: 0.000000 grad: 25.760218 
+2026-11-12,00:09:33 | INFO | [train.py-213]: Train Epoch: 1/1 [ 8816/58905 (15%)] Loss: 0.04499 Data (t): 0.028 Batch (t): 0.326 LR: 0.000000 grad: 31.022764 
+2026-11-12,00:09:36 | INFO | [train.py-213]: Train Epoch: 1/1 [ 8976/58905 (15%)] Loss: 0.11769 Data (t): 0.034 Batch (t): 0.336 LR: 0.000000 grad: 22.405706 
+2026-11-12,00:09:39 | INFO | [train.py-213]: Train Epoch: 1/1 [ 9136/58905 (16%)] Loss: 0.02379 Data (t): 0.028 Batch (t): 0.328 LR: 0.000000 grad: 18.576946 
+2026-11-12,00:09:43 | INFO | [train.py-213]: Train Epoch: 1/1 [ 9296/58905 (16%)] Loss: 0.12242 Data (t): 0.037 Batch (t): 0.384 LR: 0.000000 grad: 37.717865 
+2026-11-12,00:09:47 | INFO | [train.py-213]: Train Epoch: 1/1 [ 9456/58905 (16%)] Loss: 0.10136 Data (t): 0.033 Batch (t): 0.389 LR: 0.000000 grad: 25.460695 
+2026-11-12,00:09:51 | INFO | [train.py-213]: Train Epoch: 1/1 [ 9616/58905 (16%)] Loss: 0.05861 Data (t): 0.039 Batch (t): 0.412 LR: 0.000000 grad: 22.852455 
+2026-11-12,00:09:55 | INFO | [train.py-213]: Train Epoch: 1/1 [ 9776/58905 (17%)] Loss: 0.01559 Data (t): 0.028 Batch (t): 0.356 LR: 0.000000 grad: 13.481400 
+2026-11-12,00:09:58 | INFO | [train.py-213]: Train Epoch: 1/1 [ 9936/58905 (17%)] Loss: 0.02031 Data (t): 0.033 Batch (t): 0.335 LR: 0.000000 grad: 19.461613 
+2026-11-12,00:10:01 | INFO | [train.py-213]: Train Epoch: 1/1 [10096/58905 (17%)] Loss: 0.09799 Data (t): 0.028 Batch (t): 0.323 LR: 0.000000 grad: 26.591259 
+2026-11-12,00:10:05 | INFO | [train.py-213]: Train Epoch: 1/1 [10256/58905 (17%)] Loss: 0.19847 Data (t): 0.032 Batch (t): 0.337 LR: 0.000000 grad: 15.454398 
+2026-11-12,00:10:08 | INFO | [train.py-213]: Train Epoch: 1/1 [10416/58905 (18%)] Loss: 0.03762 Data (t): 0.028 Batch (t): 0.327 LR: 0.000000 grad: 23.209015 
+2026-11-12,00:10:11 | INFO | [train.py-213]: Train Epoch: 1/1 [10576/58905 (18%)] Loss: 0.02851 Data (t): 0.033 Batch (t): 0.335 LR: 0.000000 grad: 10.102876 
+2026-11-12,00:10:15 | INFO | [train.py-213]: Train Epoch: 1/1 [10736/58905 (18%)] Loss: 0.06485 Data (t): 0.027 Batch (t): 0.322 LR: 0.000000 grad: 21.026524 
+2026-11-12,00:10:18 | INFO | [train.py-213]: Train Epoch: 1/1 [10896/58905 (18%)] Loss: 0.02419 Data (t): 0.032 Batch (t): 0.332 LR: 0.000000 grad: 18.935160 
+2026-11-12,00:10:21 | INFO | [train.py-213]: Train Epoch: 1/1 [11056/58905 (19%)] Loss: 0.07003 Data (t): 0.028 Batch (t): 0.328 LR: 0.000000 grad: 20.212488 
+2026-11-12,00:10:24 | INFO | [train.py-213]: Train Epoch: 1/1 [11216/58905 (19%)] Loss: 0.10389 Data (t): 0.034 Batch (t): 0.330 LR: 0.000000 grad: 24.219648 
+2026-11-12,00:10:28 | INFO | [train.py-213]: Train Epoch: 1/1 [11376/58905 (19%)] Loss: 0.01520 Data (t): 0.028 Batch (t): 0.327 LR: 0.000000 grad: 26.331593 
+2026-11-12,00:10:31 | INFO | [train.py-213]: Train Epoch: 1/1 [11536/58905 (20%)] Loss: 0.03357 Data (t): 0.033 Batch (t): 0.331 LR: 0.000000 grad: 25.000757 
+2026-11-12,00:10:34 | INFO | [train.py-213]: Train Epoch: 1/1 [11696/58905 (20%)] Loss: 0.12322 Data (t): 0.027 Batch (t): 0.326 LR: 0.000000 grad: 21.111336 
+2026-11-12,00:10:38 | INFO | [train.py-213]: Train Epoch: 1/1 [11856/58905 (20%)] Loss: 0.12317 Data (t): 0.032 Batch (t): 0.329 LR: 0.000000 grad: 24.914520 
+2026-11-12,00:10:41 | INFO | [train.py-213]: Train Epoch: 1/1 [12016/58905 (20%)] Loss: 0.00883 Data (t): 0.028 Batch (t): 0.320 LR: 0.000000 grad: 24.132318 
+2026-11-12,00:10:44 | INFO | [train.py-213]: Train Epoch: 1/1 [12176/58905 (21%)] Loss: 0.15997 Data (t): 0.033 Batch (t): 0.328 LR: 0.000000 grad: 29.494640 
+2026-11-12,00:10:47 | INFO | [train.py-213]: Train Epoch: 1/1 [12336/58905 (21%)] Loss: 0.08883 Data (t): 0.027 Batch (t): 0.321 LR: 0.000000 grad: 16.198721 
+2026-11-12,00:10:51 | INFO | [train.py-213]: Train Epoch: 1/1 [12496/58905 (21%)] Loss: 0.06079 Data (t): 0.032 Batch (t): 0.327 LR: 0.000000 grad: 20.910707 
+2026-11-12,00:10:54 | INFO | [train.py-213]: Train Epoch: 1/1 [12656/58905 (21%)] Loss: 0.02113 Data (t): 0.028 Batch (t): 0.335 LR: 0.000000 grad: 22.466152 
+2026-11-12,00:10:57 | INFO | [train.py-213]: Train Epoch: 1/1 [12816/58905 (22%)] Loss: 0.08299 Data (t): 0.034 Batch (t): 0.344 LR: 0.000000 grad: 26.144373 
+2026-11-12,00:11:01 | INFO | [train.py-213]: Train Epoch: 1/1 [12976/58905 (22%)] Loss: 0.05950 Data (t): 0.027 Batch (t): 0.326 LR: 0.000000 grad: 23.372431 
+2026-11-12,00:11:04 | INFO | [train.py-213]: Train Epoch: 1/1 [13136/58905 (22%)] Loss: 0.01492 Data (t): 0.033 Batch (t): 0.338 LR: 0.000000 grad: 16.619188 
+2026-11-12,00:11:07 | INFO | [train.py-213]: Train Epoch: 1/1 [13296/58905 (23%)] Loss: 0.03243 Data (t): 0.027 Batch (t): 0.326 LR: 0.000000 grad: 26.423170 
+2026-11-12,00:11:11 | INFO | [train.py-213]: Train Epoch: 1/1 [13456/58905 (23%)] Loss: 0.01168 Data (t): 0.035 Batch (t): 0.379 LR: 0.000000 grad: 14.897899 
+2026-11-12,00:11:15 | INFO | [train.py-213]: Train Epoch: 1/1 [13616/58905 (23%)] Loss: 0.06393 Data (t): 0.029 Batch (t): 0.371 LR: 0.000000 grad: 27.045776 
+2026-11-12,00:11:18 | INFO | [train.py-213]: Train Epoch: 1/1 [13776/58905 (23%)] Loss: 0.07549 Data (t): 0.035 Batch (t): 0.367 LR: 0.000000 grad: 13.816369 
+2026-11-12,00:11:22 | INFO | [train.py-213]: Train Epoch: 1/1 [13936/58905 (24%)] Loss: 0.08077 Data (t): 0.028 Batch (t): 0.328 LR: 0.000000 grad: 16.771582 
+2026-11-12,00:11:25 | INFO | [train.py-213]: Train Epoch: 1/1 [14096/58905 (24%)] Loss: 0.14998 Data (t): 0.035 Batch (t): 0.345 LR: 0.000000 grad: 22.248650 
+2026-11-12,00:11:29 | INFO | [train.py-213]: Train Epoch: 1/1 [14256/58905 (24%)] Loss: 0.11666 Data (t): 0.030 Batch (t): 0.365 LR: 0.000000 grad: 25.588644 
+2026-11-12,00:11:33 | INFO | [train.py-213]: Train Epoch: 1/1 [14416/58905 (24%)] Loss: 0.09581 Data (t): 0.036 Batch (t): 0.375 LR: 0.000000 grad: 22.628180 
+2026-11-12,00:11:36 | INFO | [train.py-213]: Train Epoch: 1/1 [14576/58905 (25%)] Loss: 0.01702 Data (t): 0.030 Batch (t): 0.366 LR: 0.000000 grad: 18.249414 
+2026-11-12,00:11:40 | INFO | [train.py-213]: Train Epoch: 1/1 [14736/58905 (25%)] Loss: 0.05324 Data (t): 0.034 Batch (t): 0.354 LR: 0.000000 grad: 42.183376 
+2026-11-12,00:11:43 | INFO | [train.py-213]: Train Epoch: 1/1 [14896/58905 (25%)] Loss: 0.04525 Data (t): 0.027 Batch (t): 0.325 LR: 0.000000 grad: 19.635664 
+2026-11-12,00:11:46 | INFO | [train.py-213]: Train Epoch: 1/1 [15056/58905 (26%)] Loss: 0.02154 Data (t): 0.033 Batch (t): 0.336 LR: 0.000000 grad: 18.763933 
+2026-11-12,00:11:50 | INFO | [train.py-213]: Train Epoch: 1/1 [15216/58905 (26%)] Loss: 0.10297 Data (t): 0.028 Batch (t): 0.343 LR: 0.000000 grad: 12.767836 
+2026-11-12,00:11:53 | INFO | [train.py-213]: Train Epoch: 1/1 [15376/58905 (26%)] Loss: 0.02067 Data (t): 0.034 Batch (t): 0.336 LR: 0.000000 grad: 10.119420 
+2026-11-12,00:11:57 | INFO | [train.py-213]: Train Epoch: 1/1 [15536/58905 (26%)] Loss: 0.00451 Data (t): 0.029 Batch (t): 0.347 LR: 0.000000 grad: 11.837087 
+2026-11-12,00:12:00 | INFO | [train.py-213]: Train Epoch: 1/1 [15696/58905 (27%)] Loss: 0.09308 Data (t): 0.032 Batch (t): 0.334 LR: 0.000000 grad: 19.100325 
+2026-11-12,00:12:03 | INFO | [train.py-213]: Train Epoch: 1/1 [15856/58905 (27%)] Loss: 0.07686 Data (t): 0.026 Batch (t): 0.326 LR: 0.000000 grad: 16.037748 
+2026-11-12,00:12:07 | INFO | [train.py-213]: Train Epoch: 1/1 [16016/58905 (27%)] Loss: 0.06648 Data (t): 0.032 Batch (t): 0.332 LR: 0.000000 grad: 20.572983 
+2026-11-12,00:12:10 | INFO | [train.py-213]: Train Epoch: 1/1 [16176/58905 (27%)] Loss: 0.08320 Data (t): 0.027 Batch (t): 0.326 LR: 0.000000 grad: 25.277330 
+2026-11-12,00:12:13 | INFO | [train.py-213]: Train Epoch: 1/1 [16336/58905 (28%)] Loss: 0.11506 Data (t): 0.034 Batch (t): 0.334 LR: 0.000000 grad: 24.351444 
+2026-11-12,00:12:16 | INFO | [train.py-213]: Train Epoch: 1/1 [16496/58905 (28%)] Loss: 0.07630 Data (t): 0.028 Batch (t): 0.324 LR: 0.000000 grad: 14.387866 
+2026-11-12,00:12:20 | INFO | [train.py-213]: Train Epoch: 1/1 [16656/58905 (28%)] Loss: 0.11966 Data (t): 0.034 Batch (t): 0.330 LR: 0.000000 grad: 18.412949 
+2026-11-12,00:12:23 | INFO | [train.py-213]: Train Epoch: 1/1 [16816/58905 (29%)] Loss: 0.10133 Data (t): 0.027 Batch (t): 0.325 LR: 0.000000 grad: 20.389410 
+2026-11-12,00:12:26 | INFO | [train.py-213]: Train Epoch: 1/1 [16976/58905 (29%)] Loss: 0.00763 Data (t): 0.034 Batch (t): 0.335 LR: 0.000000 grad: 37.038456 
+2026-11-12,00:12:30 | INFO | [train.py-213]: Train Epoch: 1/1 [17136/58905 (29%)] Loss: 0.00896 Data (t): 0.028 Batch (t): 0.325 LR: 0.000000 grad: 21.304420 
+2026-11-12,00:12:33 | INFO | [train.py-213]: Train Epoch: 1/1 [17296/58905 (29%)] Loss: 0.08169 Data (t): 0.033 Batch (t): 0.330 LR: 0.000000 grad: 24.777401 
+2026-11-12,00:12:36 | INFO | [train.py-213]: Train Epoch: 1/1 [17456/58905 (30%)] Loss: 0.02751 Data (t): 0.027 Batch (t): 0.321 LR: 0.000000 grad: 20.921047 
+2026-11-12,00:12:39 | INFO | [train.py-213]: Train Epoch: 1/1 [17616/58905 (30%)] Loss: 0.05355 Data (t): 0.033 Batch (t): 0.332 LR: 0.000000 grad: 27.722456 
+2026-11-12,00:12:43 | INFO | [train.py-213]: Train Epoch: 1/1 [17776/58905 (30%)] Loss: 0.01729 Data (t): 0.027 Batch (t): 0.325 LR: 0.000000 grad: 20.955433 
+2026-11-12,00:12:46 | INFO | [train.py-213]: Train Epoch: 1/1 [17936/58905 (30%)] Loss: 0.04090 Data (t): 0.033 Batch (t): 0.331 LR: 0.000000 grad: 29.106215 
+2026-11-12,00:12:49 | INFO | [train.py-213]: Train Epoch: 1/1 [18096/58905 (31%)] Loss: 0.01232 Data (t): 0.027 Batch (t): 0.324 LR: 0.000000 grad: 35.658287 
+2026-11-12,00:12:53 | INFO | [train.py-213]: Train Epoch: 1/1 [18256/58905 (31%)] Loss: 0.24401 Data (t): 0.032 Batch (t): 0.339 LR: 0.000000 grad: 25.087770 
+2026-11-12,00:12:56 | INFO | [train.py-213]: Train Epoch: 1/1 [18416/58905 (31%)] Loss: 0.04122 Data (t): 0.028 Batch (t): 0.329 LR: 0.000000 grad: 20.654011 
+2026-11-12,00:12:59 | INFO | [train.py-213]: Train Epoch: 1/1 [18576/58905 (32%)] Loss: 0.04479 Data (t): 0.032 Batch (t): 0.333 LR: 0.000000 grad: 18.068281 
+2026-11-12,00:13:02 | INFO | [train.py-213]: Train Epoch: 1/1 [18736/58905 (32%)] Loss: 0.00896 Data (t): 0.028 Batch (t): 0.323 LR: 0.000000 grad: 14.650299 
+2026-11-12,00:13:06 | INFO | [train.py-213]: Train Epoch: 1/1 [18896/58905 (32%)] Loss: 0.03715 Data (t): 0.032 Batch (t): 0.332 LR: 0.000000 grad: 29.579891 
+2026-11-12,00:13:09 | INFO | [train.py-213]: Train Epoch: 1/1 [19056/58905 (32%)] Loss: 0.04950 Data (t): 0.026 Batch (t): 0.322 LR: 0.000000 grad: 23.798624 
+2026-11-12,00:13:12 | INFO | [train.py-213]: Train Epoch: 1/1 [19216/58905 (33%)] Loss: 0.04359 Data (t): 0.034 Batch (t): 0.333 LR: 0.000000 grad: 19.490898 
+2026-11-12,00:13:16 | INFO | [train.py-213]: Train Epoch: 1/1 [19376/58905 (33%)] Loss: 0.22466 Data (t): 0.029 Batch (t): 0.327 LR: 0.000000 grad: 19.695518 
+2026-11-12,00:13:19 | INFO | [train.py-213]: Train Epoch: 1/1 [19536/58905 (33%)] Loss: 0.12462 Data (t): 0.032 Batch (t): 0.334 LR: 0.000000 grad: 23.107552 
+2026-11-12,00:13:22 | INFO | [train.py-213]: Train Epoch: 1/1 [19696/58905 (33%)] Loss: 0.06137 Data (t): 0.028 Batch (t): 0.325 LR: 0.000000 grad: 10.919568 
+2026-11-12,00:13:25 | INFO | [train.py-213]: Train Epoch: 1/1 [19856/58905 (34%)] Loss: 0.06923 Data (t): 0.033 Batch (t): 0.331 LR: 0.000000 grad: 22.780319 
+2026-11-12,00:13:29 | INFO | [train.py-213]: Train Epoch: 1/1 [20016/58905 (34%)] Loss: 0.11775 Data (t): 0.027 Batch (t): 0.325 LR: 0.000000 grad: 32.932667 
+2026-11-12,00:13:32 | INFO | [train.py-213]: Train Epoch: 1/1 [20176/58905 (34%)] Loss: 0.01670 Data (t): 0.033 Batch (t): 0.333 LR: 0.000000 grad: 23.387962 
+2026-11-12,00:13:35 | INFO | [train.py-213]: Train Epoch: 1/1 [20336/58905 (35%)] Loss: 0.05050 Data (t): 0.027 Batch (t): 0.324 LR: 0.000000 grad: 21.649164 
+2026-11-12,00:13:39 | INFO | [train.py-213]: Train Epoch: 1/1 [20496/58905 (35%)] Loss: 0.03008 Data (t): 0.034 Batch (t): 0.332 LR: 0.000000 grad: 14.252819 
+2026-11-12,00:13:42 | INFO | [train.py-213]: Train Epoch: 1/1 [20656/58905 (35%)] Loss: 0.17383 Data (t): 0.027 Batch (t): 0.321 LR: 0.000000 grad: 23.471169 
+2026-11-12,00:13:45 | INFO | [train.py-213]: Train Epoch: 1/1 [20816/58905 (35%)] Loss: 0.20986 Data (t): 0.034 Batch (t): 0.333 LR: 0.000000 grad: 16.836664 
+2026-11-12,00:13:48 | INFO | [train.py-213]: Train Epoch: 1/1 [20976/58905 (36%)] Loss: 0.14213 Data (t): 0.027 Batch (t): 0.323 LR: 0.000000 grad: 22.412415 
+2026-11-12,00:13:52 | INFO | [train.py-213]: Train Epoch: 1/1 [21136/58905 (36%)] Loss: 0.11477 Data (t): 0.032 Batch (t): 0.327 LR: 0.000000 grad: 25.727589 
+2026-11-12,00:13:55 | INFO | [train.py-213]: Train Epoch: 1/1 [21296/58905 (36%)] Loss: 0.08115 Data (t): 0.027 Batch (t): 0.320 LR: 0.000000 grad: 31.672203 
+2026-11-12,00:13:58 | INFO | [train.py-213]: Train Epoch: 1/1 [21456/58905 (36%)] Loss: 0.08357 Data (t): 0.032 Batch (t): 0.327 LR: 0.000000 grad: 21.964560 
+2026-11-12,00:14:01 | INFO | [train.py-213]: Train Epoch: 1/1 [21616/58905 (37%)] Loss: 0.12249 Data (t): 0.028 Batch (t): 0.326 LR: 0.000000 grad: 24.877161 
+2026-11-12,00:14:05 | INFO | [train.py-213]: Train Epoch: 1/1 [21776/58905 (37%)] Loss: 0.02170 Data (t): 0.036 Batch (t): 0.334 LR: 0.000000 grad: 15.524956 
+2026-11-12,00:14:08 | INFO | [train.py-213]: Train Epoch: 1/1 [21936/58905 (37%)] Loss: 0.04879 Data (t): 0.028 Batch (t): 0.325 LR: 0.000000 grad: 20.771990 
+2026-11-12,00:14:11 | INFO | [train.py-213]: Train Epoch: 1/1 [22096/58905 (38%)] Loss: 0.02971 Data (t): 0.032 Batch (t): 0.331 LR: 0.000000 grad: 22.592484 
+2026-11-12,00:14:14 | INFO | [train.py-213]: Train Epoch: 1/1 [22256/58905 (38%)] Loss: 0.05074 Data (t): 0.027 Batch (t): 0.320 LR: 0.000000 grad: 19.222672 
+2026-11-12,00:14:18 | INFO | [train.py-213]: Train Epoch: 1/1 [22416/58905 (38%)] Loss: 0.20828 Data (t): 0.034 Batch (t): 0.333 LR: 0.000000 grad: 29.491167 
+2026-11-12,00:14:21 | INFO | [train.py-213]: Train Epoch: 1/1 [22576/58905 (38%)] Loss: 0.11662 Data (t): 0.027 Batch (t): 0.323 LR: 0.000000 grad: 25.781551 
+2026-11-12,00:14:24 | INFO | [train.py-213]: Train Epoch: 1/1 [22736/58905 (39%)] Loss: 0.04929 Data (t): 0.034 Batch (t): 0.332 LR: 0.000000 grad: 20.331886 
+2026-11-12,00:14:28 | INFO | [train.py-213]: Train Epoch: 1/1 [22896/58905 (39%)] Loss: 0.05085 Data (t): 0.028 Batch (t): 0.324 LR: 0.000000 grad: 16.414495 
+2026-11-12,00:14:31 | INFO | [train.py-213]: Train Epoch: 1/1 [23056/58905 (39%)] Loss: 0.02975 Data (t): 0.033 Batch (t): 0.329 LR: 0.000000 grad: 27.192301 
+2026-11-12,00:14:34 | INFO | [train.py-213]: Train Epoch: 1/1 [23216/58905 (39%)] Loss: 0.08155 Data (t): 0.027 Batch (t): 0.320 LR: 0.000000 grad: 22.778214 
+2026-11-12,00:14:37 | INFO | [train.py-213]: Train Epoch: 1/1 [23376/58905 (40%)] Loss: 0.15094 Data (t): 0.033 Batch (t): 0.333 LR: 0.000000 grad: 30.123701 
+2026-11-12,00:14:41 | INFO | [train.py-213]: Train Epoch: 1/1 [23536/58905 (40%)] Loss: 0.01089 Data (t): 0.028 Batch (t): 0.323 LR: 0.000000 grad: 22.630054 
+2026-11-12,00:14:44 | INFO | [train.py-213]: Train Epoch: 1/1 [23696/58905 (40%)] Loss: 0.03279 Data (t): 0.033 Batch (t): 0.330 LR: 0.000000 grad: 24.157812 
+2026-11-12,00:14:47 | INFO | [train.py-213]: Train Epoch: 1/1 [23856/58905 (40%)] Loss: 0.23552 Data (t): 0.027 Batch (t): 0.318 LR: 0.000000 grad: 21.748669 
+2026-11-12,00:14:50 | INFO | [train.py-213]: Train Epoch: 1/1 [24016/58905 (41%)] Loss: 0.06089 Data (t): 0.033 Batch (t): 0.329 LR: 0.000000 grad: 20.959286 
+2026-11-12,00:14:54 | INFO | [train.py-213]: Train Epoch: 1/1 [24176/58905 (41%)] Loss: 0.06338 Data (t): 0.027 Batch (t): 0.319 LR: 0.000000 grad: 24.621435 
+2026-11-12,00:14:57 | INFO | [train.py-213]: Train Epoch: 1/1 [24336/58905 (41%)] Loss: 0.08144 Data (t): 0.034 Batch (t): 0.330 LR: 0.000000 grad: 18.720314 
+2026-11-12,00:15:00 | INFO | [train.py-213]: Train Epoch: 1/1 [24496/58905 (42%)] Loss: 0.02384 Data (t): 0.027 Batch (t): 0.321 LR: 0.000000 grad: 24.649677 
+2026-11-12,00:15:03 | INFO | [train.py-213]: Train Epoch: 1/1 [24656/58905 (42%)] Loss: 0.06580 Data (t): 0.033 Batch (t): 0.329 LR: 0.000000 grad: 15.404824 
+2026-11-12,00:15:07 | INFO | [train.py-213]: Train Epoch: 1/1 [24816/58905 (42%)] Loss: 0.03760 Data (t): 0.027 Batch (t): 0.319 LR: 0.000000 grad: 26.815365 
+2026-11-12,00:15:10 | INFO | [train.py-213]: Train Epoch: 1/1 [24976/58905 (42%)] Loss: 0.14796 Data (t): 0.034 Batch (t): 0.332 LR: 0.000000 grad: 17.875006 
+2026-11-12,00:15:13 | INFO | [train.py-213]: Train Epoch: 1/1 [25136/58905 (43%)] Loss: 0.06783 Data (t): 0.028 Batch (t): 0.322 LR: 0.000000 grad: 17.514109 
+2026-11-12,00:15:16 | INFO | [train.py-213]: Train Epoch: 1/1 [25296/58905 (43%)] Loss: 0.05508 Data (t): 0.032 Batch (t): 0.333 LR: 0.000000 grad: 21.177734 
+2026-11-12,00:15:20 | INFO | [train.py-213]: Train Epoch: 1/1 [25456/58905 (43%)] Loss: 0.04045 Data (t): 0.027 Batch (t): 0.323 LR: 0.000000 grad: 16.037035 
+2026-11-12,00:15:23 | INFO | [train.py-213]: Train Epoch: 1/1 [25616/58905 (43%)] Loss: 0.04578 Data (t): 0.033 Batch (t): 0.333 LR: 0.000000 grad: 21.688087 
+2026-11-12,00:15:26 | INFO | [train.py-213]: Train Epoch: 1/1 [25776/58905 (44%)] Loss: 0.01621 Data (t): 0.027 Batch (t): 0.323 LR: 0.000000 grad: 25.734465 
+2026-11-12,00:15:30 | INFO | [train.py-213]: Train Epoch: 1/1 [25936/58905 (44%)] Loss: 0.03464 Data (t): 0.033 Batch (t): 0.331 LR: 0.000000 grad: 24.280252 
+2026-11-12,00:15:33 | INFO | [train.py-213]: Train Epoch: 1/1 [26096/58905 (44%)] Loss: 0.01551 Data (t): 0.026 Batch (t): 0.319 LR: 0.000000 grad: 19.685041 
+2026-11-12,00:15:36 | INFO | [train.py-213]: Train Epoch: 1/1 [26256/58905 (45%)] Loss: 0.04856 Data (t): 0.034 Batch (t): 0.331 LR: 0.000000 grad: 19.664505 
+2026-11-12,00:15:39 | INFO | [train.py-213]: Train Epoch: 1/1 [26416/58905 (45%)] Loss: 0.06575 Data (t): 0.027 Batch (t): 0.322 LR: 0.000000 grad: 25.303217 
+2026-11-12,00:15:43 | INFO | [train.py-213]: Train Epoch: 1/1 [26576/58905 (45%)] Loss: 0.04627 Data (t): 0.033 Batch (t): 0.330 LR: 0.000000 grad: 22.221811 
+2026-11-12,00:15:46 | INFO | [train.py-213]: Train Epoch: 1/1 [26736/58905 (45%)] Loss: 0.01681 Data (t): 0.028 Batch (t): 0.327 LR: 0.000000 grad: 22.258436 
+2026-11-12,00:15:49 | INFO | [train.py-213]: Train Epoch: 1/1 [26896/58905 (46%)] Loss: 0.05189 Data (t): 0.034 Batch (t): 0.330 LR: 0.000000 grad: 25.286224 
+2026-11-12,00:15:52 | INFO | [train.py-213]: Train Epoch: 1/1 [27056/58905 (46%)] Loss: 0.00858 Data (t): 0.027 Batch (t): 0.323 LR: 0.000000 grad: 17.805426 
+2026-11-12,00:15:56 | INFO | [train.py-213]: Train Epoch: 1/1 [27216/58905 (46%)] Loss: 0.01095 Data (t): 0.033 Batch (t): 0.332 LR: 0.000000 grad: 22.086821 
+2026-11-12,00:15:59 | INFO | [train.py-213]: Train Epoch: 1/1 [27376/58905 (46%)] Loss: 0.04768 Data (t): 0.027 Batch (t): 0.320 LR: 0.000000 grad: 25.405712 
+2026-11-12,00:16:02 | INFO | [train.py-213]: Train Epoch: 1/1 [27536/58905 (47%)] Loss: 0.05130 Data (t): 0.032 Batch (t): 0.330 LR: 0.000000 grad: 25.798489 
+2026-11-12,00:16:05 | INFO | [train.py-213]: Train Epoch: 1/1 [27696/58905 (47%)] Loss: 0.00428 Data (t): 0.028 Batch (t): 0.322 LR: 0.000000 grad: 13.510716 
+2026-11-12,00:16:09 | INFO | [train.py-213]: Train Epoch: 1/1 [27856/58905 (47%)] Loss: 0.11329 Data (t): 0.034 Batch (t): 0.333 LR: 0.000000 grad: 21.621008 
+2026-11-12,00:16:12 | INFO | [train.py-213]: Train Epoch: 1/1 [28016/58905 (48%)] Loss: 0.10017 Data (t): 0.027 Batch (t): 0.320 LR: 0.000000 grad: 19.154301 
+2026-11-12,00:16:15 | INFO | [train.py-213]: Train Epoch: 1/1 [28176/58905 (48%)] Loss: 0.01356 Data (t): 0.033 Batch (t): 0.326 LR: 0.000000 grad: 8.381726 
+2026-11-12,00:16:18 | INFO | [train.py-213]: Train Epoch: 1/1 [28336/58905 (48%)] Loss: 0.03519 Data (t): 0.027 Batch (t): 0.320 LR: 0.000000 grad: 24.012415 
+2026-11-12,00:16:22 | INFO | [train.py-213]: Train Epoch: 1/1 [28496/58905 (48%)] Loss: 0.01812 Data (t): 0.034 Batch (t): 0.329 LR: 0.000000 grad: 13.577164 
+2026-11-12,00:16:25 | INFO | [train.py-213]: Train Epoch: 1/1 [28656/58905 (49%)] Loss: 0.06003 Data (t): 0.027 Batch (t): 0.324 LR: 0.000000 grad: 23.281084 
+2026-11-12,00:16:28 | INFO | [train.py-213]: Train Epoch: 1/1 [28816/58905 (49%)] Loss: 0.09767 Data (t): 0.032 Batch (t): 0.331 LR: 0.000000 grad: 28.507799 
+2026-11-12,00:16:31 | INFO | [train.py-213]: Train Epoch: 1/1 [28976/58905 (49%)] Loss: 0.11119 Data (t): 0.027 Batch (t): 0.320 LR: 0.000000 grad: 27.596680 
+2026-11-12,00:16:35 | INFO | [train.py-213]: Train Epoch: 1/1 [29136/58905 (49%)] Loss: 0.01488 Data (t): 0.033 Batch (t): 0.330 LR: 0.000000 grad: 24.240927 
+2026-11-12,00:16:38 | INFO | [train.py-213]: Train Epoch: 1/1 [29296/58905 (50%)] Loss: 0.00445 Data (t): 0.027 Batch (t): 0.322 LR: 0.000000 grad: 24.265627 
+2026-11-12,00:16:41 | INFO | [train.py-213]: Train Epoch: 1/1 [29456/58905 (50%)] Loss: 0.08120 Data (t): 0.032 Batch (t): 0.331 LR: 0.000000 grad: 31.854383 
+2026-11-12,00:16:44 | INFO | [train.py-213]: Train Epoch: 1/1 [29616/58905 (50%)] Loss: 0.03074 Data (t): 0.027 Batch (t): 0.322 LR: 0.000000 grad: 23.002586 
+2026-11-12,00:16:48 | INFO | [train.py-213]: Train Epoch: 1/1 [29776/58905 (51%)] Loss: 0.02726 Data (t): 0.032 Batch (t): 0.330 LR: 0.000000 grad: 15.657722 
+2026-11-12,00:16:51 | INFO | [train.py-213]: Train Epoch: 1/1 [29936/58905 (51%)] Loss: 0.02121 Data (t): 0.027 Batch (t): 0.323 LR: 0.000000 grad: 20.692572 
+2026-11-12,00:16:54 | INFO | [train.py-213]: Train Epoch: 1/1 [30096/58905 (51%)] Loss: 0.11484 Data (t): 0.032 Batch (t): 0.329 LR: 0.000000 grad: 18.376797 
+2026-11-12,00:16:58 | INFO | [train.py-213]: Train Epoch: 1/1 [30256/58905 (51%)] Loss: 0.06547 Data (t): 0.027 Batch (t): 0.321 LR: 0.000000 grad: 24.286015 
+2026-11-12,00:17:01 | INFO | [train.py-213]: Train Epoch: 1/1 [30416/58905 (52%)] Loss: 0.00969 Data (t): 0.033 Batch (t): 0.327 LR: 0.000000 grad: 18.505316 
+2026-11-12,00:17:04 | INFO | [train.py-213]: Train Epoch: 1/1 [30576/58905 (52%)] Loss: 0.04437 Data (t): 0.027 Batch (t): 0.321 LR: 0.000000 grad: 25.933746 
+2026-11-12,00:17:07 | INFO | [train.py-213]: Train Epoch: 1/1 [30736/58905 (52%)] Loss: 0.03719 Data (t): 0.032 Batch (t): 0.328 LR: 0.000000 grad: 27.547071 
+2026-11-12,00:17:10 | INFO | [train.py-213]: Train Epoch: 1/1 [30896/58905 (52%)] Loss: 0.08307 Data (t): 0.026 Batch (t): 0.321 LR: 0.000000 grad: 21.886070 
+2026-11-12,00:17:14 | INFO | [train.py-213]: Train Epoch: 1/1 [31056/58905 (53%)] Loss: 0.02422 Data (t): 0.033 Batch (t): 0.328 LR: 0.000000 grad: 14.952324 
+2026-11-12,00:17:17 | INFO | [train.py-213]: Train Epoch: 1/1 [31216/58905 (53%)] Loss: 0.09055 Data (t): 0.028 Batch (t): 0.332 LR: 0.000000 grad: 17.326309 
+2026-11-12,00:17:20 | INFO | [train.py-213]: Train Epoch: 1/1 [31376/58905 (53%)] Loss: 0.04424 Data (t): 0.033 Batch (t): 0.331 LR: 0.000000 grad: 24.283533 
+2026-11-12,00:17:24 | INFO | [train.py-213]: Train Epoch: 1/1 [31536/58905 (54%)] Loss: 0.02429 Data (t): 0.027 Batch (t): 0.324 LR: 0.000000 grad: 27.539013 
+2026-11-12,00:17:27 | INFO | [train.py-213]: Train Epoch: 1/1 [31696/58905 (54%)] Loss: 0.00956 Data (t): 0.032 Batch (t): 0.335 LR: 0.000000 grad: 17.451950 
+2026-11-12,00:17:30 | INFO | [train.py-213]: Train Epoch: 1/1 [31856/58905 (54%)] Loss: 0.12955 Data (t): 0.027 Batch (t): 0.325 LR: 0.000000 grad: 17.529137 
+2026-11-12,00:17:34 | INFO | [train.py-213]: Train Epoch: 1/1 [32016/58905 (54%)] Loss: 0.09963 Data (t): 0.032 Batch (t): 0.330 LR: 0.000000 grad: 26.572950 
+2026-11-12,00:17:37 | INFO | [train.py-213]: Train Epoch: 1/1 [32176/58905 (55%)] Loss: 0.15068 Data (t): 0.028 Batch (t): 0.324 LR: 0.000000 grad: 18.925194 
+2026-11-12,00:17:40 | INFO | [train.py-213]: Train Epoch: 1/1 [32336/58905 (55%)] Loss: 0.08357 Data (t): 0.032 Batch (t): 0.330 LR: 0.000000 grad: 19.255859 
+2026-11-12,00:17:43 | INFO | [train.py-213]: Train Epoch: 1/1 [32496/58905 (55%)] Loss: 0.10646 Data (t): 0.026 Batch (t): 0.323 LR: 0.000000 grad: 18.940899 
+2026-11-12,00:17:47 | INFO | [train.py-213]: Train Epoch: 1/1 [32656/58905 (55%)] Loss: 0.04736 Data (t): 0.033 Batch (t): 0.331 LR: 0.000000 grad: 22.744720 
+2026-11-12,00:17:50 | INFO | [train.py-213]: Train Epoch: 1/1 [32816/58905 (56%)] Loss: 0.02253 Data (t): 0.029 Batch (t): 0.331 LR: 0.000000 grad: 24.093397 
+2026-11-12,00:17:53 | INFO | [train.py-213]: Train Epoch: 1/1 [32976/58905 (56%)] Loss: 0.06091 Data (t): 0.032 Batch (t): 0.332 LR: 0.000000 grad: 34.720097 
+2026-11-12,00:17:57 | INFO | [train.py-213]: Train Epoch: 1/1 [33136/58905 (56%)] Loss: 0.12333 Data (t): 0.027 Batch (t): 0.326 LR: 0.000000 grad: 20.678724 
+2026-11-12,00:18:00 | INFO | [train.py-213]: Train Epoch: 1/1 [33296/58905 (57%)] Loss: 0.11195 Data (t): 0.033 Batch (t): 0.341 LR: 0.000000 grad: 23.450157 
+2026-11-12,00:18:03 | INFO | [train.py-213]: Train Epoch: 1/1 [33456/58905 (57%)] Loss: 0.03444 Data (t): 0.027 Batch (t): 0.323 LR: 0.000000 grad: 27.449629 
+2026-11-12,00:18:06 | INFO | [train.py-213]: Train Epoch: 1/1 [33616/58905 (57%)] Loss: 0.11315 Data (t): 0.034 Batch (t): 0.331 LR: 0.000000 grad: 19.989656 
+2026-11-12,00:18:10 | INFO | [train.py-213]: Train Epoch: 1/1 [33776/58905 (57%)] Loss: 0.09812 Data (t): 0.027 Batch (t): 0.323 LR: 0.000000 grad: 28.101772 
+2026-11-12,00:18:13 | INFO | [train.py-213]: Train Epoch: 1/1 [33936/58905 (58%)] Loss: 0.07049 Data (t): 0.032 Batch (t): 0.329 LR: 0.000000 grad: 19.284296 
+2026-11-12,00:18:16 | INFO | [train.py-213]: Train Epoch: 1/1 [34096/58905 (58%)] Loss: 0.00323 Data (t): 0.027 Batch (t): 0.322 LR: 0.000000 grad: 18.097315 
+2026-11-12,00:18:20 | INFO | [train.py-213]: Train Epoch: 1/1 [34256/58905 (58%)] Loss: 0.11590 Data (t): 0.034 Batch (t): 0.330 LR: 0.000000 grad: 23.848654 
+2026-11-12,00:18:23 | INFO | [train.py-213]: Train Epoch: 1/1 [34416/58905 (58%)] Loss: 0.03859 Data (t): 0.028 Batch (t): 0.322 LR: 0.000000 grad: 16.148886 
+2026-11-12,00:18:26 | INFO | [train.py-213]: Train Epoch: 1/1 [34576/58905 (59%)] Loss: 0.02188 Data (t): 0.033 Batch (t): 0.331 LR: 0.000000 grad: 29.487785 
+2026-11-12,00:18:29 | INFO | [train.py-213]: Train Epoch: 1/1 [34736/58905 (59%)] Loss: 0.10276 Data (t): 0.027 Batch (t): 0.324 LR: 0.000000 grad: 30.105022 
+2026-11-12,00:18:33 | INFO | [train.py-213]: Train Epoch: 1/1 [34896/58905 (59%)] Loss: 0.10507 Data (t): 0.032 Batch (t): 0.326 LR: 0.000000 grad: 20.062231 
+2026-11-12,00:18:36 | INFO | [train.py-213]: Train Epoch: 1/1 [35056/58905 (60%)] Loss: 0.06903 Data (t): 0.027 Batch (t): 0.322 LR: 0.000000 grad: 28.292683 
+2026-11-12,00:18:39 | INFO | [train.py-213]: Train Epoch: 1/1 [35216/58905 (60%)] Loss: 0.01787 Data (t): 0.033 Batch (t): 0.330 LR: 0.000000 grad: 22.250875 
+2026-11-12,00:18:42 | INFO | [train.py-213]: Train Epoch: 1/1 [35376/58905 (60%)] Loss: 0.04731 Data (t): 0.027 Batch (t): 0.324 LR: 0.000000 grad: 17.220531 
+2026-11-12,00:18:46 | INFO | [train.py-213]: Train Epoch: 1/1 [35536/58905 (60%)] Loss: 0.02790 Data (t): 0.032 Batch (t): 0.332 LR: 0.000000 grad: 22.566219 
+2026-11-12,00:18:49 | INFO | [train.py-213]: Train Epoch: 1/1 [35696/58905 (61%)] Loss: 0.05414 Data (t): 0.027 Batch (t): 0.322 LR: 0.000000 grad: 29.442776 
+2026-11-12,00:18:52 | INFO | [train.py-213]: Train Epoch: 1/1 [35856/58905 (61%)] Loss: 0.12550 Data (t): 0.032 Batch (t): 0.328 LR: 0.000000 grad: 16.221907 
+2026-11-12,00:18:55 | INFO | [train.py-213]: Train Epoch: 1/1 [36016/58905 (61%)] Loss: 0.09321 Data (t): 0.028 Batch (t): 0.322 LR: 0.000000 grad: 27.523855 
+2026-11-12,00:18:59 | INFO | [train.py-213]: Train Epoch: 1/1 [36176/58905 (61%)] Loss: 0.08669 Data (t): 0.032 Batch (t): 0.330 LR: 0.000000 grad: 16.150080 
+2026-11-12,00:19:02 | INFO | [train.py-213]: Train Epoch: 1/1 [36336/58905 (62%)] Loss: 0.13611 Data (t): 0.028 Batch (t): 0.323 LR: 0.000000 grad: 24.206978 
+2026-11-12,00:19:05 | INFO | [train.py-213]: Train Epoch: 1/1 [36496/58905 (62%)] Loss: 0.07101 Data (t): 0.033 Batch (t): 0.334 LR: 0.000000 grad: 27.841591 
+2026-11-12,00:19:08 | INFO | [train.py-213]: Train Epoch: 1/1 [36656/58905 (62%)] Loss: 0.06368 Data (t): 0.027 Batch (t): 0.322 LR: 0.000000 grad: 14.415757 
+2026-11-12,00:19:12 | INFO | [train.py-213]: Train Epoch: 1/1 [36816/58905 (62%)] Loss: 0.06621 Data (t): 0.032 Batch (t): 0.328 LR: 0.000000 grad: 20.197433 
+2026-11-12,00:19:15 | INFO | [train.py-213]: Train Epoch: 1/1 [36976/58905 (63%)] Loss: 0.07269 Data (t): 0.027 Batch (t): 0.324 LR: 0.000000 grad: 21.994474 
+2026-11-12,00:19:18 | INFO | [train.py-213]: Train Epoch: 1/1 [37136/58905 (63%)] Loss: 0.10798 Data (t): 0.032 Batch (t): 0.331 LR: 0.000000 grad: 13.748257 
+2026-11-12,00:19:21 | INFO | [train.py-213]: Train Epoch: 1/1 [37296/58905 (63%)] Loss: 0.04023 Data (t): 0.028 Batch (t): 0.324 LR: 0.000000 grad: 15.494112 
+2026-11-12,00:19:25 | INFO | [train.py-213]: Train Epoch: 1/1 [37456/58905 (64%)] Loss: 0.06404 Data (t): 0.033 Batch (t): 0.330 LR: 0.000000 grad: 19.860989 
+2026-11-12,00:19:28 | INFO | [train.py-213]: Train Epoch: 1/1 [37616/58905 (64%)] Loss: 0.01125 Data (t): 0.026 Batch (t): 0.321 LR: 0.000000 grad: 22.366827 
+2026-11-12,00:19:31 | INFO | [train.py-213]: Train Epoch: 1/1 [37776/58905 (64%)] Loss: 0.07956 Data (t): 0.033 Batch (t): 0.329 LR: 0.000000 grad: 28.545353 
+2026-11-12,00:19:35 | INFO | [train.py-213]: Train Epoch: 1/1 [37936/58905 (64%)] Loss: 0.04239 Data (t): 0.026 Batch (t): 0.323 LR: 0.000000 grad: 28.072945 
+2026-11-12,00:19:38 | INFO | [train.py-213]: Train Epoch: 1/1 [38096/58905 (65%)] Loss: 0.07962 Data (t): 0.034 Batch (t): 0.333 LR: 0.000000 grad: 23.180403 
+2026-11-12,00:19:41 | INFO | [train.py-213]: Train Epoch: 1/1 [38256/58905 (65%)] Loss: 0.13396 Data (t): 0.027 Batch (t): 0.322 LR: 0.000000 grad: 19.265764 
+2026-11-12,00:19:44 | INFO | [train.py-213]: Train Epoch: 1/1 [38416/58905 (65%)] Loss: 0.04622 Data (t): 0.034 Batch (t): 0.333 LR: 0.000000 grad: 19.661875 
+2026-11-12,00:19:48 | INFO | [train.py-213]: Train Epoch: 1/1 [38576/58905 (65%)] Loss: 0.07527 Data (t): 0.026 Batch (t): 0.322 LR: 0.000000 grad: 19.433308 
+2026-11-12,00:19:51 | INFO | [train.py-213]: Train Epoch: 1/1 [38736/58905 (66%)] Loss: 0.07560 Data (t): 0.033 Batch (t): 0.329 LR: 0.000000 grad: 23.962208 
+2026-11-12,00:19:54 | INFO | [train.py-213]: Train Epoch: 1/1 [38896/58905 (66%)] Loss: 0.02290 Data (t): 0.027 Batch (t): 0.320 LR: 0.000000 grad: 22.166546 
+2026-11-12,00:19:57 | INFO | [train.py-213]: Train Epoch: 1/1 [39056/58905 (66%)] Loss: 0.09130 Data (t): 0.033 Batch (t): 0.330 LR: 0.000000 grad: 37.210812 
+2026-11-12,00:20:01 | INFO | [train.py-213]: Train Epoch: 1/1 [39216/58905 (67%)] Loss: 0.05905 Data (t): 0.028 Batch (t): 0.323 LR: 0.000000 grad: 10.105458 
+2026-11-12,00:20:04 | INFO | [train.py-213]: Train Epoch: 1/1 [39376/58905 (67%)] Loss: 0.05456 Data (t): 0.034 Batch (t): 0.334 LR: 0.000000 grad: 17.025290 
+2026-11-12,00:20:07 | INFO | [train.py-213]: Train Epoch: 1/1 [39536/58905 (67%)] Loss: 0.07526 Data (t): 0.027 Batch (t): 0.323 LR: 0.000000 grad: 26.350878 
+2026-11-12,00:20:10 | INFO | [train.py-213]: Train Epoch: 1/1 [39696/58905 (67%)] Loss: 0.06201 Data (t): 0.032 Batch (t): 0.327 LR: 0.000000 grad: 19.542492 
+2026-11-12,00:20:14 | INFO | [train.py-213]: Train Epoch: 1/1 [39856/58905 (68%)] Loss: 0.01418 Data (t): 0.027 Batch (t): 0.323 LR: 0.000000 grad: 24.520693 
+2026-11-12,00:20:17 | INFO | [train.py-213]: Train Epoch: 1/1 [40016/58905 (68%)] Loss: 0.09418 Data (t): 0.033 Batch (t): 0.327 LR: 0.000000 grad: 19.432999 
+2026-11-12,00:20:20 | INFO | [train.py-213]: Train Epoch: 1/1 [40176/58905 (68%)] Loss: 0.08323 Data (t): 0.027 Batch (t): 0.321 LR: 0.000000 grad: 28.150354 
+2026-11-12,00:20:23 | INFO | [train.py-213]: Train Epoch: 1/1 [40336/58905 (68%)] Loss: 0.14841 Data (t): 0.035 Batch (t): 0.332 LR: 0.000000 grad: 14.764958 
+2026-11-12,00:20:27 | INFO | [train.py-213]: Train Epoch: 1/1 [40496/58905 (69%)] Loss: 0.08662 Data (t): 0.026 Batch (t): 0.320 LR: 0.000000 grad: 13.557923 
+2026-11-12,00:20:30 | INFO | [train.py-213]: Train Epoch: 1/1 [40656/58905 (69%)] Loss: 0.08991 Data (t): 0.032 Batch (t): 0.327 LR: 0.000000 grad: 22.868483 
+2026-11-12,00:20:33 | INFO | [train.py-213]: Train Epoch: 1/1 [40816/58905 (69%)] Loss: 0.01893 Data (t): 0.027 Batch (t): 0.321 LR: 0.000000 grad: 23.203907 
+2026-11-12,00:20:36 | INFO | [train.py-213]: Train Epoch: 1/1 [40976/58905 (70%)] Loss: 0.05899 Data (t): 0.032 Batch (t): 0.328 LR: 0.000000 grad: 17.494137 
+2026-11-12,00:20:40 | INFO | [train.py-213]: Train Epoch: 1/1 [41136/58905 (70%)] Loss: 0.10359 Data (t): 0.027 Batch (t): 0.332 LR: 0.000000 grad: 19.918800 
+2026-11-12,00:20:43 | INFO | [train.py-213]: Train Epoch: 1/1 [41296/58905 (70%)] Loss: 0.00998 Data (t): 0.033 Batch (t): 0.329 LR: 0.000000 grad: 23.177917 
+2026-11-12,00:20:46 | INFO | [train.py-213]: Train Epoch: 1/1 [41456/58905 (70%)] Loss: 0.03671 Data (t): 0.027 Batch (t): 0.321 LR: 0.000000 grad: 12.427123 
+2026-11-12,00:20:50 | INFO | [train.py-213]: Train Epoch: 1/1 [41616/58905 (71%)] Loss: 0.10086 Data (t): 0.033 Batch (t): 0.329 LR: 0.000000 grad: 20.329504 
+2026-11-12,00:20:53 | INFO | [train.py-213]: Train Epoch: 1/1 [41776/58905 (71%)] Loss: 0.10765 Data (t): 0.028 Batch (t): 0.323 LR: 0.000000 grad: 18.232422 
+2026-11-12,00:20:56 | INFO | [train.py-213]: Train Epoch: 1/1 [41936/58905 (71%)] Loss: 0.04679 Data (t): 0.033 Batch (t): 0.329 LR: 0.000000 grad: 32.305706 
+2026-11-12,00:20:59 | INFO | [train.py-213]: Train Epoch: 1/1 [42096/58905 (71%)] Loss: 0.01008 Data (t): 0.028 Batch (t): 0.327 LR: 0.000000 grad: 17.404455 
+2026-11-12,00:21:03 | INFO | [train.py-213]: Train Epoch: 1/1 [42256/58905 (72%)] Loss: 0.14274 Data (t): 0.033 Batch (t): 0.330 LR: 0.000000 grad: 15.831209 
+2026-11-12,00:21:06 | INFO | [train.py-213]: Train Epoch: 1/1 [42416/58905 (72%)] Loss: 0.03750 Data (t): 0.026 Batch (t): 0.320 LR: 0.000000 grad: 26.295732 
+2026-11-12,00:21:09 | INFO | [train.py-213]: Train Epoch: 1/1 [42576/58905 (72%)] Loss: 0.02959 Data (t): 0.034 Batch (t): 0.330 LR: 0.000000 grad: 29.617489 
+2026-11-12,00:21:12 | INFO | [train.py-213]: Train Epoch: 1/1 [42736/58905 (73%)] Loss: 0.14429 Data (t): 0.027 Batch (t): 0.322 LR: 0.000000 grad: 6.645829 
+2026-11-12,00:21:16 | INFO | [train.py-213]: Train Epoch: 1/1 [42896/58905 (73%)] Loss: 0.00873 Data (t): 0.034 Batch (t): 0.332 LR: 0.000000 grad: 22.039913 
+2026-11-12,00:21:19 | INFO | [train.py-213]: Train Epoch: 1/1 [43056/58905 (73%)] Loss: 0.03775 Data (t): 0.027 Batch (t): 0.323 LR: 0.000000 grad: 16.002275 
+2026-11-12,00:21:22 | INFO | [train.py-213]: Train Epoch: 1/1 [43216/58905 (73%)] Loss: 0.05129 Data (t): 0.032 Batch (t): 0.327 LR: 0.000000 grad: 28.192486 
+2026-11-12,00:21:25 | INFO | [train.py-213]: Train Epoch: 1/1 [43376/58905 (74%)] Loss: 0.06540 Data (t): 0.028 Batch (t): 0.323 LR: 0.000000 grad: 39.092827 
+2026-11-12,00:21:29 | INFO | [train.py-213]: Train Epoch: 1/1 [43536/58905 (74%)] Loss: 0.01118 Data (t): 0.033 Batch (t): 0.330 LR: 0.000000 grad: 26.143250 
+2026-11-12,00:21:32 | INFO | [train.py-213]: Train Epoch: 1/1 [43696/58905 (74%)] Loss: 0.17484 Data (t): 0.028 Batch (t): 0.323 LR: 0.000000 grad: 17.649632 
+2026-11-12,00:21:35 | INFO | [train.py-213]: Train Epoch: 1/1 [43856/58905 (74%)] Loss: 0.04616 Data (t): 0.032 Batch (t): 0.331 LR: 0.000000 grad: 17.307364 
+2026-11-12,00:21:39 | INFO | [train.py-213]: Train Epoch: 1/1 [44016/58905 (75%)] Loss: 0.03006 Data (t): 0.027 Batch (t): 0.323 LR: 0.000000 grad: 14.441306 
+2026-11-12,00:21:42 | INFO | [train.py-213]: Train Epoch: 1/1 [44176/58905 (75%)] Loss: 0.09795 Data (t): 0.033 Batch (t): 0.331 LR: 0.000000 grad: 25.765833 
+2026-11-12,00:21:45 | INFO | [train.py-213]: Train Epoch: 1/1 [44336/58905 (75%)] Loss: 0.03014 Data (t): 0.027 Batch (t): 0.321 LR: 0.000000 grad: 26.369022 
+2026-11-12,00:21:48 | INFO | [train.py-213]: Train Epoch: 1/1 [44496/58905 (76%)] Loss: 0.03483 Data (t): 0.033 Batch (t): 0.330 LR: 0.000000 grad: 17.758770 
+2026-11-12,00:21:52 | INFO | [train.py-213]: Train Epoch: 1/1 [44656/58905 (76%)] Loss: 0.09675 Data (t): 0.026 Batch (t): 0.326 LR: 0.000000 grad: 19.750338 
+2026-11-12,00:21:55 | INFO | [train.py-213]: Train Epoch: 1/1 [44816/58905 (76%)] Loss: 0.09673 Data (t): 0.031 Batch (t): 0.331 LR: 0.000000 grad: 18.606758 
+2026-11-12,00:21:58 | INFO | [train.py-213]: Train Epoch: 1/1 [44976/58905 (76%)] Loss: 0.01149 Data (t): 0.028 Batch (t): 0.325 LR: 0.000000 grad: 22.411388 
+2026-11-12,00:22:01 | INFO | [train.py-213]: Train Epoch: 1/1 [45136/58905 (77%)] Loss: 0.09521 Data (t): 0.034 Batch (t): 0.330 LR: 0.000000 grad: 18.364798 
+2026-11-12,00:22:05 | INFO | [train.py-213]: Train Epoch: 1/1 [45296/58905 (77%)] Loss: 0.07279 Data (t): 0.026 Batch (t): 0.323 LR: 0.000000 grad: 14.409068 
+2026-11-12,00:22:08 | INFO | [train.py-213]: Train Epoch: 1/1 [45456/58905 (77%)] Loss: 0.03904 Data (t): 0.034 Batch (t): 0.333 LR: 0.000000 grad: 17.990471 
+2026-11-12,00:22:11 | INFO | [train.py-213]: Train Epoch: 1/1 [45616/58905 (77%)] Loss: 0.02145 Data (t): 0.026 Batch (t): 0.322 LR: 0.000000 grad: 10.284216 
+2026-11-12,00:22:15 | INFO | [train.py-213]: Train Epoch: 1/1 [45776/58905 (78%)] Loss: 0.02521 Data (t): 0.032 Batch (t): 0.330 LR: 0.000000 grad: 16.135183 
+2026-11-12,00:22:18 | INFO | [train.py-213]: Train Epoch: 1/1 [45936/58905 (78%)] Loss: 0.06521 Data (t): 0.029 Batch (t): 0.324 LR: 0.000000 grad: 23.567133 
+2026-11-12,00:22:21 | INFO | [train.py-213]: Train Epoch: 1/1 [46096/58905 (78%)] Loss: 0.07498 Data (t): 0.030 Batch (t): 0.336 LR: 0.000000 grad: 24.740866 
+2026-11-12,00:22:25 | INFO | [train.py-213]: Train Epoch: 1/1 [46256/58905 (79%)] Loss: 0.03980 Data (t): 0.023 Batch (t): 0.337 LR: 0.000000 grad: 21.583151 
+2026-11-12,00:22:28 | INFO | [train.py-213]: Train Epoch: 1/1 [46416/58905 (79%)] Loss: 0.00365 Data (t): 0.032 Batch (t): 0.338 LR: 0.000000 grad: 15.808557 
+2026-11-12,00:22:31 | INFO | [train.py-213]: Train Epoch: 1/1 [46576/58905 (79%)] Loss: 0.11574 Data (t): 0.026 Batch (t): 0.327 LR: 0.000000 grad: 15.703252 
+2026-11-12,00:22:35 | INFO | [train.py-213]: Train Epoch: 1/1 [46736/58905 (79%)] Loss: 0.07713 Data (t): 0.029 Batch (t): 0.346 LR: 0.000000 grad: 16.767344 
+2026-11-12,00:22:38 | INFO | [train.py-213]: Train Epoch: 1/1 [46896/58905 (80%)] Loss: 0.05371 Data (t): 0.022 Batch (t): 0.339 LR: 0.000000 grad: 20.455450 
+2026-11-12,00:22:41 | INFO | [train.py-213]: Train Epoch: 1/1 [47056/58905 (80%)] Loss: 0.03931 Data (t): 0.030 Batch (t): 0.347 LR: 0.000000 grad: 16.520821 
+2026-11-12,00:22:45 | INFO | [train.py-213]: Train Epoch: 1/1 [47216/58905 (80%)] Loss: 0.02793 Data (t): 0.022 Batch (t): 0.337 LR: 0.000000 grad: 19.816137 
+2026-11-12,00:22:48 | INFO | [train.py-213]: Train Epoch: 1/1 [47376/58905 (80%)] Loss: 0.11488 Data (t): 0.033 Batch (t): 0.352 LR: 0.000000 grad: 16.051456 
+2026-11-12,00:22:52 | INFO | [train.py-213]: Train Epoch: 1/1 [47536/58905 (81%)] Loss: 0.12474 Data (t): 0.025 Batch (t): 0.338 LR: 0.000000 grad: 23.410185 
+2026-11-12,00:22:55 | INFO | [train.py-213]: Train Epoch: 1/1 [47696/58905 (81%)] Loss: 0.14306 Data (t): 0.031 Batch (t): 0.353 LR: 0.000000 grad: 17.586699 
+2026-11-12,00:22:59 | INFO | [train.py-213]: Train Epoch: 1/1 [47856/58905 (81%)] Loss: 0.06716 Data (t): 0.022 Batch (t): 0.342 LR: 0.000000 grad: 20.312586 
+2026-11-12,00:23:02 | INFO | [train.py-213]: Train Epoch: 1/1 [48016/58905 (82%)] Loss: 0.04682 Data (t): 0.029 Batch (t): 0.353 LR: 0.000000 grad: 17.929615 
+2026-11-12,00:23:06 | INFO | [train.py-213]: Train Epoch: 1/1 [48176/58905 (82%)] Loss: 0.05686 Data (t): 0.023 Batch (t): 0.336 LR: 0.000000 grad: 29.444086 
+2026-11-12,00:23:09 | INFO | [train.py-213]: Train Epoch: 1/1 [48336/58905 (82%)] Loss: 0.05818 Data (t): 0.033 Batch (t): 0.343 LR: 0.000000 grad: 17.107843 
+2026-11-12,00:23:12 | INFO | [train.py-213]: Train Epoch: 1/1 [48496/58905 (82%)] Loss: 0.01595 Data (t): 0.028 Batch (t): 0.328 LR: 0.000000 grad: 27.915842 
+2026-11-12,00:23:16 | INFO | [train.py-213]: Train Epoch: 1/1 [48656/58905 (83%)] Loss: 0.01191 Data (t): 0.032 Batch (t): 0.335 LR: 0.000000 grad: 20.714878 
+2026-11-12,00:23:19 | INFO | [train.py-213]: Train Epoch: 1/1 [48816/58905 (83%)] Loss: 0.01148 Data (t): 0.028 Batch (t): 0.326 LR: 0.000000 grad: 27.695791 
+2026-11-12,00:23:22 | INFO | [train.py-213]: Train Epoch: 1/1 [48976/58905 (83%)] Loss: 0.05552 Data (t): 0.033 Batch (t): 0.337 LR: 0.000000 grad: 19.960243 
+2026-11-12,00:23:26 | INFO | [train.py-213]: Train Epoch: 1/1 [49136/58905 (83%)] Loss: 0.01426 Data (t): 0.029 Batch (t): 0.327 LR: 0.000000 grad: 17.144600 
+2026-11-12,00:23:29 | INFO | [train.py-213]: Train Epoch: 1/1 [49296/58905 (84%)] Loss: 0.01895 Data (t): 0.034 Batch (t): 0.341 LR: 0.000000 grad: 14.569583 
+2026-11-12,00:23:32 | INFO | [train.py-213]: Train Epoch: 1/1 [49456/58905 (84%)] Loss: 0.04460 Data (t): 0.027 Batch (t): 0.339 LR: 0.000000 grad: 24.558813 
+2026-11-12,00:23:36 | INFO | [train.py-213]: Train Epoch: 1/1 [49616/58905 (84%)] Loss: 0.15366 Data (t): 0.032 Batch (t): 0.342 LR: 0.000000 grad: 28.972898 
+2026-11-12,00:23:39 | INFO | [train.py-213]: Train Epoch: 1/1 [49776/58905 (84%)] Loss: 0.00883 Data (t): 0.026 Batch (t): 0.333 LR: 0.000000 grad: 24.663620 
+2026-11-12,00:23:43 | INFO | [train.py-213]: Train Epoch: 1/1 [49936/58905 (85%)] Loss: 0.00999 Data (t): 0.031 Batch (t): 0.349 LR: 0.000000 grad: 22.970568 
+2026-11-12,00:23:46 | INFO | [train.py-213]: Train Epoch: 1/1 [50096/58905 (85%)] Loss: 0.13936 Data (t): 0.025 Batch (t): 0.346 LR: 0.000000 grad: 29.652498 
+2026-11-12,00:23:50 | INFO | [train.py-213]: Train Epoch: 1/1 [50256/58905 (85%)] Loss: 0.07534 Data (t): 0.030 Batch (t): 0.354 LR: 0.000000 grad: 25.712540 
+2026-11-12,00:23:54 | INFO | [train.py-213]: Train Epoch: 1/1 [50416/58905 (86%)] Loss: 0.04682 Data (t): 0.028 Batch (t): 0.409 LR: 0.000000 grad: 18.635965 
+2026-11-12,00:23:58 | INFO | [train.py-213]: Train Epoch: 1/1 [50576/58905 (86%)] Loss: 0.08417 Data (t): 0.036 Batch (t): 0.427 LR: 0.000000 grad: 13.225512 
+2026-11-12,00:24:02 | INFO | [train.py-213]: Train Epoch: 1/1 [50736/58905 (86%)] Loss: 0.49069 Data (t): 0.032 Batch (t): 0.405 LR: 0.000000 grad: 18.881313 
+2026-11-12,00:24:06 | INFO | [train.py-213]: Train Epoch: 1/1 [50896/58905 (86%)] Loss: 0.08853 Data (t): 0.040 Batch (t): 0.419 LR: 0.000000 grad: 21.860378 
+2026-11-12,00:24:10 | INFO | [train.py-213]: Train Epoch: 1/1 [51056/58905 (87%)] Loss: 0.00355 Data (t): 0.033 Batch (t): 0.401 LR: 0.000000 grad: 24.707943 
+2026-11-12,00:24:14 | INFO | [train.py-213]: Train Epoch: 1/1 [51216/58905 (87%)] Loss: 0.05279 Data (t): 0.039 Batch (t): 0.411 LR: 0.000000 grad: 25.785019 
+2026-11-12,00:24:18 | INFO | [train.py-213]: Train Epoch: 1/1 [51376/58905 (87%)] Loss: 0.10513 Data (t): 0.033 Batch (t): 0.409 LR: 0.000000 grad: 22.574306 
+2026-11-12,00:24:23 | INFO | [train.py-213]: Train Epoch: 1/1 [51536/58905 (87%)] Loss: 0.03512 Data (t): 0.041 Batch (t): 0.414 LR: 0.000000 grad: 21.331171 
+2026-11-12,00:24:26 | INFO | [train.py-213]: Train Epoch: 1/1 [51696/58905 (88%)] Loss: 0.03435 Data (t): 0.031 Batch (t): 0.380 LR: 0.000000 grad: 20.235878 
+2026-11-12,00:24:30 | INFO | [train.py-213]: Train Epoch: 1/1 [51856/58905 (88%)] Loss: 0.03161 Data (t): 0.033 Batch (t): 0.334 LR: 0.000000 grad: 18.281630 
+2026-11-12,00:24:33 | INFO | [train.py-213]: Train Epoch: 1/1 [52016/58905 (88%)] Loss: 0.08060 Data (t): 0.028 Batch (t): 0.328 LR: 0.000000 grad: 20.472767 
+2026-11-12,00:24:36 | INFO | [train.py-213]: Train Epoch: 1/1 [52176/58905 (89%)] Loss: 0.05288 Data (t): 0.033 Batch (t): 0.337 LR: 0.000000 grad: 18.995352 
+2026-11-12,00:24:40 | INFO | [train.py-213]: Train Epoch: 1/1 [52336/58905 (89%)] Loss: 0.21937 Data (t): 0.026 Batch (t): 0.325 LR: 0.000000 grad: 26.548380 
+2026-11-12,00:24:43 | INFO | [train.py-213]: Train Epoch: 1/1 [52496/58905 (89%)] Loss: 0.09533 Data (t): 0.034 Batch (t): 0.335 LR: 0.000000 grad: 21.105429 
+2026-11-12,00:24:46 | INFO | [train.py-213]: Train Epoch: 1/1 [52656/58905 (89%)] Loss: 0.06876 Data (t): 0.027 Batch (t): 0.324 LR: 0.000000 grad: 20.687586 
+2026-11-12,00:24:49 | INFO | [train.py-213]: Train Epoch: 1/1 [52816/58905 (90%)] Loss: 0.04416 Data (t): 0.033 Batch (t): 0.333 LR: 0.000000 grad: 17.896442 
+2026-11-12,00:24:53 | INFO | [train.py-213]: Train Epoch: 1/1 [52976/58905 (90%)] Loss: 0.01224 Data (t): 0.028 Batch (t): 0.326 LR: 0.000000 grad: 19.044363 
+2026-11-12,00:24:56 | INFO | [train.py-213]: Train Epoch: 1/1 [53136/58905 (90%)] Loss: 0.02656 Data (t): 0.034 Batch (t): 0.334 LR: 0.000000 grad: 14.678338 
+2026-11-12,00:24:59 | INFO | [train.py-213]: Train Epoch: 1/1 [53296/58905 (90%)] Loss: 0.05434 Data (t): 0.027 Batch (t): 0.326 LR: 0.000000 grad: 17.054333 
+2026-11-12,00:25:03 | INFO | [train.py-213]: Train Epoch: 1/1 [53456/58905 (91%)] Loss: 0.09993 Data (t): 0.033 Batch (t): 0.336 LR: 0.000000 grad: 16.815193 
+2026-11-12,00:25:06 | INFO | [train.py-213]: Train Epoch: 1/1 [53616/58905 (91%)] Loss: 0.07270 Data (t): 0.027 Batch (t): 0.325 LR: 0.000000 grad: 23.635212 
+2026-11-12,00:25:09 | INFO | [train.py-213]: Train Epoch: 1/1 [53776/58905 (91%)] Loss: 0.00972 Data (t): 0.034 Batch (t): 0.333 LR: 0.000000 grad: 23.910013 
+2026-11-12,00:25:13 | INFO | [train.py-213]: Train Epoch: 1/1 [53936/58905 (92%)] Loss: 0.03731 Data (t): 0.026 Batch (t): 0.324 LR: 0.000000 grad: 14.193419 
+2026-11-12,00:25:16 | INFO | [train.py-213]: Train Epoch: 1/1 [54096/58905 (92%)] Loss: 0.07506 Data (t): 0.033 Batch (t): 0.355 LR: 0.000000 grad: 18.891693 
+2026-11-12,00:25:20 | INFO | [train.py-213]: Train Epoch: 1/1 [54256/58905 (92%)] Loss: 0.03579 Data (t): 0.029 Batch (t): 0.373 LR: 0.000000 grad: 25.598341 
+2026-11-12,00:25:24 | INFO | [train.py-213]: Train Epoch: 1/1 [54416/58905 (92%)] Loss: 0.01009 Data (t): 0.037 Batch (t): 0.386 LR: 0.000000 grad: 21.842722 
+2026-11-12,00:25:27 | INFO | [train.py-213]: Train Epoch: 1/1 [54576/58905 (93%)] Loss: 0.08071 Data (t): 0.030 Batch (t): 0.380 LR: 0.000000 grad: 28.947340 
+2026-11-12,00:25:32 | INFO | [train.py-213]: Train Epoch: 1/1 [54736/58905 (93%)] Loss: 0.15673 Data (t): 0.036 Batch (t): 0.413 LR: 0.000000 grad: 20.127825 
+2026-11-12,00:25:35 | INFO | [train.py-213]: Train Epoch: 1/1 [54896/58905 (93%)] Loss: 0.12704 Data (t): 0.028 Batch (t): 0.336 LR: 0.000000 grad: 16.877779 
+2026-11-12,00:25:38 | INFO | [train.py-213]: Train Epoch: 1/1 [55056/58905 (93%)] Loss: 0.12065 Data (t): 0.034 Batch (t): 0.332 LR: 0.000000 grad: 21.945036 
+2026-11-12,00:25:42 | INFO | [train.py-213]: Train Epoch: 1/1 [55216/58905 (94%)] Loss: 0.02668 Data (t): 0.027 Batch (t): 0.325 LR: 0.000000 grad: 21.976744 
+2026-11-12,00:25:45 | INFO | [train.py-213]: Train Epoch: 1/1 [55376/58905 (94%)] Loss: 0.10912 Data (t): 0.033 Batch (t): 0.332 LR: 0.000000 grad: 12.554888 
+2026-11-12,00:25:48 | INFO | [train.py-213]: Train Epoch: 1/1 [55536/58905 (94%)] Loss: 0.04238 Data (t): 0.027 Batch (t): 0.324 LR: 0.000000 grad: 17.211243 
+2026-11-12,00:25:51 | INFO | [train.py-213]: Train Epoch: 1/1 [55696/58905 (95%)] Loss: 0.04635 Data (t): 0.034 Batch (t): 0.334 LR: 0.000000 grad: 17.476828 
+2026-11-12,00:25:55 | INFO | [train.py-213]: Train Epoch: 1/1 [55856/58905 (95%)] Loss: 0.01980 Data (t): 0.028 Batch (t): 0.326 LR: 0.000000 grad: 21.975275 
+2026-11-12,00:25:58 | INFO | [train.py-213]: Train Epoch: 1/1 [56016/58905 (95%)] Loss: 0.11290 Data (t): 0.033 Batch (t): 0.331 LR: 0.000000 grad: 26.081326 
+2026-11-12,00:26:01 | INFO | [train.py-213]: Train Epoch: 1/1 [56176/58905 (95%)] Loss: 0.05721 Data (t): 0.028 Batch (t): 0.327 LR: 0.000000 grad: 19.559471 
+2026-11-12,00:26:05 | INFO | [train.py-213]: Train Epoch: 1/1 [56336/58905 (96%)] Loss: 0.10770 Data (t): 0.034 Batch (t): 0.334 LR: 0.000000 grad: 35.215736 
+2026-11-12,00:26:08 | INFO | [train.py-213]: Train Epoch: 1/1 [56496/58905 (96%)] Loss: 0.13792 Data (t): 0.026 Batch (t): 0.323 LR: 0.000000 grad: 20.273251 
+2026-11-12,00:26:11 | INFO | [train.py-213]: Train Epoch: 1/1 [56656/58905 (96%)] Loss: 0.02617 Data (t): 0.034 Batch (t): 0.333 LR: 0.000000 grad: 20.740120 
+2026-11-12,00:26:14 | INFO | [train.py-213]: Train Epoch: 1/1 [56816/58905 (96%)] Loss: 0.03513 Data (t): 0.028 Batch (t): 0.322 LR: 0.000000 grad: 27.300095 
+2026-11-12,00:26:18 | INFO | [train.py-213]: Train Epoch: 1/1 [56976/58905 (97%)] Loss: 0.05365 Data (t): 0.033 Batch (t): 0.333 LR: 0.000000 grad: 21.516054 
+2026-11-12,00:26:21 | INFO | [train.py-213]: Train Epoch: 1/1 [57136/58905 (97%)] Loss: 0.06418 Data (t): 0.028 Batch (t): 0.325 LR: 0.000000 grad: 24.091743 
+2026-11-12,00:26:24 | INFO | [train.py-213]: Train Epoch: 1/1 [57296/58905 (97%)] Loss: 0.02797 Data (t): 0.032 Batch (t): 0.330 LR: 0.000000 grad: 21.230219 
+2026-11-12,00:26:28 | INFO | [train.py-213]: Train Epoch: 1/1 [57456/58905 (98%)] Loss: 0.04188 Data (t): 0.029 Batch (t): 0.323 LR: 0.000000 grad: 20.902544 
+2026-11-12,00:26:31 | INFO | [train.py-213]: Train Epoch: 1/1 [57616/58905 (98%)] Loss: 0.05806 Data (t): 0.033 Batch (t): 0.331 LR: 0.000000 grad: 31.152807 
+2026-11-12,00:26:34 | INFO | [train.py-213]: Train Epoch: 1/1 [57776/58905 (98%)] Loss: 0.04007 Data (t): 0.027 Batch (t): 0.325 LR: 0.000000 grad: 29.388714 
+2026-11-12,00:26:37 | INFO | [train.py-213]: Train Epoch: 1/1 [57936/58905 (98%)] Loss: 0.00887 Data (t): 0.034 Batch (t): 0.334 LR: 0.000000 grad: 13.321788 
+2026-11-12,00:26:41 | INFO | [train.py-213]: Train Epoch: 1/1 [58096/58905 (99%)] Loss: 0.04597 Data (t): 0.027 Batch (t): 0.325 LR: 0.000000 grad: 19.930973 
+2026-11-12,00:26:44 | INFO | [train.py-213]: Train Epoch: 1/1 [58256/58905 (99%)] Loss: 0.03605 Data (t): 0.033 Batch (t): 0.334 LR: 0.000000 grad: 20.135588 
+2026-11-12,00:26:47 | INFO | [train.py-213]: Train Epoch: 1/1 [58416/58905 (99%)] Loss: 0.01410 Data (t): 0.027 Batch (t): 0.325 LR: 0.000000 grad: 26.382662 
+2026-11-12,00:26:51 | INFO | [train.py-213]: Train Epoch: 1/1 [58576/58905 (99%)] Loss: 0.05698 Data (t): 0.033 Batch (t): 0.330 LR: 0.000000 grad: 26.238440 
+2026-11-12,00:26:54 | INFO | [train.py-213]: Train Epoch: 1/1 [58736/58905 (100%)] Loss: 0.08994 Data (t): 0.028 Batch (t): 0.323 LR: 0.000000 grad: 25.657883 
+2026-11-12,00:26:57 | INFO | [train.py-213]: Train Epoch: 1/1 [58896/58905 (100%)] Loss: 0.06163 Data (t): 0.034 Batch (t): 0.334 LR: 0.000000 grad: 24.558237 
+2026-11-12,00:26:57 | INFO | [main.py-326]: [Profiling] Model training finished in 20.47 minute.
+2026-11-12,00:27:02 | INFO | [evaluation.py-20]: Starting evaluation of [A3_R2_train_s2] at epoch 1
+2026-11-12,00:27:43 | INFO | [evaluation.py-176]: Finished evaluation of [A3_R2_train_s2] at epoch 1
+	retrieval-image2text-R@1	37.91
+	retrieval-image2text-R@5	57.44
+	retrieval-image2text-R@10	70.18
+	retrieval-text2image-R@1	34.0
+	retrieval-text2image-R@5	67.51
+	retrieval-text2image-R@10	80.82
+	retrieval-mean-recall	57.98
+2026-11-12,00:27:46 | INFO | [main.py-370]: Best model saved at epoch 1 with retrieval-mean-recall 57.98

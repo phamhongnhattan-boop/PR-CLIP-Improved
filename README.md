@@ -106,13 +106,22 @@ python scripts/eval_epoch0_standalone.py --ckpt RET-2.pt --csv dataset/test/rsic
 python scripts/bootstrap_epoch0.py --emb emb_rsicd.pt --out results/a3/bootstrap_epoch0_rsicd_test.json
 ```
 
-The three-seed trained runs (B1/R2/R3) still need a GPU: run `notebooks/A3_MultiSeed_Colab.ipynb`.
+Three seeds, one epoch, validation-selected (epoch 1 was chosen for every run; RTX 4060 Laptop, `scripts/RUN_A3_GPU.bat`; `results/a3/summary.csv`, `results/a3/rsitmd/`, `results/a3/paired_seed_tests.json`, logs in `results/a3/raw_logs/`):
+
+| Config | RSICD mR | Δ vs B1 (paired) | RSITMD mR | Δ vs B1 (paired) |
+|---|---|---|---|---|
+| B1 | 38.56 ± 0.16 | – | 51.64 ± 0.26 | – |
+| R2 RIP-fixed | 38.90 ± 0.25 | +0.34 ± 0.09 (p = 0.02) | 52.29 ± 0.16 | +0.66 ± 0.17 (p = 0.02) |
+| R3 RIP+E1+EXT v2 | 38.91 ± 0.21 | +0.35 ± 0.05 | 52.28 ± 0.22 | +0.64 ± 0.13 |
+| PR-CLIP (paper) | 39.23 | | 52.41 | |
+
+**Note:** the released AMP training loop never calls `optimizer.zero_grad()`, so every step has `grad = nan` and no update happens. `apply_patches.py` includes the fix (`# AMP-FIX`).
 
 ## Notebooks and results
 
 | Notebook | What it runs | Result in saved outputs | Report |
 |---|---|---|---|
-| `A3_MultiSeed_Colab.ipynb` | A3 protocol: epoch 0 (B1, RIP), B1/R2/R3 × 3 seeds, val selection | epoch 0 done (above); trained runs to be run | Tables IV, V |
+| `A3_MultiSeed_Colab.ipynb` | A3 protocol: epoch 0 (B1, RIP), B1/R2/R3 × 3 seeds, val selection (same as `RUN_A3_GPU.bat`) | done, see above | Tables IV, V |
 | `PR_CLIP_(2).ipynb` | Modified extraction (type embeddings, pre-LN, GELU, padding mask) | mR **38.74** | Table VI |
 | `PR_CLIP_v4_BRCR.ipynb` | BRCR, flags `mask,bidir,rel,detach` | mR **38.68** | Table VI |
 | `PR_CLIP_STPR_Improved_Ready.ipynb` | STPR: 15% masking of reconstruction queries + local cosine loss (β=0.05) | mR 38.69 | not in report |

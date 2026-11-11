@@ -13,7 +13,7 @@
 
 % ---------------------------------------------------------------------------
 % Values not yet produced by the multi-seed / validation protocol are printed
-% as a red "TBD" (only the three-seed rows of the A3 table). Fill them by running notebooks/A3_MultiSeed_Colab.ipynb
+% as a red "TBD". All tables are filled in this version.
 % (scripts/aggregate_results.py writes tables/a3_multiseed_rows.tex).
 \newcommand{\TBD}{\textcolor{red}{TBD}}
 \newcommand{\fillme}[1]{\textcolor{red}{[#1]}}
@@ -47,7 +47,7 @@ Student ID: \fillme{ID}\\
 \maketitle
 
 \begin{abstract}
-Remote sensing image--text retrieval (RSITR) ranks satellite or aerial images for a text query and captions for an image query. PR-CLIP improves CLIP-based RSITR with a training-only task that extracts, filters, and reconstructs cross-modal positional information, and reports 39.23\% mean Recall (mR) on RSICD. We study this model with the authors' released code and the GeoRSCLIP RET-2 checkpoint, which itself reaches 38.86\% mR on RSICD and 51.81\% on RSITMD without further training. We test three changes that add no learned parameters: rotation-invariant pooling of image embeddings over the dihedral group D4 (RIP-fixed), a padding-aware extraction module with CLIP-initialised projections (E1), and cross-modal-only attention in the extraction encoder (EXT~v2). Applied to the RET-2 checkpoint with no training, RIP-fixed gives 39.70\% mR on RSICD, +0.84 points over the same checkpoint (paired bootstrap 95\% interval [+0.29, +1.42]) and above the published PR-CLIP result (39.23\%). On RSITMD the gain is only +0.07 points ([-0.77, +0.87]), so it does not carry over to the second test set. RIP-fixed costs eight image-encoder forward passes per image. One further epoch of fine-tuning lowered the RSICD result to 39.09\%. In a one-epoch controlled study, RIP-fixed explains almost all of the gain over the matched baseline (38.72\% to 39.09\%), and E1 and EXT~v2 add only 0.01--0.02 points. Because these runs used one seed and selected the reported epoch on the test split, we define a protocol with an image-level validation split and three seeds, and we report mean $\pm$ standard deviation where available. Longer fine-tuning, larger learning rates, residual adapters, and a reliability-aware reconstruction variant did not improve on the starting checkpoint.
+Remote sensing image--text retrieval (RSITR) ranks satellite or aerial images for a text query and captions for an image query. PR-CLIP improves CLIP-based RSITR with a training-only task that extracts, filters, and reconstructs cross-modal positional information, and reports 39.23\% mean Recall (mR) on RSICD. We study this model with the authors' released code and the GeoRSCLIP RET-2 checkpoint, which itself reaches 38.86\% mR on RSICD and 51.81\% on RSITMD without further training. We test three changes that add no learned parameters: rotation-invariant pooling of image embeddings over the dihedral group D4 (RIP-fixed), a padding-aware extraction module with CLIP-initialised projections (E1), and cross-modal-only attention in the extraction encoder (EXT~v2). Applied to the RET-2 checkpoint with no training, RIP-fixed gives 39.70\% mR on RSICD, +0.84 points over the same checkpoint (paired bootstrap 95\% interval [+0.29, +1.42]) and above the published PR-CLIP result (39.23\%). On RSITMD the gain is only +0.07 points ([-0.77, +0.87]), so it does not carry over to the second test set. RIP-fixed costs eight image-encoder forward passes per image. We then re-ran the controlled one-epoch study with three seeds and model selection on a held-out image-level validation split. After training, RIP-fixed improves the matched baseline on every seed: +0.34 $\pm$ 0.09 points on RSICD (38.56 to 38.90\%) and +0.66 $\pm$ 0.17 on RSITMD (51.64 to 52.29\%; paired $t$-test $p=0.02$ for both). E1 and EXT~v2 change mR by $\pm$0.01 points. One epoch of fine-tuning raises validation mR for every configuration but lowers RSICD test mR, so the validation-selected models stay below PR-CLIP on both test sets. Longer fine-tuning, larger learning rates, residual adapters, and a reliability-aware reconstruction variant did not improve on the starting checkpoint.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -64,10 +64,10 @@ This report has two goals. First, we check how close a short fine-tuning budget 
 
 Our contributions are:
 \begin{itemize}
-\item An empirical comparison, under one code base and one training setup, of RIP-fixed, E1, and EXT~v2 on top of PR-CLIP, with all module changes released as a patch to the authors' code.
+\item A three-seed, validation-selected comparison of RIP-fixed, E1, and EXT~v2 on top of PR-CLIP under one code base and one training setup, with all module changes released as a patch to the authors' code.
 \item A deterministic evaluation of RIP-fixed on the RET-2 checkpoint without training on both RSICD (39.70\%) and RSITMD (51.88\%), with paired bootstrap intervals and inference cost.
 \item A documented set of negative results on training duration, learning rate, initialization, residual adapters, and a reconstruction variant.
-\item An evaluation protocol that fixes two problems in our first runs: in the public split, the RSICD ``validation'' file is identical to the test file, and our first runs chose the reported epoch on the test set.
+\item An evaluation protocol that fixes two problems in our first runs (the public RSICD ``validation'' file is identical to the test file, and our first runs chose the reported epoch on the test set), and a fix for a bug in the released mixed-precision training loop that silently disables all parameter updates.
 \end{itemize}
 
 % ===========================================================================
@@ -87,6 +87,7 @@ Objects in overhead images can appear in any orientation. RICNN \cite{cheng2016r
 
 % ===========================================================================
 \section{Background: PR-CLIP}
+\label{sec:background}
 Fig.~\ref{fig:arch} shows the PR-CLIP training pipeline \cite{guan2025prclip}. A CLIP ViT-B/32 \cite{dosovitskiy2021vit} image encoder $f_v$ and text encoder $f_t$ give global features $v^o, t^o$ and token features $V^o$ (50 tokens) and $T^o$ (77 tokens). The cross-modal contrastive loss $\mathcal{L}_{CMC}$ is a bidirectional InfoNCE loss on $(v^o, t^o)$.
 
 \textbf{Extraction.} Token features are projected to 512 dimensions, $\tilde V^o = V^o W_v^{proj}$ and $\tilde T^o = T^o W_t^{proj}$, concatenated, and passed through a 2-layer Transformer encoder. The output is split back into image part $V^p$ and text part $T^p$.
@@ -180,6 +181,7 @@ Before A3 we explored three variants, each in its own setup. (i) \emph{Dual resi
 
 % ===========================================================================
 \section{Experimental Setup}
+\label{sec:setup}
 
 \subsection{Datasets and Splits}
 We train on RET-2 and test on RSICD (1{,}093 images, 5{,}465 captions) \cite{lu2018rsicd} and RSITMD (452 images, 2{,}260 captions) \cite{yuan2022amfmn}, using the CSV files released with PR-CLIP. No test image appears in the RET-2 training file.
@@ -190,7 +192,7 @@ The released split has a problem for model selection. \texttt{rsicd\_val.csv} is
 All A3 runs start from the RET-2 ckpt. Some earlier runs start from the original OpenAI CLIP ViT-B/32 weights; these are labelled ``CLIP'' and are not comparable with RET-2 runs.
 
 \subsection{Training Configuration}
-The A3 setup is: 1 epoch, batch size 16, learning rate $2\times10^{-7}$, 100 warm-up steps, weight decay 0.5, maximum gradient norm 50, AMP, ViT-B/32 at $224\times224$. Seeds 1, 2 and 3 are used for every trained configuration. Hyper-parameters are not tuned per module.
+The A3 setup is: 1 epoch, batch size 16, learning rate $2\times10^{-7}$, 100 warm-up steps, weight decay 0.5, maximum gradient norm 50, AMP, ViT-B/32 at $224\times224$. Seeds 1, 2 and 3 are used for every trained configuration. Hyper-parameters are not tuned per module. All A3 runs use the AMP fix described in Sec.~\ref{sec:background} and were run on one RTX 4060 Laptop GPU (8\,GB); one epoch takes about 15 minutes for B1 and 23 minutes with RIP-fixed.
 
 \subsection{Evaluation Protocol}
 \begin{itemize}
@@ -209,7 +211,7 @@ For $K\in\{1,5,10\}$, R@$K$ is the share of queries whose ground-truth match is 
 All values are percentages.
 
 \subsection{Implementation and Reproducibility}
-All A3 changes are in \texttt{prclip\_patches/} of our repository: \texttt{apply\_patches.py} applies them to the authors' code at commit \texttt{242fba6}, and modules are switched only by the environment variables \texttt{PRCLIP\_RIP}, \texttt{PRCLIP\_E1} and \texttt{PRCLIP\_EXT2}. Unit tests in \texttt{tests/} check D4 invariance, norm preservation, gradient flow, and masking. The notebook \texttt{A3\_MultiSeed\_Colab.ipynb} runs the full protocol and writes every evaluation to \texttt{metrics.jsonl}; \texttt{aggregate\_results.py} produces Table~\ref{tab:a3}. Logs of earlier runs are stored in \texttt{results/legacy/}.
+All A3 changes are in \texttt{prclip\_patches/} of our repository: \texttt{apply\_patches.py} applies them to the authors' code at commit \texttt{242fba6}, and modules are switched only by the environment variables \texttt{PRCLIP\_RIP}, \texttt{PRCLIP\_E1} and \texttt{PRCLIP\_EXT2}. Unit tests in \texttt{tests/} check D4 invariance, norm preservation, gradient flow, and masking. The notebook \texttt{A3\_MultiSeed\_Colab.ipynb} (Colab) and \texttt{RUN\_A3\_GPU.bat} (local Windows GPU) run the full protocol and writes every evaluation to \texttt{metrics.jsonl}; \texttt{aggregate\_results.py} produces Table~\ref{tab:a3}. Logs of earlier runs are stored in \texttt{results/legacy/}.
 
 % ===========================================================================
 \section{Results}
@@ -244,7 +246,7 @@ Table~\ref{tab:ep0} reports the RET-2 ckpt at epoch 0 with and without RIP-fixed
 
 On RSITMD the picture is different: mR moves from 51.81\% to 51.88\% (+0.07), and RIP-fixed stays below PR-CLIP (52.41\%). Here seed noise does not apply, but the test set is finite. A paired bootstrap over test images (2{,}000 resamples, each image kept with its five captions) gives a 95\% interval of [+0.29, +1.42] points for the RSICD gain (resampling std 0.29; gain $\le 0$ in 0.1\% of resamples) and [-0.77, +0.87] for RSITMD (gain $\le 0$ in 43.1\%).
 
-One caution remains: RIP-fixed was chosen after the team had seen RSICD test results, so the RSICD gain is partly a selection effect. RSITMD, which was not used to design the module, shows almost no gain. The validation-selected rows of Table~\ref{tab:a3} are needed for a fully fair comparison after training.
+One caution remains: RIP-fixed was chosen after the team had seen RSICD test results, so the RSICD gain is partly a selection effect. RSITMD, which was not used to design the module, shows almost no gain. The validation-selected, three-seed results after training are given in Sec.~\ref{sec:a3}.
 
 \begin{table*}[t]
 \centering
@@ -263,35 +265,43 @@ Test set & Configuration & I2T R@1 & I2T R@5 & I2T R@10 & T2I R@1 & T2I R@5 & T2
  & RIP-fixed (8 passes) & 32.52 & 53.10 & 66.81 & 25.40 & 58.14 & 75.31 & 51.88 & 167 \\
  & PR-CLIP (published) & 32.74 & 54.65 & 66.59 & 27.43 & 58.36 & 74.69 & 52.41 & -- \\
 \bottomrule
-\multicolumn{10}{@{}p{0.95\textwidth}@{}}{Paired bootstrap 95\% interval of the mR gain (RIP-fixed $-$ B1): RSICD [+0.29, +1.42], RSITMD [-0.77, +0.87]. PR-CLIP reports 3.95\,s total inference on an RTX 4090, which is not comparable with our CPU timing; on CPU RIP-fixed needs 8.1$\times$ the image-encoding time.}
+\multicolumn{10}{@{}p{0.95\textwidth}@{}}{Paired bootstrap 95\% interval of the mR gain (RIP-fixed $-$ B1): RSICD [+0.29, +1.42], RSITMD [-0.77, +0.87]. With the authors' evaluation code on an RTX 4060 Laptop GPU the same checkpoint gives 38.89/39.67 (RSICD) and 51.81/51.89 (RSITMD) for B1/RIP-fixed, with total inference time 21.3\,s vs.\ 35.5\,s on RSICD (PR-CLIP reports 3.95\,s on an RTX 4090). On CPU RIP-fixed needs 8.1$\times$ the image-encoding time.}
 \end{tabular}
 \end{table*}
 
 \subsection{Controlled A3 Module Study}
-Table~\ref{tab:a3} first lists the preliminary single-seed A3 runs. RIP-fixed (R2) raised mR from 38.72\% to 39.09\% (+0.37). Adding E1 (R4) gave 39.10\% and adding EXT~v2 (R3) gave 39.11\%. Nearly all of the gain therefore comes from RIP-fixed, which directly changes the embeddings used for retrieval. Extraction runs only during training and can affect retrieval only through gradients to the backbone, and with one epoch at learning rate $2\times10^{-7}$ that effect is small. Compared with PR-CLIP, the best run (R3) has lower I2T R@1 (20.04 vs.\ 22.32) but higher T2I R@5 and R@10.
+\label{sec:a3}
+Table~\ref{tab:a3} lists the A3 results. The upper block repeats the preliminary single-seed runs from our earlier notebooks, where the epoch was chosen on RSICD test. The lower block is the re-run under the protocol of Sec.~\ref{sec:setup}: the same patched code for every configuration, training on the RET-2 training split, seeds 1--3, and model selection on the held-out validation split. For every configuration and seed, validation mR rose after one epoch (B1: 55.02 to 56.13--56.59\%; R2 and R3: 56.79 to 57.81--58.02\%), so the validation rule always selected epoch~1. The lower block therefore reports epoch-1 test results.
 
-The seed-to-seed spread we saw elsewhere is about 0.4 points (38.15\% vs.\ 37.75\% for the same setting with seeds 1 and 2 in Table~\ref{tab:sens}). The 0.37-point gain of RIP-fixed is therefore within the range of seed noise, and the 0.01--0.02-point differences among R2, R4 and R3 carry no information. The lower block of Table~\ref{tab:a3} reports the three-seed, validation-selected results needed to settle this.
+RIP-fixed improves the matched baseline on every seed and on both test sets. The paired per-seed gain is $+0.34 \pm 0.09$ points on RSICD (seeds: $+0.44, +0.31, +0.27$) and $+0.66 \pm 0.17$ on RSITMD ($+0.63, +0.50, +0.84$); a paired $t$-test gives $p=0.02$ in both cases. The seed spread of B1 itself is small (std 0.16 and 0.26). E1 and EXT~v2 on top of RIP-fixed change mR by $+0.01 \pm 0.06$ (RSICD) and $-0.01 \pm 0.07$ (RSITMD), so they have no measurable effect in this setup. The preliminary run reached 39.09--39.11\% on RSICD; the re-run gives 38.68--39.17\% across seeds, so the earlier numbers were at the upper end of the seed range.
+
+Training and test disagree. One epoch lowers RSICD test mR for both B1 ($38.89 \to 38.56$) and RIP-fixed ($39.67 \to 38.90$), while it raises RSITMD for RIP-fixed ($51.89 \to 52.29$). The validation split is drawn from RET-2, which mixes RSICD-like and RSITMD-like images, so validation-based selection does not protect the RSICD result here. The best validation-selected results (38.91\% on RSICD, 52.29\% on RSITMD) remain 0.32 and 0.12 points below PR-CLIP; seed~1 of R2 and R3 exceeds PR-CLIP on RSITMD (52.47 and 52.52\%), but the three-seed mean does not.
 
 \begin{table*}[t]
 \centering
-\caption{Controlled A3 study on RSICD test. Upper block: preliminary runs (seed 1, epoch chosen without validation). Lower block: three seeds, mean $\pm$ std; ``val-selected'' picks epoch 0 or 1 per seed on the RET-2 validation split.}
+\caption{Controlled A3 study (1 epoch, batch 16, lr $2\times10^{-7}$, RET-2 init). Upper block: preliminary runs (seed 1, epoch chosen on RSICD test, no validation). Lower block: re-run with the released protocol, seeds 1--3, mean $\pm$ std over seeds; validation selected epoch 1 for every run. $\Delta$: paired per-seed mR difference to B1 (mean $\pm$ std). Logs: \texttt{results/a3/raw\_logs/}.}
 \label{tab:a3}
-\footnotesize
-\begin{tabular}{@{}lllccccccc@{}}
+\scriptsize
+\setlength{\tabcolsep}{3.2pt}
+\begin{tabular}{@{}llcccccccccc@{}}
 \toprule
-Run & Setting & $n$ & I2T R@1 & I2T R@5 & I2T R@10 & T2I R@1 & T2I R@5 & T2I R@10 & mR \\
+Run & Test & $n$ & I2T R@1 & I2T R@5 & I2T R@10 & T2I R@1 & T2I R@5 & T2I R@10 & mR & $\Delta$ \\
 \midrule
-PR-CLIP (published) & -- & -- & 22.32 & 40.81 & 55.90 & 16.47 & 41.74 & 58.12 & 39.23 \\
+PR-CLIP (published) & RSICD & -- & 22.32 & 40.81 & 55.90 & 16.47 & 41.74 & 58.12 & 39.23 & \\
+PR-CLIP (published) & RSITMD & -- & 32.74 & 54.65 & 66.59 & 27.43 & 58.36 & 74.69 & 52.41 & \\
 \midrule
-B1 baseline & epoch 1, seed 1 & 1 & 20.31 & 40.99 & 53.80 & 16.40 & 42.01 & 58.79 & 38.72 \\
-R2 RIP-fixed & epoch 1, seed 1 & 1 & 19.95 & 41.08 & 55.44 & 16.32 & 42.16 & 59.58 & 39.09 \\
-R4 RIP+E1 & epoch 1, seed 1 & 1 & 19.95 & 41.26 & 55.35 & 16.43 & 42.07 & 59.52 & 39.10 \\
-R3 RIP+E1+EXT v2 & epoch 1, seed 1 & 1 & 20.04 & 40.99 & 55.72 & 16.40 & 42.16 & 59.36 & 39.11 \\
+B1 baseline (prelim.) & RSICD & 1 & 20.31 & 40.99 & 53.80 & 16.40 & 42.01 & 58.79 & 38.72 & -- \\
+R2 RIP-fixed (prelim.) & RSICD & 1 & 19.95 & 41.08 & 55.44 & 16.32 & 42.16 & 59.58 & 39.09 & +0.37 \\
+R4 RIP+E1 (prelim.) & RSICD & 1 & 19.95 & 41.26 & 55.35 & 16.43 & 42.07 & 59.52 & 39.10 & +0.38 \\
+R3 RIP+E1+EXT v2 (prelim.) & RSICD & 1 & 20.04 & 40.99 & 55.72 & 16.40 & 42.16 & 59.36 & 39.11 & +0.39 \\
 \midrule
-\IfFileExists{tables/a3_multiseed_rows.tex}{\input{tables/a3_multiseed_rows.tex}}{%
-B1 baseline & val-selected & 3 & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
-R2 RIP-fixed & val-selected & 3 & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
-R3 RIP+E1+EXT v2 & val-selected & 3 & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\}
+B1 baseline & RSICD & 3 & 20.10$\pm$0.05 & 41.02$\pm$0.38 & 54.16$\pm$0.33 & 16.04$\pm$0.24 & 41.55$\pm$0.25 & 58.51$\pm$0.19 & 38.56$\pm$0.16 & -- \\
+R2 RIP-fixed & RSICD & 3 & 20.28$\pm$0.42 & 41.29$\pm$0.53 & 54.65$\pm$0.30 & 15.91$\pm$0.11 & 42.08$\pm$0.24 & 59.19$\pm$0.37 & 38.90$\pm$0.25 & +0.34$\pm$0.09 \\
+R3 RIP+E1+EXT v2 & RSICD & 3 & 20.34$\pm$0.32 & 41.26$\pm$0.48 & 54.65$\pm$0.14 & 15.90$\pm$0.06 & 42.08$\pm$0.22 & 59.23$\pm$0.32 & 38.91$\pm$0.21 & +0.35$\pm$0.05 \\
+\midrule
+B1 baseline & RSITMD & 3 & 32.52$\pm$0.80 & 52.29$\pm$0.68 & 66.45$\pm$0.89 & 25.03$\pm$0.28 & 58.14$\pm$0.28 & 75.38$\pm$0.22 & 51.64$\pm$0.26 & -- \\
+R2 RIP-fixed & RSITMD & 3 & 33.11$\pm$0.71 & 53.61$\pm$0.51 & 66.67$\pm$0.46 & 26.03$\pm$0.25 & 58.48$\pm$0.34 & 75.86$\pm$0.31 & 52.29$\pm$0.16 & +0.66$\pm$0.17 \\
+R3 RIP+E1+EXT v2 & RSITMD & 3 & 32.97$\pm$0.39 & 53.54$\pm$0.58 & 66.74$\pm$0.56 & 26.05$\pm$0.18 & 58.54$\pm$0.48 & 75.86$\pm$0.31 & 52.28$\pm$0.22 & +0.64$\pm$0.13 \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -372,29 +382,29 @@ $0.01\,$CMC only & \textbf{18.59} & \textbf{25.10} & \textbf{17.31} \\
 
 % ===========================================================================
 \section{Discussion}
-\textbf{The starting checkpoint dominates.} The RET-2 ckpt already gives 38.86\% on RSICD and 51.81\% on RSITMD, within 0.4 and 0.6 points of PR-CLIP. Every fine-tuning setting we tried moved away from it. Under a small budget, keeping the pretrained representation was more effective than adapting it.
+\textbf{The starting checkpoint dominates.} The RET-2 ckpt already gives 38.86\% on RSICD and 51.81\% on RSITMD, within 0.4 and 0.6 points of PR-CLIP. On RSICD every fine-tuning setting we tried moved away from it; on RSITMD only fine-tuning with RIP-fixed improved on it. Under a small budget, keeping the pretrained representation was usually more effective than adapting it.
 
-\textbf{RIP-fixed acts at retrieval time, and its gain is dataset-dependent.} RIP-fixed was the only change with a gain larger than a few hundredths of a point on RSICD, and the gain was largest with no training at all. On RSITMD the gain is +0.07 points, within resampling noise. RSICD contains many scene-level captions without direction words, while RSITMD captions are longer and describe object relations more often, which may make orientation pooling less useful there; we have not tested this explanation. This suggests that the benefit comes from averaging out orientation-dependent noise in the image embedding at retrieval time, not from better training. Averaging over D4 also makes the gallery embeddings of rotated copies of a scene identical, which fits nadir imagery where orientation is arbitrary. The cost is eight image-encoder passes per image; for T2I search this is an offline indexing cost only.
+\textbf{RIP-fixed is the only change with a reliable effect.} After one epoch it improves the baseline on every seed and on both test sets ($+0.34$ and $+0.66$ points, $p=0.02$). Without training, its gain was larger on RSICD ($+0.84$) but absent on RSITMD ( +0.07 points, within resampling noise). Training thus moves the gain from RSICD towards RSITMD; RSICD contains many scene-level captions without direction words, while RSITMD captions are longer and describe object relations more often, which may make orientation pooling less useful there; we have not tested this explanation. Because the pooling acts on the embeddings used at retrieval time, it can help without any training; during training the backbone also adapts to the pooled embedding, which may explain the larger RSITMD gain after one epoch. Averaging over D4 also makes the gallery embeddings of rotated copies of a scene identical, which fits nadir imagery where orientation is arbitrary. The cost is eight image-encoder passes per image; for T2I search this is an offline indexing cost only.
 
 \textbf{Extraction changes have little effect in this setup.} Extraction only shapes gradients, and one epoch at a very small learning rate gives it little room to change the backbone. A fair test of E1 and EXT~v2 would need longer training with the paper's objective and batch size.
 
-\textbf{Single seeds are not enough.} A seed changes the trained result by up to 0.4 points, which is as large as the RIP-fixed gain after training (+0.37). Conclusions about R2, R3 and R4 should rest on the multi-seed, validation-selected results.
+\textbf{Seeds and selection matter.} Across three seeds the B1 result varies by up to 0.3 points on RSICD and 0.5 points on RSITMD, which is why single-seed gains of a few hundredths (R2 vs.\ R3 vs.\ R4) carry no information. Validation on held-out RET-2 images always preferred the trained model, yet on RSICD the untrained checkpoint scored higher on test; a validation split that matches each test domain would be needed to select between them fairly.
 
 % ===========================================================================
 \section{Limitations}
 \begin{itemize}
 \item We did not retrain PR-CLIP with the paper's objective, batch size 160 and 20 epochs; the released code's objective also differs from the paper's equation. No number here is a full reproduction of 39.23\%.
-\item The trained A3 results (39.09/39.10/39.11\%) come from one seed, and the epoch was chosen after seeing test results. The three-seed, validation-selected runs of Table~\ref{tab:a3} need a GPU and were not completed for this version.
+\item The A3 study trains for one epoch with three seeds on a single RTX 4060 Laptop GPU; longer training with the paper's objective and batch size may change the ranking. R4 (RIP+E1) was not re-run, since R3 already shows that E1 and EXT~v2 together have no effect.
 \item The epoch-0 results are deterministic, but RIP-fixed was designed after seeing RSICD test results; its gain does not hold on RSITMD.
-\item The validation split is carved from RET-2, so A3 runs in the new protocol train on 10\% fewer images than the preliminary runs.
-\item RIP-fixed is evaluated only on RSICD and RSITMD; it may hurt captions with absolute directions, which we have not measured separately. Its inference time was measured on CPU only.
+\item The validation split is carved from RET-2, so A3 runs in the new protocol train on 10\% fewer images than the preliminary runs, and it mixes RSICD- and RSITMD-like images, so it did not predict the RSICD test trend.
+\item RIP-fixed is evaluated only on RSICD and RSITMD; it may hurt captions with absolute directions, which we have not measured separately. Inference time was measured on a laptop GPU (RTX 4060) and on CPU, not on the RTX 4090 used by the paper.
 \item The exploratory variants were not run under the A3 protocol and lack a complete factorial ablation.
 \item The objective ablation (Table~\ref{tab:objective}) uses 200 pairs, batch 2 and one seed, so it only shows behaviour at a very small budget.
 \end{itemize}
 
 % ===========================================================================
 \section{Conclusion}
-We studied PR-CLIP starting from the public RET-2 checkpoint under a small training budget. The checkpoint alone reaches 38.86\% mR on RSICD, and every fine-tuning run we tried ended below it. Among parameter-free changes, D4 rotation-invariant pooling was the only one with a noticeable effect: with no training it gives 39.70\% on RSICD (+0.84, bootstrap 95\% interval [+0.29, +1.42]), above the published PR-CLIP result, at the cost of eight image-encoder passes per image. On RSITMD the same change gives only +0.07 points, so the effect is dataset-dependent. The extraction variants E1 and EXT~v2 changed mR by at most 0.02 points. We release the module patch, a validation split that fixes the val/test overlap in the public CSV files, and a notebook that produces validation-selected, three-seed results. Future work should run PR-CLIP with the paper's objective and configuration, test RIP-fixed on direction-dependent captions, and replace uniform D4 averaging with learned aggregation \cite{shanmugam2021tta}.
+We studied PR-CLIP starting from the public RET-2 checkpoint under a small training budget. The checkpoint alone reaches 38.86\% mR on RSICD, and every fine-tuning run we tried ended below it on that test set. Among parameter-free changes, D4 rotation-invariant pooling was the only one with a noticeable effect: with no training it gives 39.70\% on RSICD (+0.84, bootstrap 95\% interval [+0.29, +1.42]), above the published PR-CLIP result, at the cost of eight image-encoder passes per image. On RSITMD the same change gives only +0.07 points without training. After one epoch with three seeds, RIP-fixed improves the matched baseline on every seed on both test sets ($+0.34$ on RSICD, $+0.66$ on RSITMD), but the validation-selected models (38.91\% and 52.29\%) stay below PR-CLIP. The extraction variants E1 and EXT~v2 changed mR by about $\pm$0.01 points. We release the module patch (including a fix for the released mixed-precision training loop), a validation split that fixes the val/test overlap in the public CSV files, all logs, and scripts that reproduce every table. Future work should run PR-CLIP with the paper's objective and configuration, test RIP-fixed on direction-dependent captions, and replace uniform D4 averaging with learned aggregation \cite{shanmugam2021tta}.
 
 \section*{Code Availability}
 Code, patches, notebooks and logs: \url{https://github.com/phamhongnhattan-boop/PR-CLIP-Improved}. Authors' PR-CLIP code: \url{https://github.com/ADMIS-TONGJI/PR-CLIP} (commit \texttt{242fba6}).

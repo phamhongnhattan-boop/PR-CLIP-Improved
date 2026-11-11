@@ -1,0 +1,62 @@
+{
+  "rsicd_test_R2-B1": {
+    "per_seed": [
+      0.44,
+      0.31,
+      0.27
+    ],
+    "mean": 0.34,
+    "sd": 0.09,
+    "p_paired_t": 0.022
+  },
+  "rsicd_test_R3-R2": {
+    "per_seed": [
+      -0.06,
+      0.06,
+      0.02
+    ],
+    "mean": 0.01,
+    "sd": 0.06,
+    "p_paired_t": 0.868
+  },
+  "rsicd_test_R3-B1": {
+    "per_seed": [
+      0.38,
+      0.37,
+      0.29
+    ],
+    "mean": 0.35,
+    "sd": 0.05,
+    "p_paired_t": 0.007
+  },
+  "rsitmd_test_R2-B1": {
+    "per_seed": [
+      0.63,
+      0.5,
+      0.84
+    ],
+    "mean": 0.66,
+    "sd": 0.17,
+    "p_paired_t": 0.022
+  },
+  "rsitmd_test_R3-R2": {
+    "per_seed": [
+      0.05,
+      0.0,
+      -0.09
+    ],
+    "mean": -0.01,
+    "sd": 0.07,
+    "p_paired_t": 0.776
+  },
+  "rsitmd_test_R3-B1": {
+    "per_seed": [
+      0.68,
+      0.5,
+      0.75
+    ],
+    "mean": 0.64,
+    "sd": 0.13,
+    "p_paired_t": 0.013
+  }
+}
