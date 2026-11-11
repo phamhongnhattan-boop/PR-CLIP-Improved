@@ -63,6 +63,11 @@ def main():
     ap.add_argument("--resume", default=None, help="checkpoint to evaluate (eval mode)")
     ap.add_argument("--repo", default="/content/PR-CLIP")
     ap.add_argument("--logs", default="/content/drive/MyDrive/a3_logs")
+    ap.add_argument("--images", default="./images", help="folder with all RSICD/RSITMD/RET-2 images")
+    ap.add_argument("--ckpt", default="./cache/weights/RET-2.pt", help="RET-2 checkpoint")
+    ap.add_argument("--cache-dir", default=None, help="open_clip cache (OpenAI ViT-B-32 weights)")
+    ap.add_argument("--workers", default="2")
+    ap.add_argument("--precision", default="amp", help="amp on GPU; fp32 only for CPU smoke tests")
     a = ap.parse_args()
 
     env = {**os.environ, "PRCLIP_RIP": "0", "PRCLIP_E1": "0", "PRCLIP_EXT2": "0", **CONFIGS[a.cfg]}
@@ -72,10 +77,16 @@ def main():
     else:
         tag = "ep0" if a.resume is None else "ep1"
         name = f"A3_{a.cfg}_{tag}_{a.data}_s{a.seed}"
-        extra = ["--retrieval-data", DATA[a.data]]
+        extra = ["--retrieval-data", DATA[a.data], "--retrieval-frequency", "1"]
         if a.resume:
             extra += ["--resume", a.resume]
-    cmd = [sys.executable, "-m", "training.main", *COMMON, *extra,
+    common = [a.images if c == "./images" else a.ckpt if c == "./cache/weights/RET-2.pt"
+              else a.workers if (i > 0 and COMMON[i - 1] == "--workers")
+              else a.precision if (i > 0 and COMMON[i - 1] == "--precision") else c
+              for i, c in enumerate(COMMON)]
+    if a.cache_dir:
+        common += ["--cache-dir", a.cache_dir]
+    cmd = [sys.executable, "-m", "training.main", *common, *extra,
            "--seed", str(a.seed), "--name", name, "--logs", a.logs]
     print("RUN", a.cfg, {k: env[k] for k in ("PRCLIP_RIP", "PRCLIP_E1", "PRCLIP_EXT2")})
     print(" ".join(cmd), flush=True)

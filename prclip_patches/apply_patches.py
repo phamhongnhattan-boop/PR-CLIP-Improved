@@ -62,6 +62,24 @@ if "[A3]" not in s:
              "    logging.info(f\"[A3] active modules: {_a3_flags()}\")\n    if args.eval_first:", "main-log")
 write("training/main.py", s)
 
+# optional dependencies: import only when the corresponding builder is used, so a
+# minimal env (torch + open_clip + transformers + timm) is enough for ViT-B/32 openclip runs
+s = read("model/model.py")
+if "[A3-LAZY]" not in s:
+    s = soft(s, "\nimport cn_clip.clip as cn_clip\n", "\n# [A3-LAZY] optional imports moved into their branches\n")
+    s = soft(s, "\nimport adapters\nfrom sentence_transformers import SentenceTransformer\n", "\n")
+    s = soft(s, "        CLIP_model, preprocess_val = cn_clip.load_from_name(",
+             "        import cn_clip.clip as cn_clip\n        CLIP_model, preprocess_val = cn_clip.load_from_name(")
+    s = soft(s, "            if args.adapter=='bottleneck_adapter':",
+             "            import adapters\n            if args.adapter=='bottleneck_adapter':")
+    s = soft(s, "        text_backbone = SentenceTransformer(",
+             "        from sentence_transformers import SentenceTransformer\n        text_backbone = SentenceTransformer(")
+write("model/model.py", s)
+s = read("training/main.py")
+if "except ImportError:\n    wandb = None" not in s:
+    s = soft(s, "\nimport wandb\n", "\ntry:\n    import wandb\nexcept ImportError:\n    wandb = None\n")
+write("training/main.py", s)
+
 # ---------------------------------------------------------------- 2. model.py
 shutil.copy(HERE / "a3_modules.py", ROOT / "model" / "a3_modules.py")
 s = read("model/model.py")
@@ -119,6 +137,22 @@ if "[A3-PATCH]" not in s:
              "                                      self.text_valid_mask, self.a3_e1, self.a3_ext2)\n",
              "extraction")
     write("model/model.py", s)
+
+# lazy optional evaluations (same as team fork phamhongnhattan-boop/PR-CLIP@learn-cmc)
+s = read("evaluation/evaluation.py")
+if "[A3-LAZY-EVAL]" not in s:
+    s = soft(s, "from .linear_eval import linear_eval\nfrom .zero_shot import zero_shot_eval\n", "# [A3-LAZY-EVAL]\n")
+    s = soft(s, "from .nlp_evaluations import nlp_eval\n", "")
+    s = soft(s, "    nlp_metrics = nlp_eval(model, epoch, args)\n",
+             "    if args.nlp_eval_frequency:\n        from .nlp_evaluations import nlp_eval\n"
+             "        nlp_metrics = nlp_eval(model, epoch, args)\n    else:\n        nlp_metrics = {}\n")
+    s = soft(s, "    for zeroshot_dataset in zeroshot_datasets:\n",
+             "    if args.zeroshot_frequency:\n        from .zero_shot import zero_shot_eval\n    for zeroshot_dataset in (zeroshot_datasets if args.zeroshot_frequency else []):\n")
+    s = soft(s, "    if linear_eval_datasets:\n", "    if linear_eval_datasets and args.linear_frequency:\n        from .linear_eval import linear_eval\n")
+    write("evaluation/evaluation.py", s)
+s = read("__init__.py")
+if "def get_model" not in s:
+    write("__init__.py", "def get_model(*args, **kwargs):\n    from model.model import get_model as _g\n    return _g(*args, **kwargs)\n")
 
 # ---------------------------------------------------------------- 3. metrics.jsonl
 # Every retrieval evaluation appends one JSON line (epoch, csv, flags, metrics,

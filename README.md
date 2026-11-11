@@ -20,6 +20,7 @@ None of the three adds learned parameters. All code is a patch on the authors' c
 | `scripts/aggregate_results.py` | mean ± std tables → `results/a3/`, `report/tables/` |
 | `scripts/eval_epoch0_standalone.py` | Epoch-0 evaluation (B1 / RIP-fixed) with only torch + open_clip; matches the authors' recall code |
 | `scripts/bootstrap_epoch0.py` | Paired bootstrap CI of the RIP-fixed gain |
+| `scripts/RUN_A3_GPU.bat` / `RUN_A3_GPU.ps1` | One-click A3 run on a Windows GPU with an existing env (venv + deps) |
 | `scripts/run_a3_local.ps1` | Same A3 protocol on a local Windows GPU (PowerShell) |
 | `scripts/extract_notebook_logs.py` | Pulls metrics from saved notebook outputs → `results/legacy/` |
 | `tests/test_a3_modules.py` | CPU unit tests (D4 invariance, norm, gradients, masks) |
