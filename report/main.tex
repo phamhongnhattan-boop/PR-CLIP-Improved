@@ -396,7 +396,7 @@ $0.01\,$CMC only & \textbf{18.59} & \textbf{25.10} & \textbf{17.31} \\
 We studied PR-CLIP starting from the public RET-2 checkpoint under a small training budget. The checkpoint alone reaches 38.86\% mR on RSICD, and every fine-tuning run we tried ended below it. Among parameter-free changes, D4 rotation-invariant pooling was the only one with a noticeable effect: with no training it gives 39.70\% on RSICD (+0.84, bootstrap 95\% interval [+0.29, +1.42]), above the published PR-CLIP result, at the cost of eight image-encoder passes per image. On RSITMD the same change gives only +0.07 points, so the effect is dataset-dependent. The extraction variants E1 and EXT~v2 changed mR by at most 0.02 points. We release the module patch, a validation split that fixes the val/test overlap in the public CSV files, and a notebook that produces validation-selected, three-seed results. Future work should run PR-CLIP with the paper's objective and configuration, test RIP-fixed on direction-dependent captions, and replace uniform D4 averaging with learned aggregation \cite{shanmugam2021tta}.
 
 \section*{Code Availability}
-Code, patches, notebooks and logs: \url{https://github.com/hoangk64-ai/PR-CLIP-Improved}. Authors' PR-CLIP code: \url{https://github.com/ADMIS-TONGJI/PR-CLIP} (commit \texttt{242fba6}).
+Code, patches, notebooks and logs: \url{https://github.com/phamhongnhattan-boop/PR-CLIP-Improved}. Authors' PR-CLIP code: \url{https://github.com/ADMIS-TONGJI/PR-CLIP} (commit \texttt{242fba6}).
 
 % ===========================================================================
 \begin{thebibliography}{99}
