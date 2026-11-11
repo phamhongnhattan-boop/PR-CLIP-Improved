@@ -45,6 +45,13 @@ function Done($pattern) {
     }
     return $false
 }
+function TrainDone($tag) {
+    foreach ($d in (Get-ChildItem -Path $Logs -Directory -Filter "$tag*" -ErrorAction SilentlyContinue)) {
+        $f = Join-Path $d.FullName "metrics.jsonl"
+        if ((Test-Path $f) -and (Select-String -Path $f -Pattern '"epoch": 1' -Quiet)) { return $true }
+    }
+    return $false
+}
 function Run([string[]]$a) {
     Write-Host ("`n>> " + (Get-Date -Format "HH:mm:ss") + " run_a3.py " + ($a -join " "))
     & $Py (Join-Path $Imp "scripts\run_a3.py") @a --repo $Repo --logs $Logs --images $Images --ckpt $Ckpt --cache-dir $Cache --workers $Workers
@@ -62,7 +69,11 @@ foreach ($cfg in @("B1", "R2")) {
 foreach ($seed in $Seeds) {
     foreach ($cfg in $TrainCfgs) {
         $tag = "A3_${cfg}_train_s$seed"
-        if (-not (Done $tag)) { Run @("train", "--cfg", $cfg, "--seed", "$seed") }
+        if (-not (TrainDone $tag)) {
+            # remove an interrupted (or pre-AMP-FIX) attempt so its epoch-0 line is not reused
+            Get-ChildItem -Path $Logs -Directory -Filter "$tag*" -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
+            Run @("train", "--cfg", $cfg, "--seed", "$seed")
+        }
         $ck = Get-ChildItem -Path $Logs -Recurse -Filter "epoch_1.pt" -ErrorAction SilentlyContinue |
               Where-Object { $_.FullName -like "*\$tag*" } | Select-Object -Last 1
         foreach ($data in @("rsicd_test", "rsitmd_test")) {

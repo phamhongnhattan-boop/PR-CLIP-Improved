@@ -138,6 +138,44 @@ if "[A3-PATCH]" not in s:
              "extraction")
     write("model/model.py", s)
 
+# AMP-FIX: the released AMP branch never calls optimizer.zero_grad(), so gradients
+# accumulate until they overflow; every step then has grad = nan and GradScaler skips it,
+# i.e. the model is never updated. Accumulate over step_lou (=4) batches as in the fp32
+# branch, then step and zero the gradients (same fix as the team notebooks).
+s = read("training/train.py")
+if "# AMP-FIX" not in s:
+    old_amp = (
+        "            if scaler is not None:\n"
+        "                scaler.scale(total_loss).backward()\n"
+        "                scaler.unscale_(optimizer)\n"
+        "                norm = nn.utils.clip_grad_norm_(model.parameters(), max_norm=args.max_grad_norm)\n"
+        "                if args.horovod:\n"
+        "                    optimizer.synchronize()\n"
+        "                    scaler.unscale_(optimizer)\n"
+        "                    with optimizer.skip_synchronize():\n"
+        "                        scaler.step(optimizer)\n"
+        "                else:\n"
+        "                    scaler.step(optimizer)\n"
+        "                scaler.update()\n")
+    new_amp = (
+        "            if scaler is not None:  # AMP-FIX\n"
+        "                scaler.scale(total_loss).backward()\n"
+        "                if (i + 1) % step_lou == 0 or i == train_loader_size - 1:\n"
+        "                    scaler.unscale_(optimizer)\n"
+        "                    norm = nn.utils.clip_grad_norm_(model.parameters(), max_norm=args.max_grad_norm)\n"
+        "                    if args.horovod:\n"
+        "                        optimizer.synchronize()\n"
+        "                        with optimizer.skip_synchronize():\n"
+        "                            scaler.step(optimizer)\n"
+        "                    else:\n"
+        "                        scaler.step(optimizer)\n"
+        "                    scaler.update()\n"
+        "                    optimizer.zero_grad()\n")
+    s = once(s, old_amp, new_amp, "amp-fix")
+    s = once(s, "    train_loader_size = len(dataloader)\n    step_lou = 4\n",
+             "    train_loader_size = len(dataloader)\n    step_lou = 4\n    norm = torch.tensor(0.0)\n", "amp-norm")
+    write("training/train.py", s)
+
 # lazy optional evaluations (same as team fork phamhongnhattan-boop/PR-CLIP@learn-cmc)
 s = read("evaluation/evaluation.py")
 if "[A3-LAZY-EVAL]" not in s:
@@ -183,6 +221,6 @@ if "[A3-METRICS]" not in s:
     write("evaluation/evaluation.py", s)
 
 for p in ("model/model.py", "model/a3_modules.py", "training/main.py", "training/optimization.py",
-          "evaluation/evaluation.py"):
+          "evaluation/evaluation.py", "training/train.py"):
     py_compile.compile(str(ROOT / p), doraise=True)
 print("Patches applied and compiled OK:", ROOT)
