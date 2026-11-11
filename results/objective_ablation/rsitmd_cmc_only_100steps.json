@@ -1,0 +1,20 @@
+{
+  "kind": "fine-tuned OpenCLIP backbone",
+  "checkpoint_kind": "repro training checkpoint",
+  "checkpoint": "C:\\Users\\NHAT TAN\\Documents\\Codex\\2026-10-10\\yu\\work\\tmp\\ret2_cmc_only_100steps.pt",
+  "pretrained": "openai",
+  "device": "cuda",
+  "csv": "C:\\Users\\NHAT TAN\\Documents\\Codex\\2026-10-10\\yu\\outputs\\pr-clip-reproduction\\dataset\\test\\rsitmd_test.csv",
+  "csv_sha256": "d0d54b26f144e73e40fbbcad8bf8cfcaa071e625736335b5a06ebe21e0f81da9",
+  "images": 452,
+  "captions": 2260,
+  "metrics_percent": {
+    "t2i_R@1": 8.6283,
+    "i2t_R@1": 10.177,
+    "t2i_R@5": 29.5575,
+    "i2t_R@5": 23.8938,
+    "t2i_R@10": 45.354,
+    "i2t_R@10": 32.9646,
+    "mR": 25.0959
+  }
+}

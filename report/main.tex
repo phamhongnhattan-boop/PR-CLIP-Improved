@@ -95,7 +95,7 @@ Fig.~\ref{fig:arch} shows the PR-CLIP training pipeline \cite{guan2025prclip}. A
 
 \textbf{Reconstruction.} An 8-layer Transformer decoder reconstructs $\tilde V^o$ from $V^f$ with $\tilde T^o$ as cross-attention context, and the reverse for text. The paper uses a token-level MSE loss $\mathcal{L}_{PRC}$ and the objective $\mathcal{L} = 0.01\,\mathcal{L}_{CMC} + \mathcal{L}_{PRC}$.
 
-\textbf{Released code.} We use the authors' public code \cite{prclipcode} at commit \texttt{242fba6}, built on the ITRA framework \cite{itra}. In this code the reconstruction loss is an MSE between mean-pooled, normalised reconstructed tokens and the global features, and the training loop combines it with InfoNCE as $(1.5\,\mathcal{L}_{InfoNCE} + \mathcal{L}_{rec})/4$ with 4-step accumulation. This is not identical to the paper's objective. We did not retrain PR-CLIP with the paper's objective and configuration (20 epochs, batch size 160, two RTX 4090 GPUs), so none of our numbers is a full reproduction of the published 39.23\%.
+\textbf{Released code.} We use the authors' public code \cite{prclipcode} at commit \texttt{242fba6}, built on the ITRA framework \cite{itra}. In this code the reconstruction loss is an MSE between mean-pooled, normalised reconstructed tokens and the global features, and the training loop combines it with InfoNCE as $(1.5\,\mathcal{L}_{InfoNCE} + \mathcal{L}_{rec})/4$ with 4-step accumulation. This is not identical to the paper's objective. An audit of the release found further gaps (Table~\ref{tab:audit}). We did not retrain PR-CLIP with the paper's objective and configuration (20 epochs, batch size 160, two RTX 4090 GPUs), so none of our numbers is a full reproduction of the published 39.23\%.
 
 \begin{figure*}[t]
 \centering
@@ -103,6 +103,28 @@ Fig.~\ref{fig:arch} shows the PR-CLIP training pipeline \cite{guan2025prclip}. A
 \caption{PR-CLIP training pipeline (released code). Orange boxes mark where our A3 modifications act. Extraction, filtering, and reconstruction run only during training. RIP-fixed changes the image embedding used both in training and at retrieval time.}
 \label{fig:arch}
 \end{figure*}
+
+
+\begin{table}[t]
+\centering
+\caption{Differences between the PR-CLIP paper and the released code (commit \texttt{242fba6}).}
+\label{tab:audit}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Item & Paper & Released code \\
+\midrule
+Loss & $0.01\,\mathcal{L}_{CMC}+\mathcal{L}_{PRC}$ & $(1.5\,\mathcal{L}_{NCE}+\mathrm{MSE}_{pool})/4$ \\
+LR, RSICD & $5\mathrm{e}{-5}$ & $5\mathrm{e}{-6}$ \\
+LR, RSITMD & $5\mathrm{e}{-6}$ & $5\mathrm{e}{-5}$ \\
+Selection & train / val / test & \texttt{best.pt} on test CSV \\
+RSICD val & separate split & = test file (same SHA-256) \\
+Checkpoint & released & link gives image archive \\
+Tokens & -- & no \texttt{return\_hidden} in OpenCLIP 2.20 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 % ===========================================================================
 \section{Investigated Modifications}
@@ -323,6 +345,28 @@ BRCR, all switches (+ sum loss) & 37.97 & \pend \\
 \end{tabular}
 \end{table}
 
+
+\subsection{Objective Ablation from OpenAI CLIP}
+\label{sec:objective}
+To see how the reconstruction term itself behaves, we ran a separate small study with an independent re-implementation of Eqs.~(3)--(13) (repository \texttt{phamhongnhattan-boop/PR-CLIP}, folder \texttt{repro/}). It starts from OpenAI CLIP ViT-B/32 (not the RET-2 ckpt) and trains for 100 steps on 200 RET-2 pairs (batch 2, lr $5\times10^{-6}$, seed 3407). The model is chosen on \texttt{rsitmd\_val.csv}, and the test sets are evaluated once afterwards (Table~\ref{tab:objective}). With this tiny budget, both objectives that include reconstruction destroyed retrieval (mR 1.41\% and 0.75\% on RSITMD val), while the contrastive term alone improved on CLIP. This does not show that PRC is useless at full scale: batch size, initialization and training length are far from the paper. It does show that the reconstruction loss can dominate the update when the contrastive weight is 0.01, which supports keeping the reconstruction branch light in our A3 setup.
+
+\begin{table}[t]
+\centering
+\caption{Objective ablation, OpenAI CLIP init, 100 steps on 200 RET-2 pairs, one seed. mR in \%. Logs: \texttt{results/objective\_ablation/}.}
+\label{tab:objective}
+\footnotesize
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Objective & RSITMD val & RSITMD test & RSICD test \\
+\midrule
+OpenAI CLIP, no training & 16.77 & 24.23 & 15.69 \\
+$0.01\,$CMC $+$ PRC (paper) & 1.41 & -- & -- \\
+Released-style pooled MSE & 0.75 & -- & -- \\
+$0.01\,$CMC only & \textbf{18.59} & \textbf{25.10} & \textbf{17.31} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 % ===========================================================================
 \section{Discussion}
 \textbf{The starting checkpoint dominates.} The RET-2 ckpt already gives 38.88\%, within 0.35 points of PR-CLIP. Every fine-tuning setting we tried moved away from it. Under a small budget, keeping the pretrained representation was more effective than adapting it.
@@ -341,6 +385,7 @@ BRCR, all switches (+ sum loss) & 37.97 & \pend \\
 \item The validation split is carved from RET-2, so A3 runs in the new protocol train on 10\% fewer images than the preliminary runs.
 \item RIP-fixed is evaluated only on RSICD and RSITMD; it may hurt captions with absolute directions, which we have not measured separately.
 \item The exploratory variants were not run under the A3 protocol and lack a complete factorial ablation.
+\item The objective ablation (Table~\ref{tab:objective}) uses 200 pairs, batch 2 and one seed, so it only shows behaviour at a very small budget.
 \end{itemize}
 
 % ===========================================================================

@@ -18,11 +18,13 @@ None of the three adds learned parameters. All code is a patch on the authors' c
 | `scripts/make_val_split.py` | Image-level validation split from RET-2 (+ SHA-256 manifest) |
 | `scripts/run_a3.py` | Runs one A3 configuration (`eval` or `train`) |
 | `scripts/aggregate_results.py` | mean ± std tables → `results/a3/`, `report/tables/` |
+| `scripts/run_a3_local.ps1` | Same A3 protocol on a local Windows GPU (PowerShell) |
 | `scripts/extract_notebook_logs.py` | Pulls metrics from saved notebook outputs → `results/legacy/` |
 | `tests/test_a3_modules.py` | CPU unit tests (D4 invariance, norm, gradients, masks) |
 | `notebooks/` | Colab notebooks (see table below) |
 | `results/legacy/` | Metrics extracted from notebook outputs |
 | `results/a3/` | Multi-seed A3 results (filled by `A3_MultiSeed_Colab.ipynb`) |
+| `results/objective_ablation/` | Loss-objective ablation from OpenAI CLIP (paper PRC vs released MSE vs CMC-only), copied from the team fork |
 | `report/` | LaTeX source (IEEEtran) and PDF |
 
 ## Environment
@@ -60,7 +62,7 @@ CSV files (`dataset/train/ret2.csv`, `dataset/test/*.csv`) come with the authors
 
 ## Running the A3 study
 
-Open `notebooks/A3_MultiSeed_Colab.ipynb` in Colab and run all cells. It is resumable across sessions (finished runs are skipped). Or from the patched authors' repo:
+Open `notebooks/A3_MultiSeed_Colab.ipynb` in Colab and run all cells. It is resumable across sessions (finished runs are skipped). On a local Windows GPU use `scripts\run_a3_local.ps1 -PrClip <authors' repo> -Images <image folder>`. Or step by step from the patched authors' repo:
 
 ```bash
 # epoch 0, no training (deterministic)
@@ -100,6 +102,15 @@ Unit tests (CPU): `python -m pytest -q tests`
 All values: RSICD test, 1 epoch, batch 16, lr 2e-7, RET-2 init, seed 1. Full numbers in `results/legacy/legacy_runs.csv`.
 
 **Logs still missing from the repo** (marked † in the report): the earlier sensitivity runs (report Table V), the dual adapter result (38.69), BRCR with all switches (37.97), and the preliminary A3 runs (38.72 / 39.09 / 39.10 / 39.11, epoch 0: 38.89 / 39.66). Upload their `out.log` files to `results/raw_logs/<run_name>/`, or replace them with the A3 notebook outputs.
+
+## Related code: paper-objective re-implementation
+
+The team fork [phamhongnhattan-boop/PR-CLIP](https://github.com/phamhongnhattan-boop/PR-CLIP) (branch `learn-cmc`) contains:
+- `model/paper_objective.py`: token-level PRC loss and `0.01 × CMC + PRC` (paper Eq. 13), selectable with `--prclip-objective paper`;
+- `model/openclip_hidden.py`: ViT-B/32 token path for OpenCLIP 2.20 (same role as `_vit_hidden` in our patch);
+- `model/position_extraction.py`: extraction with an optional text padding mask (the masking part of E1);
+- `repro/`: an independent re-implementation of Eqs. (3)–(13), dataset audit, and the objective ablation in report Table VIII;
+- `REPRODUCTION.md`: paper vs. code differences (report Table I).
 
 ## Citation
 

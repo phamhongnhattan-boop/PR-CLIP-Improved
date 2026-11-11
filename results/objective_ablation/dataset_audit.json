@@ -1,0 +1,55 @@
+{
+  "splits": {
+    "train/ret2.csv": {
+      "pairs": 65460,
+      "images": 13092,
+      "captions_per_image": {
+        "5": 13092
+      },
+      "missing_images": 0,
+      "csv_sha256": "ee7b24a322138fa27bf1870411d5647c326287ea4e2915de6c2b2a68139a0620"
+    },
+    "test/rsitmd_test.csv": {
+      "pairs": 2260,
+      "images": 452,
+      "captions_per_image": {
+        "5": 452
+      },
+      "missing_images": 0,
+      "csv_sha256": "d0d54b26f144e73e40fbbcad8bf8cfcaa071e625736335b5a06ebe21e0f81da9"
+    },
+    "test/rsicd_test.csv": {
+      "pairs": 5465,
+      "images": 1093,
+      "captions_per_image": {
+        "5": 1093
+      },
+      "missing_images": 0,
+      "csv_sha256": "babb50017a24a133eaea5fc670e1977c3bbdfc6e7eb9c878a85d1f37cf48be4e"
+    },
+    "test/rsitmd_val.csv": {
+      "pairs": 4280,
+      "images": 856,
+      "captions_per_image": {
+        "5": 856
+      },
+      "missing_images": 0,
+      "csv_sha256": "d2f4943c4f187fb37238713b1a53f1ee53f8506e15c9e9345aee747c71b4955f"
+    },
+    "test/rsicd_val.csv": {
+      "pairs": 5465,
+      "images": 1093,
+      "captions_per_image": {
+        "5": 1093
+      },
+      "missing_images": 0,
+      "csv_sha256": "babb50017a24a133eaea5fc670e1977c3bbdfc6e7eb9c878a85d1f37cf48be4e"
+    }
+  },
+  "train_test_filename_overlap": 0,
+  "rsitmd_rsicd_test_filename_overlap": 0,
+  "rsitmd_val_test_filename_overlap": 0,
+  "rsicd_val_test_filename_overlap": 1093,
+  "rsicd_val_and_test_csv_identical": true,
+  "train_test_exact_content_overlap": []
+}

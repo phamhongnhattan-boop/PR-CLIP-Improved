@@ -1,0 +1,20 @@
+{
+  "kind": "OpenAI CLIP baseline",
+  "checkpoint_kind": null,
+  "checkpoint": null,
+  "pretrained": "openai",
+  "device": "cuda",
+  "csv": "C:\\Users\\NHAT TAN\\Documents\\Codex\\2026-10-10\\yu\\outputs\\pr-clip-reproduction\\dataset\\test\\rsitmd_val.csv",
+  "csv_sha256": "d2f4943c4f187fb37238713b1a53f1ee53f8506e15c9e9345aee747c71b4955f",
+  "images": 856,
+  "captions": 4280,
+  "metrics_percent": {
+    "t2i_R@1": 6.2383,
+    "i2t_R@1": 5.6075,
+    "t2i_R@5": 19.0421,
+    "i2t_R@5": 14.486,
+    "t2i_R@10": 30.0,
+    "i2t_R@10": 25.2336,
+    "mR": 16.7679
+  }
+}
